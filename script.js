@@ -1,11 +1,31 @@
 let currentRoom = 1;
-let startTime = Date.now();
+let startTime = null;
 let gameTime = 60 * 60 * 1000; // 60 minutter
 let selectedAlliances = [];
 let selectedLeaders = [];
+let timerStarted = false;
+
+// Start mission function
+function startMission() {
+    // Hide landing page
+    document.getElementById('landingPage').style.display = 'none';
+    
+    // Show game container
+    document.getElementById('gameContainer').style.display = 'block';
+    
+    // Start timer
+    startTime = Date.now();
+    timerStarted = true;
+    updateTimer();
+    
+    // Add fade-in animation
+    document.getElementById('gameContainer').style.animation = 'fadeIn 1s ease-in';
+}
 
 // Timer funksjon
 function updateTimer() {
+    if (!timerStarted || !startTime) return;
+    
     const elapsed = Date.now() - startTime;
     const remaining = Math.max(0, gameTime - elapsed);
     const minutes = Math.floor(remaining / 60000);
@@ -20,9 +40,6 @@ function updateTimer() {
         showMessage('timer', '⏰ Tiden er ute! Prøv igjen.', 'error');
     }
 }
-
-// Start timer
-updateTimer();
 
 function showMessage(roomId, message, type = 'success') {
     const messageDiv = document.getElementById(`message${roomId}`);
@@ -140,6 +157,7 @@ function restartGame() {
     startTime = Date.now();
     selectedAlliances = [];
     selectedLeaders = [];
+    timerStarted = true;
     
     // Reset alle input felt
     document.querySelectorAll('input').forEach(input => {
@@ -161,6 +179,3 @@ function restartGame() {
     updateProgress();
     updateTimer();
 }
-
-// Initial progress update
-updateProgress();

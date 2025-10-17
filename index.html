@@ -7,7 +7,68 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
+    <!-- Landing Page -->
+    <div id="landingPage" class="landing-page">
+        <div class="landing-content">
+            <div class="classified-banner">
+                <span class="red-stamp">TOP SECRET</span>
+                <span class="classified-text">⚠️ KLASSIFISERT DOKUMENT ⚠️</span>
+                <span class="red-stamp">TOP SECRET</span>
+            </div>
+            
+            <h1 class="landing-title">OPERASJON AVSLØRING</h1>
+            <div class="subtitle">Den Kalde Krigen - Digital Escape Room</div>
+            
+            <div class="mission-briefing">
+                <h2>🎯 OPPDRAGSBRIEFING</h2>
+                <div class="briefing-text">
+                    <p><strong>AGENT,</strong></p>
+                    <p>Du har blitt valgt til et kritisk oppdrag. Vår etterretning har oppdaget hemmelige dokumenter fra den kalde krigen som må dekrypteres UMIDDELBART.</p>
+                    <p>Ditt oppdrag er å:</p>
+                    <ul>
+                        <li>🔍 Analysere historiske hendelser fra den kalde krigen</li>
+                        <li>🧩 Løse komplekse gåter og dekryptere koder</li>
+                        <li>⏰ Fullføre oppdraget innen tidsfristen (60 minutter)</li>
+                        <li>🌍 Forhindre en internasjonal krise</li>
+                    </ul>
+                    <p class="warning-text">⚠️ ADVARSEL: Alle handlinger blir overvåket. Du har kun ETT forsøk.</p>
+                </div>
+            </div>
+            
+            <div class="mission-stats">
+                <div class="stat-item">
+                    <div class="stat-number">11</div>
+                    <div class="stat-label">Rom å Løse</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">60</div>
+                    <div class="stat-label">Minutter Tid</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">∞</div>
+                    <div class="stat-label">Mulige Feil</div>
+                </div>
+            </div>
+            
+            <button class="start-mission-btn" onclick="startMission()">
+                <span class="btn-text">🚀 START OPPDRAGET</span>
+                <span class="btn-subtext">Aksepter mission og begynn</span>
+            </button>
+            
+            <div class="footer-note">
+                <p>📚 Dette er en læringsspill om den kalde krigen</p>
+                <p>Utviklet for Osloskolen</p>
+            </div>
+        </div>
+        
+        <div class="background-animation">
+            <div class="globe"></div>
+            <div class="grid-lines"></div>
+        </div>
+    </div>
+
+    <!-- Game Container (hidden initially) -->
+    <div class="container" id="gameContainer" style="display: none;">
         <header class="header">
             <div class="classified-stamp">🔒 HEMMELIG DOKUMENT 🔒</div>
             <h1>OPERASJON AVSLØRING</h1>
@@ -18,7 +79,7 @@
             </div>
         </header>
 
-
+        <div id="roomsContainer"></div>
     </div>
 
     <script type="module" src="game.js"></script>
