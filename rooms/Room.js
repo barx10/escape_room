@@ -15,12 +15,6 @@ class Room {
                     ${this.content}
                 </div>
                 <div id="message${this.id}"></div>
-                ${this.hint ? `
-                <button class="btn" onclick="showHint(${this.id})" style="background: #666;">💡 Hint</button>
-                <div class="hint-box" id="hint${this.id}">
-                    <p><strong>Hint:</strong> ${this.hint}</p>
-                </div>
-                ` : ''}
             </div>
         `;
     }

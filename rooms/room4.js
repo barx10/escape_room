@@ -2,31 +2,31 @@ import Room from './Room.js';
 
 const room4 = new Room(
     4,
-    '📡 KOMMUNIKASJONSSENTERET - CUBAKRISEN',
+    '1962 — CUBAKRISEN (OPPTRAPPING)',
     `
-        <h3>13 Dager som Rystet Verden</h3>
-        <p>Du har funnet den hemmelige planen! Cubakrisen pågår akkurat nå. Hvilke to ledere forhandler om verdens skjebne?</p>
-        
+        <h3>1962 — 13 dager som rystet verden</h3>
+        <p>Avlyttede planer og diplomatisk kommunikasjon viser at verdens ledere står i forhandlinger. Identifiser hvem som leder forhandlingene.</p>
+
         <div class="map-grid">
             <div class="map-item" onclick="selectLeader('Kennedy')">
                 <strong>John F. Kennedy</strong><br>
-                <small>USA President</small>
+                <small>President, USA</small>
             </div>
             <div class="map-item" onclick="selectLeader('Khrushchev')">
                 <strong>Nikita Khrushchev</strong><br>
-                <small>Sovjetisk leder</small>
+                <small>Leder, Sovjetunionen</small>
             </div>
             <div class="map-item" onclick="selectLeader('Castro')">
                 <strong>Fidel Castro</strong><br>
-                <small>Cubansk leder</small>
+                <small>Leder, Cuba</small>
             </div>
         </div>
-        
-        <p><strong>Siste kode:</strong> Hvor mange dager varte Cubakrisen?</p>
-        
+
+        <p><strong>Siste kode:</strong> Hvor mange dager varte krisen (bruk historiekildene)?</p>
+
         <div class="code-input">
             <label for="crisisDays">Antall dager:</label>
-            <input type="number" id="crisisDays" placeholder="XX" min="1" max="30">
+            <input type="number" id="crisisDays" placeholder="13" min="1" max="30">
             <button class="btn" onclick="checkRoom4()">Stopp krisen!</button>
         </div>
     `,
@@ -44,7 +44,7 @@ const room4 = new Room(
             return false;
         }
     },
-    'Krisen varte fra 14. til 28. oktober 1962. Tell dagene!'
+    'Cubakrisen varte fra 14. til 28. oktober 1962 — 13 kritiske dager.'
 );
 
 export default room4;

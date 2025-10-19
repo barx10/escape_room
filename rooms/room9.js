@@ -1,32 +1,32 @@
 import Room from './Room.js';
 
 const room9 = new Room(
-    9,
-    '🚨 KONTROLLROMMET - ATOMTRUSLER',
+    8,
+    'FORHANDLINGENE - KONTROLLROMMET',
     `
-    <h3>Forhindre Atomkrig</h3>
-    <p>Velg de to lederne som forhandlet under Cubakrisen.</p>
+    <h3>Forhandlingene</h3>
+    <p>Hvem forhandlet direkte om en løsning under Cubakrisen? Velg de to riktige lederne.</p>
 
     <div class="map-grid">
-        <div class="map-item" onclick="selectLeader9('Kennedy')">John F. Kennedy</div>
-        <div class="map-item" onclick="selectLeader9('Khrushchev')">Nikita Khrushchev</div>
-        <div class="map-item" onclick="selectLeader9('Castro')">Fidel Castro</div>
+        <div class="map-item" onclick="selectLeader8('Kennedy')">John F. Kennedy</div>
+        <div class="map-item" onclick="selectLeader8('Khrushchev')">Nikita Khrushchev</div>
+        <div class="map-item" onclick="selectLeader8('Castro')">Fidel Castro</div>
     </div>
 
-    <button class="btn" onclick="checkRoom9()">Deaktiver trussel</button>
+    <button class="btn" onclick="checkRoom8()">Bekreft</button>
     `,
     function check() {
-        const selected = window.selectedLeaders9 || [];
+        const selected = window.selectedLeaders8 || [];
         if (selected.includes('Kennedy') && selected.includes('Khrushchev') && !selected.includes('Castro')) {
-            showMessage(9, '🎉 Riktig! Kennedy og Khrushchev forhandlet.');
+            showMessage(8, '🎉 Riktig! Kennedy og Khrushchev forhandlet.');
             setTimeout(nextRoom, 2000);
             return true;
         } else {
-            showMessage(9, '❌ Feil valg. Castro var ikke hovedforhandler.', 'error');
+            showMessage(8, '❌ Feil valg. Castro var ikke hovedforhandler.', 'error');
             return false;
         }
     },
-    'De to supermakt-lederne: USA og Sovjetunionen.'
+    'Kennedy og Khrushchev var hovedforhandlerne mellom supermaktene.'
 );
 
 export default room9;

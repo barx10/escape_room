@@ -7,19 +7,25 @@ let timerStarted = false;
 
 // Start mission function
 function startMission() {
-    // Hide landing page
-    document.getElementById('landingPage').style.display = 'none';
-    
-    // Show game container
-    document.getElementById('gameContainer').style.display = 'block';
-    
+    // Hvis global startGame finnes (fra game.js), bruk den for å initialisere spillet
+    if (typeof window.startGame === 'function') {
+        window.startGame();
+        return;
+    }
+
+    // Fallback: opprinnelig oppførsel (for eldre setups)
+    const landing = document.getElementById('landingPage');
+    const gameContainer = document.getElementById('gameContainer');
+    if (landing) landing.style.display = 'none';
+    if (gameContainer) {
+        gameContainer.style.display = 'block';
+        gameContainer.style.animation = 'fadeIn 1s ease-in';
+    }
+
     // Start timer
     startTime = Date.now();
     timerStarted = true;
     updateTimer();
-    
-    // Add fade-in animation
-    document.getElementById('gameContainer').style.animation = 'fadeIn 1s ease-in';
 }
 
 // Timer funksjon
@@ -71,39 +77,17 @@ function showHint(roomNumber) {
 // Rom 1: Årstall for kald krig
 function checkRoom1() {
     const year = parseInt(document.getElementById('year1').value);
-    if (year >= 1946 && year <= 1947) {
+    if (year === 1946) {
         showMessage(1, '🎉 Korrekt! Den kalde krigen startet rett etter andre verdenskrig. Tilgang innvilget!');
+        try { clearFailures(1); } catch(e) {}
         setTimeout(nextRoom, 2000);
     } else {
         showMessage(1, '❌ Feil årstall. Prøv igjen! Tenk på slutten av andre verdenskrig.', 'error');
+        try { recordFailure(1); } catch(e) {}
     }
 }
 
-// Rom 2: Allianser
-function selectAlliance(alliance) {
-    document.querySelectorAll('.map-item').forEach(item => {
-        item.classList.remove('selected');
-    });
-    event.target.closest('.map-item').classList.add('selected');
-    
-    if (alliance === 'NATO') {
-        document.getElementById('alliance1').value = 'NATO';
-    } else if (alliance === 'Warszawa') {
-        document.getElementById('alliance2').value = 'Warszawapakten';
-    }
-}
-
-function checkRoom2() {
-    const alliance1 = document.getElementById('alliance1').value;
-    const alliance2 = document.getElementById('alliance2').value;
-    
-    if (alliance1 === 'NATO' && alliance2 === 'Warszawapakten') {
-        showMessage(2, '🎉 Perfekt! Du har identifisert de to store militære alliansene. Koden er dekryptert!');
-        setTimeout(nextRoom, 2000);
-    } else {
-        showMessage(2, '❌ Ikke riktig kombinasjon. Velg en vest-allianse og en øst-allianse.', 'error');
-    }
-}
+// Rom 2: Timeline-oppgave håndteres nå av game.js (selectEvent2, resetSequence2, checkRoom2)
 
 // Rom 3: Berlinmuren og morse
 function checkRoom3() {
@@ -121,7 +105,7 @@ function checkRoom3() {
 function checkMorse() {
     const answer = document.getElementById('morseAnswer').value.toLowerCase();
     if (answer === 'yes we can' || answer === 'yeswecan') {
-        showMessage(3, '🎉 Morse-koden dekryptert! "YES WE CAN" - du kan gå videre!');
+        showMessage(3, '🎉 Morse-koden dekryptert! - du kan gå videre!');
         setTimeout(nextRoom, 2000);
     } else {
         showMessage(3, '❌ Feil dekoding. Prøv igjen med morse-tabellen.', 'error');

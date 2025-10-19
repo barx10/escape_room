@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oppdragsbriefing - Operasjon Avsløring</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="briefing-page">
+    <div class="briefing-container">
+        <div class="briefing-card">
+            <h1>🎯 OPPDRAGSBRIEFING</h1>
+            <div class="briefing-text">
+                <p><strong>AGENT,</strong></p>
+                <p>Du har blitt valgt til et kritisk oppdrag. Vår etterretning har oppdaget hemmelige dokumenter fra den kalde krigen som må dekrypteres UMIDDELBART.</p>
+                <p>Ditt oppdrag er å:</p>
+                <ul>
+                    <li>🔍 Analysere historiske hendelser fra den kalde krigen</li>
+                    <li>🧩 Løse komplekse gåter og dekryptere koder</li>
+                    <li>⏰ Fullføre oppdraget innen tidsfristen (60 minutter)</li>
+                    <li>🌍 Forhindre en internasjonal krise</li>
+                </ul>
+                <p class="warning-text">⚠️ ADVARSEL: Alle handlinger blir overvåket. Du har kun ETT forsøk.</p>
+
+                <div class="hint-info">
+                    <h2>💡 Hint</h2>
+                    <p>Hvert rom har opptil <strong>tre hint</strong>. Trykk på «Hint»-knappen i rommet for å vise neste hint. Hvert klikk viser ett hint — etter tredje hint deaktiveres knappen. Bruk hintene med omhu.</p>
+                </div>
+            </div>
+                <div class="hint-info" style="margin-top:12px;">
+                    <h2>🔒 Lockdown</h2>
+                    <p>Du har <strong>tre forsøk</strong> på å løse hvert rom. Hvis dere svarer feil tre ganger, låses rommet i <strong>1 minutt</strong> før dere kan prøve igjen. En nedtelling vises i rommet.</p>
+                </div>
+            </div>
+
+            <div class="briefing-actions">
+                <button id="continueBtn" class="start-mission-btn">🚀 START OPPDRAGET</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back button removed from briefing; it will appear once rommene starter -->
+
+    <script>
+        // Når brukeren trykker 'Start oppdraget' naviger tilbake til index med query som starter spillet
+        document.getElementById('continueBtn').addEventListener('click', function() {
+            // Send brukeren tilbake til index og legg på ?start=1
+            window.location.href = 'index.html?start=1';
+        });
+    </script>
+</body>
+</html>

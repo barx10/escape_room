@@ -9,6 +9,42 @@ body {
     overflow-x: hidden;
 }
 
+/* Fullscreen background for Room 1 when active */
+.room-bg-1 {
+    background-image: url('assets/images/room1.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+/* Fullscreen background for Room 2 when active */
+.room-bg-2 {
+    background-image: url('assets/images/room2.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+/* Fullscreen background for Room 3 when active */
+.room-bg-3 {
+    background-image: url('assets/images/room3.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+/* Fullscreen background for Room 4 when active */
+.room-bg-4 {
+    background-image: url('assets/images/room4.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
 html {
     height: 100%;
 }
@@ -22,7 +58,7 @@ html {
     position: relative;
     overflow: hidden;
     padding: 20px;
-    background-image: url('landing_bilde.png');
+    background-image: url('assets/images/landing_bilde.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -46,6 +82,12 @@ html {
     position: relative;
     animation: fadeInUp 1s ease-out;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+    margin: 0 auto; /* ensure centered */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 
 @keyframes fadeInUp {
@@ -170,6 +212,18 @@ html {
     font-size: 18px;
 }
 
+/* Hint info inside briefing */
+.hint-info {
+    background: rgba(255, 217, 61, 0.06);
+    border: 1px solid rgba(255, 217, 61, 0.12);
+    padding: 14px 16px;
+    border-radius: 10px;
+    margin-top: 18px;
+    color: #fff;
+}
+.hint-info h2 { margin: 0 0 8px 0; color: #ffd93d; font-size: 18px; }
+.hint-info p { margin: 0; color: #eee; line-height: 1.5; }
+
 .mission-stats {
     display: flex;
     justify-content: space-around;
@@ -177,6 +231,133 @@ html {
     margin: 40px 0;
     flex-wrap: wrap;
 }
+
+/* Rooms modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.6);
+}
+.modal-content {
+    background: linear-gradient(180deg, #0f1724, #111827);
+    margin: 8% auto;
+    padding: 20px 30px;
+    border: 2px solid #ffd93d;
+    width: 90%;
+    max-width: 720px;
+    border-radius: 12px;
+    color: #fff;
+}
+.modal-close {
+    background: transparent;
+    border: none;
+    color: #ffd93d;
+    font-size: 22px;
+    float: right;
+    cursor: pointer;
+}
+
+/* Compact inline modal variant for small reference content (e.g., morse alphabet) */
+.inline-modal {
+    display: none; /* toggled via JS */
+    position: relative;
+    z-index: 20;
+    width: 100%;
+    max-width: 680px;
+    margin: 12px 0 0 0;
+    background: linear-gradient(180deg, rgba(15,23,36,0.95), rgba(17,24,39,0.95));
+    border: 1px solid rgba(255, 217, 61, 0.12);
+    padding: 12px 14px;
+    border-radius: 8px;
+}
+.inline-modal .modal-content {
+    margin: 0;
+    padding: 12px;
+    border: none;
+    background: transparent;
+    max-height: 220px;
+    overflow: auto;
+}
+.inline-modal .modal-close {
+    float: none;
+    display: inline-block;
+    margin-left: 6px;
+}
+
+/* When modal is used inline we don't want the fullscreen backdrop; keep a subtle backdrop class if needed */
+.modal-backdrop {
+    background-color: transparent;
+}
+
+/* Improve typography for monospace table inside modal */
+.inline-modal pre, .inline-modal p { font-family: 'Courier New', monospace; color: #fff; line-height:1.4; font-size:14px; margin:6px 0; }
+.inline-modal h3 { margin: 0 0 6px 0; color: #ffd93d; font-size:16px; }
+
+/* Cooldown overlay shown when player has 3 failed attempts */
+.cooldown-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 60;
+    padding: 20px;
+}
+.cooldown-overlay .countdown-box {
+    background: rgba(17,24,39,0.95);
+    border: 2px solid #ffd93d;
+    color: #fff;
+    padding: 16px 20px;
+    border-radius: 10px;
+    text-align: center;
+    font-family: 'Courier New', monospace;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+}
+.cooldown-overlay .countdown-box .title { color: #ffd93d; font-weight: bold; margin-bottom: 8px; }
+.cooldown-overlay .countdown-box .time { font-size: 22px; margin-top: 6px; }
+
+/* Attempts counter */
+.attempts-box {
+    font-family: 'Courier New', monospace;
+    color: #ffd93d;
+    background: rgba(0,0,0,0.35);
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,217,61,0.08);
+    display: inline-block;
+    margin-left: 8px;
+    font-size: 13px;
+}
+
+.room-list { list-style: none; padding: 0; margin: 12px 0; }
+.room-list li { padding: 10px 6px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.room-list li:first-child { padding-top: 0; }
+.room-list li strong { color: #ffd93d; margin-right: 8px; }
+
+#infoBody { margin-top: 8px; line-height: 1.6; color: #ddd; }
+
+/* Fixed back button on briefing page */
+.fixed-back-btn {
+    position: fixed;
+    left: 16px;
+    bottom: 16px;
+    background: rgba(0,0,0,0.8);
+    color: #ffd93d;
+    padding: 10px 14px;
+    border: 2px solid #ffd93d;
+    border-radius: 8px;
+    text-decoration: none;
+    z-index: 9999;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+}
+.fixed-back-btn:hover { transform: translateY(-2px); }
 
 .stat-item {
     background: rgba(233, 69, 96, 0.9);
@@ -194,6 +375,9 @@ html {
     transform: translateY(-5px);
     box-shadow: 0 5px 20px rgba(233, 69, 96, 0.4);
 }
+
+/* show pointer for interactive stat items */
+.stat-item[role="button"] { cursor: pointer; }
 
 .stat-number {
     font-size: 48px;
@@ -225,6 +409,9 @@ html {
     box-shadow: 0 10px 30px rgba(233, 69, 96, 0.4);
     position: relative;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .start-mission-btn::before {
@@ -254,15 +441,28 @@ html {
     display: block;
     position: relative;
     z-index: 1;
+    text-align: center;
 }
 
-.btn-subtext {
+/* If any .btn-subtext remains, hide it (we removed subtext from button) */
+.btn-subtext { display: none !important; }
+
+.footer-with-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex-direction: column;
+}
+
+.footer-logo {
+    height: 50px;
+    width: auto;
     display: block;
-    font-size: 14px;
-    margin-top: 5px;
-    opacity: 0.9;
-    position: relative;
-    z-index: 1;
+    margin-top: 4px;
+    border-radius: 6px;
+    object-fit: contain;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
 }
 
 .footer-note {
@@ -344,6 +544,64 @@ html {
     margin: 0 auto;
     padding: 20px;
     min-height: 100%;
+}
+
+/* Briefing page styles */
+.briefing-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url('assets/images/briefing.png'); /* Bytt ut med opplastet bilde */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 20px;
+}
+
+.briefing-container {
+    max-width: 900px;
+    width: 100%;
+    z-index: 10;
+    position: relative;
+}
+
+.briefing-card {
+    background: rgba(0,0,0,0.9);
+    border: 3px solid #ffd93d;
+    border-radius: 15px;
+    padding: 30px;
+    color: #fff;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.7);
+}
+
+.briefing-card h1 {
+    color: #ffd93d;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.briefing-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.briefing-card .btn {
+    display: inline-block;
+    padding: 14px 24px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #fff;
+    background: rgba(233,69,96,0.9);
+    border: 2px solid #ffd93d;
+}
+
+.cancel-btn {
+    background: transparent;
+    color: #ffd93d;
+    border: 2px solid #ffd93d;
 }
 
 .header {

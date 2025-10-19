@@ -2,25 +2,44 @@ import Room from './Room.js';
 
 const room3 = new Room(
     3,
-    '🕵️ SPIONASJEKONTORET - BERLINMUREN',
+    '1961-1989 — BERLINMUREN',
     `
-        <h3>Den Delte Byen</h3>
-        <p>Du har funnet hemmelige dokumenter om Berlinmuren. Når ble muren bygget?</p>
-        
-        <p><strong>Bakgrunn:</strong> Berlin ble delt etter andre verdenskrig. Øst-Tyskland bygget en mur for å stoppe folk fra å flykte til vest.</p>
-        
+        <p>Etter år med flukt fra øst til vest, ble byen stengt. Dokumenter antyder at myndighetene kalte det et «beskyttelsestiltak». Men hva var egentlig hensikten?. Finn riktig dato for når muren ble bygget.</p>
+
         <div class="code-input">
-            <label for="berlinYear">År for Berlinmurens bygging:</label>
-            <input type="number" id="berlinYear" placeholder="19XX" min="1950" max="1970">
+            <label for="berlinYear">År (YYYY):</label>
+            <input type="number" id="berlinYear" min="1950" max="1970">
             <label for="berlinMonth">Måned (nummer):</label>
-            <input type="number" id="berlinMonth" placeholder="XX" min="1" max="12">
+            <input type="number" id="berlinMonth" min="1" max="12">
             <button class="btn" onclick="checkRoom3()">Åpne safe</button>
         </div>
-        
+
+        <div style="margin-top:12px;">
+            <button id="hint3Btn" class="btn" onclick="nextHint3()">💡 Hint</button>
+            <div id="hint3Box" class="hint-box" style="display:block; margin-top:10px; color:#fff;"></div>
+        </div>
+
         <div class="morse-display" id="morseCode" style="display: none;">
             🔊 Morse-kode funnet: -.-- . ... / .-- . / -.-. .- -.
         </div>
-        
+
+        <div style="margin-top:10px;">
+            <!-- Button to open morse alphabet modal (hidden until safe opens) -->
+            <button id="showMorseBtn" class="btn" style="display:none;" onclick="showMorseAlphabet()">Vis morse-alfabet</button>
+        </div>
+
+        <!-- Morse alphabet inline box (Room 3) -->
+        <div id="morseModal" class="inline-modal" style="display:none;">
+            <div class="modal-content">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h3>Morse-alfabet</h3>
+                    <button class="modal-close" onclick="closeMorseAlphabet()">✖</button>
+                </div>
+                <p style="white-space: pre-wrap;">A: .-    B: -...  C: -.-.  D: -..\nE: .    F: ..-.  G: --.   H: ....\nI: ..   J: .---  K: -.-   L: .-..\nM: --   N: -.    O: ---   P: .--.\nQ: --.- R: .-.   S: ...   T: -\nU: ..-  V: ...-  W: .--   X: -..-\nY: -.-- Z: --..\n0: ----- 1: .---- 2: ..--- 3: ...-- 4: ....-\n5: ..... 6: -.... 7: --... 8: ---.. 9: ----.</p>
+                <div style="text-align:right; margin-top:8px;"><button class="btn" onclick="closeMorseAlphabet()">Lukk</button></div>
+            </div>
+        </div>
+
         <div class="code-input">
             <label for="morseAnswer">Dekoder morse-koden:</label>
             <input type="text" id="morseAnswer" placeholder="Engelsk ord">
@@ -33,7 +52,7 @@ const room3 = new Room(
         // For enkelhet, la check være for morse, og håndter dato separat.
         const answer = document.getElementById('morseAnswer').value.toLowerCase();
         if (answer === 'yes we can' || answer === 'yeswecan') {
-            showMessage(3, '🎉 Morse-koden dekryptert! "YES WE CAN" - du kan gå videre!');
+            showMessage(3, '🎉 Morse-koden dekryptert! - du kan gå videre!');
             setTimeout(nextRoom, 2000);
             return true;
         } else {
@@ -41,7 +60,7 @@ const room3 = new Room(
             return false;
         }
     },
-    'Muren ble bygget "over natten" i august 1961. Morse: Y=-.-- E=. S=... W=.-- E=. C=-.-. A=.- N=-.'
+    ''
 );
 
 export default room3;

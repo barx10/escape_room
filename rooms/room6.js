@@ -1,11 +1,11 @@
 import Room from './Room.js';
 
 const room6 = new Room(
-    6,
-    '📚 ARKIVROMMET - HEMMELIGE DOKUMENTER',
+    5,
+    '1962 — ARKIVROMMET',
     `
-    <h3>Avslør Sovjetiske Planer</h3>
-    <p>Du er nå i arkivet. Finn dokumentet som avslører når rakettene ble plassert på Cuba.</p>
+    <h3>Arkiv: Finn datoen</h3>
+    <p>Du blar i hemmelige dokumenter som viser når sovjetiske raketter ble plassert på Cuba. Velg riktig måned.</p>
 
     <div class="map-grid">
         <div class="map-item" onclick="selectDocument('oktober')">Oktober 1962</div>
@@ -13,19 +13,19 @@ const room6 = new Room(
         <div class="map-item" onclick="selectDocument('november')">November 1962</div>
     </div>
 
-    <button class="btn" onclick="checkRoom6()">Åpne dokument</button>
+    <button class="btn" onclick="checkRoom5()">Åpne dokument</button>
     `,
     function check() {
         if (window.selectedDocument === 'oktober') {
-            showMessage(6, '🎉 Funnet! Rakettene ble plassert i oktober.');
+            showMessage(5, '🎉 Funnet! Rakettene ble plassert i oktober.');
             setTimeout(nextRoom, 2000);
             return true;
         } else {
-            showMessage(6, '❌ Feil dokument. Prøv igjen.', 'error');
+            showMessage(5, '❌ Feil dokument. Prøv igjen.', 'error');
             return false;
         }
     },
-    'Sjekk datoene – Cubakrisen eskalerte i oktober 1962.'
+    'Cubakrisen eskalerte i oktober 1962 — riktig dokument viser dette.'
 );
 
 export default room6;

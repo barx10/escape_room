@@ -1,26 +1,26 @@
 import Room from './Room.js';
 
 const room10 = new Room(
-    10,
-    '🚀 FLUKTRUTEN - SISTE BEVIS',
+    9,
+    'SISTE BEVIS — FLUKTRUTEN',
     `
-    <h3>Send Bevisene</h3>
-    <p>Skriv kodeordet for å sende bevisene om Cubakrisen til vestlige myndigheter.</p>
+    <h3>Send bevisene</h3>
+    <p>Du må sende bevisene videre. Bruk kodeordet for å sikre kommunikasjonen.</p>
 
     <div class="code-input">
         <label for="codeword">Kodeord:</label>
         <input type="text" id="codeword" placeholder="Skriv ord">
-        <button class="btn" onclick="checkRoom10()">Send</button>
+    <button class="btn" onclick="checkRoom9()">Send</button>
     </div>
     `,
     function check() {
         const word = document.getElementById('codeword').value.toLowerCase();
         if (word === 'tøvær') {
-            showMessage(10, '🎉 Sendt! Bevisene er ute.');
+            showMessage(9, '🎉 Sendt! Bevisene er ute.');
             setTimeout(nextRoom, 2000);
             return true;
         } else {
-            showMessage(10, '❌ Feil kodeord. Prøv igjen.', 'error');
+            showMessage(9, '❌ Feil kodeord. Prøv igjen.', 'error');
             return false;
         }
     },
