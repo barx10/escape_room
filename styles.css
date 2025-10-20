@@ -796,6 +796,136 @@ html {
     margin: 20px 0;
 }
 
+/* Cuba Crisis Room - Encrypted Messages */
+.encrypted-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin: 30px 0;
+}
+
+.message-box {
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px solid #ff4444;
+    border-radius: 8px;
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+.message-box:hover {
+    border-color: #ff6666;
+    box-shadow: 0 0 20px rgba(255, 68, 68, 0.3);
+}
+
+.message-box h4 {
+    color: #ff4444;
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+.encrypted-text {
+    font-family: 'Courier New', monospace;
+    font-size: 20px;
+    color: #00ff41;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 15px;
+    border-radius: 5px;
+    letter-spacing: 3px;
+    margin: 15px 0;
+    text-align: center;
+    border: 1px solid #00ff41;
+}
+
+.decrypt-input {
+    display: flex;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.decrypt-input input {
+    flex: 1;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid #555;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 16px;
+    font-family: 'Courier New', monospace;
+    text-transform: uppercase;
+}
+
+.decrypt-input input:focus {
+    outline: none;
+    border-color: #00ff41;
+    box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+}
+
+.btn-small {
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #ff4444, #cc0000);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    font-family: 'Courier New', monospace;
+}
+
+.btn-small:hover {
+    background: linear-gradient(135deg, #ff6666, #ff0000);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 68, 68, 0.4);
+}
+
+.hint {
+    color: #ffd700;
+    font-size: 14px;
+    font-style: italic;
+    margin-top: 10px;
+}
+
+.final-code-section {
+    background: rgba(0, 255, 65, 0.1);
+    border: 3px solid #00ff41;
+    border-radius: 10px;
+    padding: 30px;
+    margin-top: 30px;
+    animation: pulse-green 2s infinite;
+}
+
+@keyframes pulse-green {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 40px rgba(0, 255, 65, 0.6);
+    }
+}
+
+.final-code-section h3 {
+    color: #00ff41;
+    margin-bottom: 15px;
+}
+
+.final-code-section .code-input {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.final-code-section .code-input input {
+    flex: 1;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid #00ff41;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+}
+
 @media (max-width: 768px) {
     .container {
         padding: 10px;
@@ -866,5 +996,108 @@ html {
     .globe {
         width: 300px;
         height: 300px;
+    }
+}
+
+/* Riktig stempel Cuba-oppgave */
+.riktig-stamp {
+    position: absolute;
+    top: -30px;
+    right: 20px;
+    transform: rotate(-15deg);
+    background: linear-gradient(135deg, #00ff41, #00cc33);
+    color: #000;
+    font-size: 2.5rem;
+    font-weight: bold;
+    border: 4px solid #fff;
+    border-radius: 15px;
+    padding: 15px 40px;
+    box-shadow: 0 8px 30px rgba(0, 255, 65, 0.6), 
+                inset 0 2px 5px rgba(255, 255, 255, 0.5);
+    z-index: 100;
+    opacity: 1;
+    pointer-events: none;
+    text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8);
+    animation: stamp-appear 0.5s ease-out;
+}
+
+@keyframes stamp-appear {
+    0% {
+        transform: rotate(-15deg) scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: rotate(-15deg) scale(1.2);
+    }
+    100% {
+        transform: rotate(-15deg) scale(1);
+        opacity: 1;
+    }
+}
+
+.stamp-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 0;
+    overflow: visible;
+    pointer-events: none;
+    z-index: 100;
+}
+
+.message-box {
+    position: relative;
+    overflow: visible;
+}
+
+/* Solved stamp overlay - fullscreen */
+.solved-stamp-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    animation: overlay-fade-in 0.3s ease-out;
+    pointer-events: none;
+}
+
+.solved-stamp-container {
+    animation: stamp-appear-big 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.solved-stamp-image {
+    max-width: 80vw;
+    max-height: 80vh;
+    width: auto;
+    height: auto;
+    filter: drop-shadow(0 20px 50px rgba(0, 0, 0, 0.5));
+}
+
+@keyframes overlay-fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes stamp-appear-big {
+    0% {
+        transform: scale(0) rotate(-20deg);
+        opacity: 0;
+    }
+    60% {
+        transform: scale(1.15) rotate(-5deg);
+    }
+    100% {
+        transform: scale(1) rotate(-10deg);
+        opacity: 1;
     }
 }

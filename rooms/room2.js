@@ -4,7 +4,7 @@ const room2 = new Room(
     2,
     '1949-1955 — OPPBYGGING AV ALLIANSER',
     `
-        <h3>Oppgaveversjon 4 — Tidslinje</h3>
+        <h3>Tidslinje</h3>
         <p>Sett disse hendelsene i riktig kronologisk rekkefølge (eldst først):</p>
 
         <ol>

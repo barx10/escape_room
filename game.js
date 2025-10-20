@@ -61,6 +61,50 @@ class Game {
         }, 3000);
     }
 
+    showSolvedStamp() {
+        // Create overlay with solved stamp
+        const overlay = document.createElement('div');
+        overlay.className = 'solved-stamp-overlay';
+        overlay.innerHTML = `
+            <div class="solved-stamp-container">
+                <img src="assets/images/løst.png" alt="Løst!" class="solved-stamp-image">
+            </div>
+        `;
+        document.body.appendChild(overlay);
+        
+        // Play stamp sound using Web Audio API (works everywhere)
+        try {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            const audioCtx = new AudioContext();
+            
+            // Create a deep "thud" sound for stamp
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            // Deep bass frequency for stamp effect
+            oscillator.frequency.value = 100;
+            oscillator.type = 'sine';
+            
+            // Quick attack and decay for "thud" effect - 80% høyere volum totalt
+            const now = audioCtx.currentTime;
+            gainNode.gain.setValueAtTime(1.61, now); // 1.34 * 1.2 = 1.61 (80% høyere enn original)
+            gainNode.gain.exponentialRampToValueAtTime(0.020, now + 0.3);
+            
+            oscillator.start(now);
+            oscillator.stop(now + 0.3);
+        } catch(err) {
+            console.log('Audio generation failed:', err);
+        }
+        
+        // Remove after animation (3 seconds)
+        setTimeout(() => {
+            overlay.remove();
+        }, 3000);
+    }
+
     updateProgress() {
         const progress = (this.currentRoomIndex) * (100 / rooms.length);
         document.getElementById('progress').style.width = progress + '%';
@@ -232,12 +276,16 @@ function clearFailures(roomId) {
     try { updateAttemptDisplay(roomId); } catch(e) {}
 }
 
+window.showSolvedStamp = function() {
+    game.showSolvedStamp();
+};
+
 window.checkRoom1 = function() {
     const year = parseInt(document.getElementById('year1').value);
     if (year === 1946) {
-        game.showMessage(1, '🎉 Korrekt! Den kalde krigen startet rett etter andre verdenskrig. Tilgang innvilget!');
         clearFailures(1);
-        setTimeout(() => game.nextRoom(), 2000);
+        game.showSolvedStamp();
+        setTimeout(() => game.nextRoom(), 3000);
     } else {
         game.showMessage(1, '❌ Feil årstall. Prøv igjen! Tenk på slutten av andre verdenskrig.', 'error');
         recordFailure(1);
@@ -354,9 +402,9 @@ window.checkRoom2 = function() {
             return;
         }
     }
-    game.showMessage(2, '🎉 Perfekt! Tidslinjen er korrekt.');
     clearFailures(2);
-    setTimeout(() => game.nextRoom(), 2000);
+    game.showSolvedStamp();
+    setTimeout(() => game.nextRoom(), 3000);
 };
 
 function formatEventLabel(key) {
@@ -402,9 +450,9 @@ window.closeMorseAlphabet = function() {
 window.checkMorse = function() {
     const answer = document.getElementById('morseAnswer').value.toLowerCase();
     if (answer === 'yes we can' || answer === 'yeswecan') {
-        game.showMessage(3, '🎉 Morse-koden dekryptert! - du kan gå videre!');
         clearFailures(3);
-        setTimeout(() => game.nextRoom(), 2000);
+        game.showSolvedStamp();
+        setTimeout(() => game.nextRoom(), 3000);
     } else {
         game.showMessage(3, '❌ Feil dekoding. Prøv igjen med morse-tabellen.', 'error');
         recordFailure(3);
@@ -421,17 +469,95 @@ window.selectLeader = function(leader) {
     }
 };
 
+// Room 4 decryption tracking
+window.decryptedMessages = [];
+
+// Room 4 message checking
+window.checkMessage = function(messageNumber) {
+    console.log('checkMessage called for message', messageNumber);
+    const input = document.getElementById(`message${messageNumber}`).value.trim().toUpperCase();
+    console.log('Input:', input);
+    let correctAnswer = '';
+    
+    switch(messageNumber) {
+        case 1:
+            correctAnswer = 'WE MUST STOP THE MISSILES';
+            break;
+        case 2:
+            correctAnswer = 'WE WILL REMOVE THEM';
+            break;
+        case 3:
+            correctAnswer = 'IT HAPPENED IN 13 DAYS';
+            break;
+    }
+    
+    console.log('Correct answer:', correctAnswer);
+    console.log('Match:', input === correctAnswer);
+    
+    if (input === correctAnswer) {
+        if (!window.decryptedMessages.includes(messageNumber)) {
+            window.decryptedMessages.push(messageNumber);
+        }
+        
+        const messageBox = document.getElementById(`message${messageNumber}`).closest('.message-box');
+        if (messageBox) {
+            messageBox.style.borderColor = '#00ff41';
+            messageBox.style.backgroundColor = 'rgba(0, 255, 65, 0.1)';
+        }
+        
+        game.showMessage(4, `✅ Melding ${messageNumber} dekryptert: "${correctAnswer}"`, 'success');
+
+        // Pling-lyd
+        console.log('Playing sound...');
+        const audio = document.getElementById('pling-audio');
+        if (audio) {
+            audio.currentTime = 0;
+            audio.play().then(() => {
+                console.log('Sound played successfully');
+            }).catch(err => {
+                console.error('Error playing sound:', err);
+            });
+        } else {
+            console.error('Audio element not found!');
+        }
+
+        // Stempel
+        console.log('Showing stamp...');
+        const stamp = document.getElementById(`stamp${messageNumber}`);
+        if (stamp) {
+            stamp.innerHTML = '<span class="riktig-stamp">✓ RIKTIG!</span>';
+            console.log('Stamp added to DOM');
+            setTimeout(() => { 
+                stamp.innerHTML = ''; 
+                console.log('Stamp removed');
+            }, 3000);
+        } else {
+            console.error('Stamp container not found!');
+        }
+        
+        // Show final code section when all messages are decrypted
+        if (window.decryptedMessages.length === 3) {
+            document.getElementById('finalCodeSection').style.display = 'block';
+            game.showMessage(4, '🎊 Alle meldinger dekryptert! Nå kan du finne den siste koden.', 'success');
+        }
+    } else {
+        console.log('Wrong answer');
+        game.showMessage(4, `❌ Feil dekryptering av melding ${messageNumber}. Prøv igjen!`, 'error');
+    }
+};
+
 window.checkRoom4 = function() {
     const days = parseInt(document.getElementById('crisisDays').value);
-    const hasKennedy = game.selectedLeaders.includes('Kennedy');
-    const hasKhrushchev = game.selectedLeaders.includes('Khrushchev');
     
-    if (days === 13 && hasKennedy && hasKhrushchev) {
-        game.showMessage(4, '🎉 Fantastisk! Du har stoppet atomkrigen! Kennedy og Khrushchev forhandlet i 13 dager.');
+    if (days === 13 && window.decryptedMessages.length === 3) {
         clearFailures(4);
-        setTimeout(() => game.nextRoom(), 2000);
+        game.showSolvedStamp();
+        setTimeout(() => game.nextRoom(), 3000);
+    } else if (window.decryptedMessages.length < 3) {
+        game.showMessage(4, '❌ Du må dekryptere alle tre meldingene først!', 'error');
+        recordFailure(4);
     } else {
-        game.showMessage(4, '❌ Ikke helt riktig. Sjekk lederne og antall dager (14.-28. oktober).', 'error');
+        game.showMessage(4, '❌ Feil antall dager. Les meldingene du dekrypterte nøye.', 'error');
         recordFailure(4);
     }
 };
@@ -447,9 +573,9 @@ window.selectDocument = function(doc) {
 };
 window.checkRoom5 = function() {
     if (window.selectedDocument === 'oktober') {
-        game.showMessage(5, '🎉 Funnet! Rakettene ble plassert i oktober.');
         clearFailures(5);
-        setTimeout(() => game.nextRoom(), 2000);
+        game.showSolvedStamp();
+        setTimeout(() => game.nextRoom(), 3000);
     } else {
         game.showMessage(5, '❌ Feil dokument. Prøv igjen.', 'error');
         recordFailure(5);
@@ -459,9 +585,9 @@ window.checkRoom5 = function() {
 window.checkRoom6 = function() {
     const count = parseInt(document.getElementById('rocketCount').value);
     if (count === 42) {
-        game.showMessage(6, '🎉 Riktig! Det var 42 raketter på Cuba.');
         clearFailures(6);
-        setTimeout(() => game.nextRoom(), 2000);
+        game.showSolvedStamp();
+        setTimeout(() => game.nextRoom(), 3000);
     } else {
         game.showMessage(6, '❌ Feil antall. Lytt nøye.', 'error');
         recordFailure(6);
@@ -471,9 +597,9 @@ window.checkRoom6 = function() {
 window.checkRoom7 = function() {
     const years = parseInt(document.getElementById('yearsAfter').value);
     if (years === 5) {
-        game.showMessage(7, '🎉 Korrekt! 5 år etter 1945.');
         clearFailures(7);
-        setTimeout(() => game.nextRoom(), 2000);
+        game.showSolvedStamp();
+        setTimeout(() => game.nextRoom(), 3000);
     } else {
         game.showMessage(7, '❌ Feil. Regn: 1945 + X = ca. 1950.', 'error');
         recordFailure(7);
@@ -493,9 +619,9 @@ window.selectLeader8 = function(leader) {
 
 window.checkRoom8 = function() {
     if (window.selectedLeaders8.includes('Kennedy') && window.selectedLeaders8.includes('Khrushchev') && !window.selectedLeaders8.includes('Castro')) {
-        game.showMessage(8, '🎉 Riktig! Kennedy og Khrushchev forhandlet.');
         clearFailures(8);
-        setTimeout(() => game.nextRoom(), 2000);
+        game.showSolvedStamp();
+        setTimeout(() => game.nextRoom(), 3000);
     } else {
         game.showMessage(8, '❌ Feil valg. Castro var ikke hovedforhandler.', 'error');
         recordFailure(8);
@@ -505,9 +631,9 @@ window.checkRoom8 = function() {
 window.checkRoom9 = function() {
     const word = document.getElementById('codeword').value.toLowerCase();
     if (word === 'tøvær') {
-        game.showMessage(9, '🎉 Sendt! Bevisene er ute.');
         clearFailures(9);
-        setTimeout(() => game.nextRoom(), 2000);
+        game.showSolvedStamp();
+        setTimeout(() => game.nextRoom(), 3000);
     } else {
         game.showMessage(9, '❌ Feil kodeord. Prøv igjen.', 'error');
         recordFailure(9);
