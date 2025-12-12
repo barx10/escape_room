@@ -120,30 +120,15 @@ class Game {
     showCurrentRoom() {
         const roomId = rooms[this.currentRoomIndex].id;
         document.getElementById(`room${roomId}`).classList.add('active');
-        // If entering room 1, add full-screen background class to body
-        if (roomId === 1) {
-            document.body.classList.add('room-bg-1');
-            document.body.classList.remove('room-bg-2');
-            document.body.classList.remove('room-bg-3');
-        } else if (roomId === 2) {
-            document.body.classList.add('room-bg-2');
-            document.body.classList.remove('room-bg-1');
-            document.body.classList.remove('room-bg-3');
-        } else if (roomId === 3) {
-            document.body.classList.add('room-bg-3');
-            document.body.classList.remove('room-bg-1');
-            document.body.classList.remove('room-bg-2');
-            document.body.classList.remove('room-bg-4');
-        } else if (roomId === 4) {
-            document.body.classList.add('room-bg-4');
-            document.body.classList.remove('room-bg-1');
-            document.body.classList.remove('room-bg-2');
-            document.body.classList.remove('room-bg-3');
-        } else {
-            document.body.classList.remove('room-bg-1');
-            document.body.classList.remove('room-bg-2');
-            document.body.classList.remove('room-bg-3');
+
+        // Remove all existing room backgrounds
+        for (let i = 1; i <= 10; i++) {
+            document.body.classList.remove(`room-bg-${i}`);
         }
+
+        // Add the current room's background
+        document.body.classList.add(`room-bg-${roomId}`);
+
         // Update attempts display for the room when shown
         try { updateAttemptDisplay(roomId); } catch(e) { /* ignore */ }
     }
@@ -705,10 +690,10 @@ window.cancelMission = function() {
     const backBtn = document.getElementById('fixedBackBtn');
     if (backBtn) backBtn.style.display = 'none';
 
-    // reset body backgrounds
-    document.body.classList.remove('room-bg-1');
-    document.body.classList.remove('room-bg-2');
-    document.body.classList.remove('room-bg-3');
+    // reset body backgrounds - remove all room backgrounds
+    for (let i = 1; i <= 10; i++) {
+        document.body.classList.remove(`room-bg-${i}`);
+    }
 
     // navigate to landing page URL (optional: keep on same page)
     // window.location.href = 'index.html';
