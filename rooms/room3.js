@@ -20,7 +20,7 @@ const room3 = new Room(
         </div>
 
         <div class="morse-display" id="morseCode" style="display: none;">
-            🔊 Morse-kode funnet: -.-- . ... / .-- . / -.-. .- -.
+            🔊 Morse-kode funnet: ..-. .-. . . -.. --- --
         </div>
 
         <div style="margin-top:10px;">
@@ -47,16 +47,13 @@ const room3 = new Room(
         </div>
     `,
     function check() {
-        // Dette er for første del, men siden det er to deler, kanskje ikke bruke check her.
-        // Kanskje lage separate funksjoner.
-        // For enkelhet, la check være for morse, og håndter dato separat.
-        const answer = document.getElementById('morseAnswer').value.toLowerCase();
-        if (answer === 'yes we can' || answer === 'yeswecan') {
-            showMessage(3, '🎉 Morse-koden dekryptert! - du kan gå videre!');
+        const answer = document.getElementById('morseAnswer').value.toLowerCase().replace(/\s/g, '');
+        if (answer === 'freedom') {
+            showMessage(3, '🎉 Morse-koden dekryptert! "FREEDOM" - det vestlige Berlins drøm.');
             setTimeout(nextRoom, 2000);
             return true;
         } else {
-            showMessage(3, '❌ Feil dekoding. Prøv igjen med morse-tabellen.', 'error');
+            showMessage(3, '❌ Feil dekoding. Bruk morse-tabellen og dekoder nøye.', 'error');
             return false;
         }
     },

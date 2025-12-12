@@ -433,13 +433,13 @@ window.closeMorseAlphabet = function() {
 };
 
 window.checkMorse = function() {
-    const answer = document.getElementById('morseAnswer').value.toLowerCase();
-    if (answer === 'yes we can' || answer === 'yeswecan') {
+    const answer = document.getElementById('morseAnswer').value.toLowerCase().replace(/\s/g, '');
+    if (answer === 'freedom') {
         clearFailures(3);
         game.showSolvedStamp();
         setTimeout(() => game.nextRoom(), 3000);
     } else {
-        game.showMessage(3, '❌ Feil dekoding. Prøv igjen med morse-tabellen.', 'error');
+        game.showMessage(3, '❌ Feil dekoding. Bruk morse-tabellen og dekoder nøye.', 'error');
         recordFailure(3);
     }
 };

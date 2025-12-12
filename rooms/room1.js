@@ -5,14 +5,18 @@ const room1 = new Room(
     '1946–1949 — ETTERKRIGSTIDEN',
     `
         <h3>Oppdragsintroduksjon — starten på den kalde krigen</h3>
-        <p><strong>Agent,</strong> oppdraget starter i etterkrigstiden. For å forstå hvorfor verden senere kom i krise, må du først plassere når den kalde krigen begynte.</p>
+        <p><strong>Agent,</strong> du har funnet et hemmelig dokument fra etterretningen. Det inneholder ledetråder til når spenningene mellom øst og vest begynte.</p>
 
-        <p><strong>Din oppgave:</strong> Bekreft når den kalde krigen startet slik at du får tilgang til videre etterforskning.</p>
+        <div class="encrypted-document" style="background:rgba(0,0,0,0.4); padding:15px; border-left:3px solid #e94560; margin:15px 0;">
+            <p style="font-style:italic; color:#00ff41;">📄 KLASSIFISERT NOTAT - Mars 1947</p>
+            <p>"Winston Churchill holdt en dramatisk tale i Fulton, Missouri. Han advarte om et <strong>'jernteppe'</strong> som hadde falt over Europa, fra Østersjøen til Adriaterhavet."</p>
+            <p style="margin-top:10px; color:#e94560;">"Denne talen markerte vendepunktet. Det var <strong>året etter krigens slutt</strong> at spenningene virkelig ble synlige for verden."</p>
+        </div>
 
-        <p><strong>Første gåte:</strong> Når begynte spenningene mellom USA og Sovjetunionen å bli tydelige? Skriv årstall.</p>
+        <p><strong>Gåte:</strong> Når endte andre verdenskrig i Europa? Legg til 1 år for å finne når den kalde krigen startet.</p>
 
         <div class="code-input">
-            <label for="year1">Årstall (YYYY):</label>
+            <label for="year1">Årstall for den kalde krigens start:</label>
             <input type="number" id="year1" min="1900" max="2000">
             <button class="btn" onclick="checkRoom1()">Lås opp</button>
         </div>

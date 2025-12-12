@@ -12,35 +12,35 @@ const room4 = new Room(
 
         <div class="encrypted-messages">
             <div class="message-box">
-                <h4>📡 Melding 1 - Fra Washington (Caesar cipher, shift 1)</h4>
+                <h4>📡 Melding 1 - Fra Washington</h4>
                 <p class="encrypted-text">XF NVTU TUPQ UIF NJTTJMFT</p>
                 <div class="decrypt-input">
                     <input type="text" id="message1" placeholder="Dekrypter meldingen..." maxlength="25">
                     <button class="btn-small" onclick="checkMessage(1)">Dekrypter</button>
                 </div>
-                <p class="hint">💡 Tips: Hver bokstav er forskjøvet 1 plass fremover i alfabetet</p>
+                <p class="hint">💡 Tips: Ser ut som Caesar cipher - prøv forskjellige shift-verdier</p>
                     <div class="stamp-container" id="stamp1"></div>
             </div>
 
             <div class="message-box">
-                <h4>📡 Melding 2 - Fra Moskva (Caesar cipher, shift 3)</h4>
+                <h4>📡 Melding 2 - Fra Moskva</h4>
                 <p class="encrypted-text">ZH ZLOO UHPRYH WKHP</p>
                 <div class="decrypt-input">
                     <input type="text" id="message2" placeholder="Dekrypter meldingen..." maxlength="25">
                     <button class="btn-small" onclick="checkMessage(2)">Dekrypter</button>
                 </div>
-                <p class="hint">💡 Tips: Hver bokstav er forskjøvet 3 plasser fremover i alfabetet</p>
+                <p class="hint">💡 Tips: Samme metode som melding 1, men annen shift-verdi</p>
                     <div class="stamp-container" id="stamp2"></div>
             </div>
 
             <div class="message-box">
-                <h4>📡 Melding 3 - Fra Havana (Reversert tekst)</h4>
+                <h4>📡 Melding 3 - Fra Havana</h4>
                 <p class="encrypted-text">SYAD 31 NI DENEPPAH TI</p>
                 <div class="decrypt-input">
                     <input type="text" id="message3" placeholder="Dekrypter meldingen..." maxlength="25">
                     <button class="btn-small" onclick="checkMessage(3)">Dekrypter</button>
                 </div>
-                <p class="hint">💡 Tips: Les teksten baklengs</p>
+                <p class="hint">💡 Tips: Denne bruker en annen metode - se på ordenes struktur</p>
                     <div class="stamp-container" id="stamp3"></div>
             </div>
         </div>
