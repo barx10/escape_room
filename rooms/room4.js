@@ -4,7 +4,7 @@ let decryptedMessages = [];
 
 const room4 = new Room(
     4,
-    '1962 — CUBAKRISEN (DEKRYPTERING)',
+    'CUBAKRISEN (DEKRYPTERING)',
     `
         <h3>🔐 Hemmelige meldinger fra krisen</h3>
         <p>CIA har avlyttet tre krypterte meldinger mellom de involverte lederne under Cubakrisen. 

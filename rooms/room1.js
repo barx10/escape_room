@@ -2,7 +2,7 @@ import Room from './Room.js';
 
 const room1 = new Room(
     1,
-    '1946–1949 — ETTERKRIGSTIDEN',
+    'ETTERKRIGSTIDEN',
     `
         <h3>Oppdragsintroduksjon — starten på den kalde krigen</h3>
         <p><strong>Agent,</strong> oppdraget starter i etterkrigstiden. For å forstå hvorfor verden senere kom i krise, må du først plassere når den kalde krigen begynte.</p>

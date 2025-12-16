@@ -2,7 +2,7 @@ import Room from './Room.js';
 
 const room2 = new Room(
     2,
-    '1949-1955 — OPPBYGGING AV ALLIANSER',
+    'OPPBYGGING AV ALLIANSER',
     `
         <h3>Tidslinje</h3>
         <p>Sett disse hendelsene i riktig kronologisk rekkefølge (eldst først):</p>

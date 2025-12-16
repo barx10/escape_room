@@ -45,6 +45,15 @@ body {
     background-attachment: fixed;
 }
 
+/* Fullscreen background for Room 6 when active */
+.room-bg-5 {
+    background-image: url('assets/images/room6_bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
 html {
     height: 100%;
 }
@@ -609,8 +618,9 @@ html {
     margin-bottom: 30px;
     border: 2px solid #e94560;
     padding: 20px;
-    background: rgba(233, 69, 96, 0.1);
+    background: rgba(255, 255, 255, 0.05);
     border-radius: 10px;
+    backdrop-filter: blur(10px);
 }
 
 .classified-stamp {

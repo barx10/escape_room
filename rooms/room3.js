@@ -2,7 +2,7 @@ import Room from './Room.js';
 
 const room3 = new Room(
     3,
-    '1961-1989 — BERLINMUREN',
+    'BERLINMUREN',
     `
         <p>Etter år med flukt fra øst til vest, ble byen stengt. Dokumenter antyder at myndighetene kalte det et «beskyttelsestiltak». Men hva var egentlig hensikten?. Finn riktig dato for når muren ble bygget.</p>
 

@@ -45,6 +45,10 @@ class Game {
         document.getElementById('timer').textContent = 
             `⏰ Tid igjen: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
         
+        // Update progress bar to match time elapsed
+        const percentElapsed = (elapsed / this.gameTime) * 100;
+        document.getElementById('progress').style.width = Math.min(100, percentElapsed) + '%';
+        
         if (remaining <= 0) {
             this.showMessage('timer', '⏰ Tiden er ute! Prøv igjen.', 'error');
             clearInterval(this.timerInterval);
@@ -123,26 +127,21 @@ class Game {
         // If entering room 1, add full-screen background class to body
         if (roomId === 1) {
             document.body.classList.add('room-bg-1');
-            document.body.classList.remove('room-bg-2');
-            document.body.classList.remove('room-bg-3');
+            document.body.classList.remove('room-bg-2', 'room-bg-3', 'room-bg-4', 'room-bg-5');
         } else if (roomId === 2) {
             document.body.classList.add('room-bg-2');
-            document.body.classList.remove('room-bg-1');
-            document.body.classList.remove('room-bg-3');
+            document.body.classList.remove('room-bg-1', 'room-bg-3', 'room-bg-4', 'room-bg-5');
         } else if (roomId === 3) {
             document.body.classList.add('room-bg-3');
-            document.body.classList.remove('room-bg-1');
-            document.body.classList.remove('room-bg-2');
-            document.body.classList.remove('room-bg-4');
+            document.body.classList.remove('room-bg-1', 'room-bg-2', 'room-bg-4', 'room-bg-5');
         } else if (roomId === 4) {
             document.body.classList.add('room-bg-4');
-            document.body.classList.remove('room-bg-1');
-            document.body.classList.remove('room-bg-2');
-            document.body.classList.remove('room-bg-3');
+            document.body.classList.remove('room-bg-1', 'room-bg-2', 'room-bg-3', 'room-bg-5');
+        } else if (roomId === 5) {
+            document.body.classList.add('room-bg-5');
+            document.body.classList.remove('room-bg-1', 'room-bg-2', 'room-bg-3', 'room-bg-4');
         } else {
-            document.body.classList.remove('room-bg-1');
-            document.body.classList.remove('room-bg-2');
-            document.body.classList.remove('room-bg-3');
+            document.body.classList.remove('room-bg-1', 'room-bg-2', 'room-bg-3', 'room-bg-4', 'room-bg-5');
         }
         // Update attempts display for the room when shown
         try { updateAttemptDisplay(roomId); } catch(e) { /* ignore */ }
@@ -651,7 +650,7 @@ window.checkAnswer6 = function(questionNumber) {
         1: 42,
         2: 1850,
         3: ['RUDOLF ANDERSON', 'MAJOR RUDOLF ANDERSON'],
-        4: ['OPERATION QUARANTINE', 'QUARANTINE']
+        4: ['OPERATION QUARANTINE']
     };
     
     let isCorrect = false;

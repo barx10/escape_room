@@ -2,7 +2,7 @@ import Room from './Room.js';
 
 const room6 = new Room(
     5,
-    '1962 — HEMMELIGE DOKUMENTER',
+    'HEMMELIGE DOKUMENTER',
     `
     <h3>📂 Klassifiserte CIA-arkiver</h3>
     <p>Du har tilgang til hemmelige dokumenter fra Cubakrisen. Les nøye gjennom dokumentene og svar på spørsmålene.</p>
@@ -26,7 +26,7 @@ const room6 = new Room(
                 <div class="stamp-container" id="stamp-q1"></div>
             </div>
             <div style="display: flex; gap: 10px; align-items: center; margin-top: 10px;">
-                <input type="number" id="rocketCount" placeholder="Antall..." style="width: 150px;">
+                <input type="number" id="rocketCount" style="width: 150px;">
                 <button class="btn-small" id="btn-q1" onclick="checkAnswer6(1)">Sjekk svar ✓</button>
             </div>
         </div>
@@ -39,7 +39,7 @@ const room6 = new Room(
                 <div class="stamp-container" id="stamp-q2"></div>
             </div>
             <div style="display: flex; gap: 10px; align-items: center; margin-top: 10px;">
-                <input type="number" id="distance" placeholder="Avstand..." style="width: 150px;">
+                <input type="number" id="distance" style="width: 150px;">
                 <button class="btn-small" id="btn-q2" onclick="checkAnswer6(2)">Sjekk svar ✓</button>
             </div>
         </div>
@@ -52,7 +52,7 @@ const room6 = new Room(
                 <div class="stamp-container" id="stamp-q3"></div>
             </div>
             <div style="display: flex; gap: 10px; align-items: center; margin-top: 10px;">
-                <input type="text" id="pilotName" placeholder="Fullt navn..." style="width: 250px;">
+                <input type="text" id="pilotName" style="width: 250px;">
                 <button class="btn-small" id="btn-q3" onclick="checkAnswer6(3)">Sjekk svar ✓</button>
             </div>
         </div>
@@ -65,7 +65,7 @@ const room6 = new Room(
                 <div class="stamp-container" id="stamp-q4"></div>
             </div>
             <div style="display: flex; gap: 10px; align-items: center; margin-top: 10px;">
-                <input type="text" id="operationName" placeholder="Operation..." style="width: 250px;">
+                <input type="text" id="operationName" style="width: 250px;">
                 <button class="btn-small" id="btn-q4" onclick="checkAnswer6(4)">Sjekk svar ✓</button>
             </div>
         </div>
