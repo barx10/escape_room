@@ -4,7 +4,7 @@ import rooms from './rooms/index.js';
 
 class Game {
     constructor() {
-        this.currentRoomIndex = 0;
+        this.currentRoomIndex = 0; // Start på room 1
         this.startTime = Date.now();
         this.gameTime = 60 * 60 * 1000; // 60 minutter
         this.selectedAlliances = [];
@@ -475,7 +475,19 @@ window.decryptedMessages = [];
 // Room 4 message checking
 window.checkMessage = function(messageNumber) {
     console.log('checkMessage called for message', messageNumber);
-    const input = document.getElementById(`message${messageNumber}`).value.trim().toUpperCase();
+    const inputElement = document.getElementById(`decrypt${messageNumber}`);
+    
+    if (!inputElement) {
+        console.error(`Input element decrypt${messageNumber} not found!`);
+        return;
+    }
+    
+    if (!inputElement.value) {
+        console.error(`Input element has no value property!`);
+        return;
+    }
+    
+    const input = inputElement.value.trim().toUpperCase();
     console.log('Input:', input);
     let correctAnswer = '';
     
@@ -484,10 +496,10 @@ window.checkMessage = function(messageNumber) {
             correctAnswer = 'WE MUST STOP THE MISSILES';
             break;
         case 2:
-            correctAnswer = 'WE WILL REMOVE THEM';
+            correctAnswer = 'WE WILL DEPLOY THEM';
             break;
         case 3:
-            correctAnswer = 'IT HAPPENED IN 13 DAYS';
+            correctAnswer = 'SOVIET MISSILES OPERATIONAL NOW';
             break;
     }
     
@@ -507,18 +519,25 @@ window.checkMessage = function(messageNumber) {
         
         game.showMessage(4, `✅ Melding ${messageNumber} dekryptert: "${correctAnswer}"`, 'success');
 
-        // Pling-lyd
+        // Pling-lyd med Web Audio API
         console.log('Playing sound...');
-        const audio = document.getElementById('pling-audio');
-        if (audio) {
-            audio.currentTime = 0;
-            audio.play().then(() => {
-                console.log('Sound played successfully');
-            }).catch(err => {
-                console.error('Error playing sound:', err);
-            });
-        } else {
-            console.error('Audio element not found!');
+        try {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            const audioCtx = new AudioContext();
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            oscillator.frequency.value = 800;
+            oscillator.type = 'sine';
+            const now = audioCtx.currentTime;
+            gainNode.gain.setValueAtTime(0.3, now);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+            oscillator.start(now);
+            oscillator.stop(now + 0.2);
+            console.log('Sound played successfully');
+        } catch (err) {
+            console.error('Error playing sound:', err);
         }
 
         // Stempel
@@ -543,21 +562,29 @@ window.checkMessage = function(messageNumber) {
     } else {
         console.log('Wrong answer');
         game.showMessage(4, `❌ Feil dekryptering av melding ${messageNumber}. Prøv igjen!`, 'error');
+        recordFailure(4);
     }
 };
 
 window.checkRoom4 = function() {
-    const days = parseInt(document.getElementById('crisisDays').value);
+    const dateInput = document.getElementById('crisisDate').value;
+    console.log('checkRoom4 called');
+    console.log('Date entered:', dateInput);
+    console.log('Decrypted messages count:', window.decryptedMessages.length);
+    console.log('Decrypted messages:', window.decryptedMessages);
     
-    if (days === 13 && window.decryptedMessages.length === 3) {
+    if (dateInput === '14101962MSK' && window.decryptedMessages.length === 3) {
+        console.log('Room 4 solved!');
         clearFailures(4);
         game.showSolvedStamp();
         setTimeout(() => game.nextRoom(), 3000);
     } else if (window.decryptedMessages.length < 3) {
+        console.log('Not all messages decrypted');
         game.showMessage(4, '❌ Du må dekryptere alle tre meldingene først!', 'error');
         recordFailure(4);
     } else {
-        game.showMessage(4, '❌ Feil antall dager. Les meldingene du dekrypterte nøye.', 'error');
+        console.log('Wrong date');
+        game.showMessage(4, '❌ Feil kode. Husk både dato og tidssone!', 'error');
         recordFailure(4);
     }
 };
@@ -583,14 +610,122 @@ window.checkRoom5 = function() {
 };
 
 window.checkRoom6 = function() {
-    const count = parseInt(document.getElementById('rocketCount').value);
-    if (count === 42) {
-        clearFailures(6);
+    const rocketCount = parseInt(document.getElementById('rocketCount').value);
+    const distance = parseInt(document.getElementById('distance').value);
+    const pilotName = document.getElementById('pilotName').value.trim().toUpperCase();
+    const operationName = document.getElementById('operationName').value.trim().toUpperCase();
+    
+    console.log('Room 6 check:', { rocketCount, distance, pilotName, operationName });
+    
+    const correctAnswers = {
+        rockets: 42,
+        distance: 1850,
+        pilot: 'RUDOLF ANDERSON',
+        operation: 'OPERATION QUARANTINE'
+    };
+    
+    // Check all answers
+    if (rocketCount === correctAnswers.rockets && 
+        distance === correctAnswers.distance && 
+        (pilotName === correctAnswers.pilot || pilotName === 'MAJOR RUDOLF ANDERSON') &&
+        (operationName === correctAnswers.operation || operationName === 'QUARANTINE')) {
+        
+        clearFailures(5);
         game.showSolvedStamp();
         setTimeout(() => game.nextRoom(), 3000);
     } else {
-        game.showMessage(6, '❌ Feil antall. Lytt nøye.', 'error');
+        let errors = [];
+        if (rocketCount !== correctAnswers.rockets) errors.push('rakettantall');
+        if (distance !== correctAnswers.distance) errors.push('avstand');
+        if (pilotName !== correctAnswers.pilot && pilotName !== 'MAJOR RUDOLF ANDERSON') errors.push('pilot');
+        if (operationName !== correctAnswers.operation && operationName !== 'QUARANTINE') errors.push('operasjonsnavn');
+        
+        game.showMessage(5, `❌ Feil i: ${errors.join(', ')}. Sjekk dokumentene nøye!`, 'error');
+        recordFailure(5);
+    }
+};
+
+// Check individual answers in Room 6 and show stamp
+window.checkAnswer6 = function(questionNumber) {
+    const correctAnswers = {
+        1: 42,
+        2: 1850,
+        3: ['RUDOLF ANDERSON', 'MAJOR RUDOLF ANDERSON'],
+        4: ['OPERATION QUARANTINE', 'QUARANTINE']
+    };
+    
+    let isCorrect = false;
+    let value;
+    
+    switch(questionNumber) {
+        case 1:
+            value = parseInt(document.getElementById('rocketCount').value);
+            isCorrect = value === correctAnswers[1];
+            break;
+        case 2:
+            value = parseInt(document.getElementById('distance').value);
+            isCorrect = value === correctAnswers[2];
+            break;
+        case 3:
+            value = document.getElementById('pilotName').value.trim().toUpperCase();
+            isCorrect = correctAnswers[3].includes(value);
+            break;
+        case 4:
+            value = document.getElementById('operationName').value.trim().toUpperCase();
+            isCorrect = correctAnswers[4].includes(value);
+            break;
+    }
+    
+    if (isCorrect) {
+        // Make button green
+        const button = document.getElementById(`btn-q${questionNumber}`);
+        if (button) {
+            button.style.backgroundColor = '#00ff41';
+            button.style.color = '#000';
+            button.textContent = '✓ Riktig!';
+        }
+        
+        // Play sound
+        try {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            const audioCtx = new AudioContext();
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            oscillator.frequency.value = 800;
+            oscillator.type = 'sine';
+            const now = audioCtx.currentTime;
+            gainNode.gain.setValueAtTime(0.3, now);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+            oscillator.start(now);
+            oscillator.stop(now + 0.2);
+        } catch (err) {
+            console.error('Error playing sound:', err);
+        }
+        
+        // Show stamp
+        const stamp = document.getElementById(`stamp-q${questionNumber}`);
+        if (stamp) {
+            stamp.innerHTML = '<span class="riktig-stamp">✓ RIKTIG!</span>';
+            setTimeout(() => { 
+                stamp.innerHTML = ''; 
+            }, 3000);
+        }
+    } else {
+        // Record failure
         recordFailure(6);
+        
+        // Visual feedback for wrong answer
+        const button = document.getElementById(`btn-q${questionNumber}`);
+        if (button) {
+            button.style.backgroundColor = '#ff4444';
+            button.textContent = '✗ Feil';
+            setTimeout(() => {
+                button.style.backgroundColor = '';
+                button.textContent = 'Sjekk svar ✓';
+            }, 1500);
+        }
     }
 };
 
@@ -718,6 +853,14 @@ window.cancelMission = function() {
 window.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
     if (params.get('start') === '1') {
+        // Sjekk om det er en room parameter (f.eks ?start=1&room=5)
+        const roomParam = params.get('room');
+        if (roomParam) {
+            const roomIndex = parseInt(roomParam) - 1; // Konverter til 0-indeksert
+            if (roomIndex >= 0 && roomIndex < rooms.length) {
+                game.currentRoomIndex = roomIndex;
+            }
+        }
         // Vent et lite øyeblikk for at DOM er klar
         setTimeout(() => window.startGame(), 50);
     }
