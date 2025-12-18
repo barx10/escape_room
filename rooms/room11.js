@@ -1,7 +1,7 @@
 import Room from './Room.js';
 
 const room11 = new Room(
-    10,
+    9,
     'AVSLUTNING — OPPDRAG FULLFØRT',
     `
         <h3>🎉 Gratulerer, Agent!</h3>

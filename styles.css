@@ -9,8 +9,8 @@ body {
     overflow-x: hidden;
 }
 
-/* Fullscreen background for Room 1 when active */
-.room-bg-1 {
+/* Fullscreen background for Room 1 (index 0) */
+.room-bg-0 {
     background-image: url('assets/images/room1.png');
     background-size: cover;
     background-position: center;
@@ -18,8 +18,8 @@ body {
     background-attachment: fixed;
 }
 
-/* Fullscreen background for Room 2 when active */
-.room-bg-2 {
+/* Fullscreen background for Room 2 (index 1) */
+.room-bg-1 {
     background-image: url('assets/images/room2.png');
     background-size: cover;
     background-position: center;
@@ -27,8 +27,8 @@ body {
     background-attachment: fixed;
 }
 
-/* Fullscreen background for Room 3 when active */
-.room-bg-3 {
+/* Fullscreen background for Room 3 (index 2) */
+.room-bg-2 {
     background-image: url('assets/images/room3.png');
     background-size: cover;
     background-position: center;
@@ -36,8 +36,8 @@ body {
     background-attachment: fixed;
 }
 
-/* Fullscreen background for Room 4 when active */
-.room-bg-4 {
+/* Fullscreen background for Room 4 (index 3) */
+.room-bg-3 {
     background-image: url('assets/images/room4.png');
     background-size: cover;
     background-position: center;
@@ -45,9 +45,18 @@ body {
     background-attachment: fixed;
 }
 
-/* Fullscreen background for Room 6 when active */
-.room-bg-5 {
+/* Fullscreen background for Room 5 (index 4) */
+.room-bg-4 {
     background-image: url('assets/images/room6_bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+/* Fullscreen background for Room 6 (index 5) */
+.room-bg-5 {
+    background-image: url('assets/images/room7.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -549,10 +558,13 @@ html {
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 900px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 15px;
     min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 /* Briefing page styles */
@@ -560,12 +572,12 @@ html {
     min-height: 100vh;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     background-image: url('assets/images/briefing.png'); /* Bytt ut med opplastet bilde */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    padding: 20px;
+    padding: 40px 20px 20px 20px;
 }
 
 .briefing-container {
@@ -615,26 +627,41 @@ html {
 
 .header {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
     border: 2px solid #e94560;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.05);
+    padding: 10px 15px;
+    background: rgba(0, 0, 0, 0.6);
     border-radius: 10px;
     backdrop-filter: blur(10px);
+    display: inline-block;
+    width: auto;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.header h1 {
+    font-size: 18px;
+    margin: 5px 0;
+}
+
+.header p {
+    font-size: 12px;
+    margin: 3px 0;
 }
 
 .classified-stamp {
     color: #ff6b6b;
-    font-size: 24px;
+    font-size: 14px;
     font-weight: bold;
-    transform: rotate(-15deg);
-    margin-bottom: 10px;
+    transform: rotate(-5deg);
+    margin-bottom: 5px;
 }
 
 .timer {
-    font-size: 28px;
+    font-size: 20px;
     color: #ffd93d;
-    margin: 10px 0;
+    margin: 8px 0;
     font-weight: bold;
 }
 

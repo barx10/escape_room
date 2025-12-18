@@ -1,7 +1,7 @@
 import Room from './Room.js';
 
 const room8 = new Room(
-    7,
+    6,
     'TIDSFORSTÅELSE - KODEKNUSING',
     `
     <h3>Plasser hendelsene i tid</h3>

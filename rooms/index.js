@@ -9,18 +9,18 @@ import room9 from './room9.js';
 import room10 from './room10.js';
 import room11 from './room11.js';
 
-// Kronologisk rekkefølge: etterkrig -> allianser -> Berlin -> Cubakrisen (1962) -> avslutning
+// Kronologisk rekkefølge: etterkrig -> allianser -> Berlin -> Cubakrisen -> avlytting -> avslutning
 const rooms = [
-	room1,  // Etterkrig / intro (1945-47)
-	room2,  // Allianser (1949/1955)
-	room3,  // Berlinmuren (1961)
-	room4,  // Cubakrisen - opptrapping (1962)
-	room6,  // Arkivdokumenter (oktober 1962)
-	room7,  // Avlyttede meldinger / tekniske detaljer
-	room8,  // Kodeknusing / tidsberegning
-	room9,  // Forhandlingene (Kennedy/Khrushchev)
-	room10, // Sende bevisene
-	room11  // Avslutning og refleksjon
+	room1,  // Rom 1: Etterkrigstiden (1945-47)
+	room2,  // Rom 2: Oppbygging av allianser (NATO/Warszawa)
+	room3,  // Rom 3: Berlinmuren (1961)
+	room4,  // Rom 4: Cubakrisen - dekryptering (1962)
+	room6,  // Rom 5: Hemmelige dokumenter (CIA-arkiver)
+	room7,  // Rom 6: Avlyttet melding fra Moskva (morsekode/Gorkij)
+	room8,  // Rom 7: Tidsforståelse - kodeknusing
+	room9,  // Rom 8: Forhandlingene (Kennedy/Khrushchev)
+	room10, // Rom 9: Siste bevis - fluktruten
+	room11  // Rom 10: Avslutning
 ];
 
 export default rooms;

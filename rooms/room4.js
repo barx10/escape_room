@@ -3,7 +3,7 @@ import Room from './Room.js';
 let decryptedMessages = [];
 
 const room4 = new Room(
-    4,
+    3,
     'CUBAKRISEN (DEKRYPTERING)',
     `
         <h3>🔐 Hemmelige meldinger fra krisen</h3>

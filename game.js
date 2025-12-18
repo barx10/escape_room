@@ -123,26 +123,13 @@ class Game {
 
     showCurrentRoom() {
         const roomId = rooms[this.currentRoomIndex].id;
+        const roomIndex = this.currentRoomIndex;
         document.getElementById(`room${roomId}`).classList.add('active');
-        // If entering room 1, add full-screen background class to body
-        if (roomId === 1) {
-            document.body.classList.add('room-bg-1');
-            document.body.classList.remove('room-bg-2', 'room-bg-3', 'room-bg-4', 'room-bg-5');
-        } else if (roomId === 2) {
-            document.body.classList.add('room-bg-2');
-            document.body.classList.remove('room-bg-1', 'room-bg-3', 'room-bg-4', 'room-bg-5');
-        } else if (roomId === 3) {
-            document.body.classList.add('room-bg-3');
-            document.body.classList.remove('room-bg-1', 'room-bg-2', 'room-bg-4', 'room-bg-5');
-        } else if (roomId === 4) {
-            document.body.classList.add('room-bg-4');
-            document.body.classList.remove('room-bg-1', 'room-bg-2', 'room-bg-3', 'room-bg-5');
-        } else if (roomId === 5) {
-            document.body.classList.add('room-bg-5');
-            document.body.classList.remove('room-bg-1', 'room-bg-2', 'room-bg-3', 'room-bg-4');
-        } else {
-            document.body.classList.remove('room-bg-1', 'room-bg-2', 'room-bg-3', 'room-bg-4', 'room-bg-5');
-        }
+        
+        // Fjern alle bakgrunnsklasser først, så legg til riktig
+        document.body.classList.remove('room-bg-0', 'room-bg-1', 'room-bg-2', 'room-bg-3', 'room-bg-4', 'room-bg-5', 'room-bg-6', 'room-bg-7', 'room-bg-8', 'room-bg-9');
+        document.body.classList.add(`room-bg-${roomIndex}`);
+        
         // Update attempts display for the room when shown
         try { updateAttemptDisplay(roomId); } catch(e) { /* ignore */ }
     }
@@ -813,10 +800,8 @@ window.startGame = function() {
     const backBtn = document.getElementById('fixedBackBtn');
     if (backBtn) backBtn.style.display = 'block';
 
-    // Hvis første rom er room 1, vis fullskjerms bakgrunn nå
-    if (rooms[0] && rooms[0].id === 1) {
-        document.body.classList.add('room-bg-1');
-    }
+    // Sett bakgrunn for første rom
+    document.body.classList.add('room-bg-0');
 
     // Initialiser spillobjektet
     game.init();
@@ -840,9 +825,7 @@ window.cancelMission = function() {
     if (backBtn) backBtn.style.display = 'none';
 
     // reset body backgrounds
-    document.body.classList.remove('room-bg-1');
-    document.body.classList.remove('room-bg-2');
-    document.body.classList.remove('room-bg-3');
+    document.body.classList.remove('room-bg-0', 'room-bg-1', 'room-bg-2', 'room-bg-3', 'room-bg-4', 'room-bg-5', 'room-bg-6', 'room-bg-7', 'room-bg-8', 'room-bg-9');
 
     // navigate to landing page URL (optional: keep on same page)
     // window.location.href = 'index.html';

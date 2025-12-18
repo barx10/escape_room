@@ -1,7 +1,7 @@
 import Room from './Room.js';
 
 const room9 = new Room(
-    8,
+    7,
     'FORHANDLINGENE - KONTROLLROMMET',
     `
     <h3>Forhandlingene</h3>

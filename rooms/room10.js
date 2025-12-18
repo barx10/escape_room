@@ -1,7 +1,7 @@
 import Room from './Room.js';
 
 const room10 = new Room(
-    9,
+    8,
     'SISTE BEVIS — FLUKTRUTEN',
     `
     <h3>Send bevisene</h3>

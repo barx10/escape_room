@@ -1,7 +1,7 @@
 import Room from './Room.js';
 
 const room6 = new Room(
-    5,
+    4,
     'HEMMELIGE DOKUMENTER',
     `
     <h3>📂 Klassifiserte CIA-arkiver</h3>
@@ -32,7 +32,7 @@ const room6 = new Room(
         </div>
 
         <div style="margin: 15px 0;">
-            <label style="display: block; margin-bottom: 5px;">2. Hva var avstanden fra Cuba til Washington D.C.? (i km)</label>
+            <label style="display: block; margin-bottom: 5px;">2. Hva var avstanden fra ubåt utenfor Cuba til Tampa, Floride US? (i km)</label>
             <button class="btn-small" onclick="const v = document.getElementById('vedleggB'); v.style.display = v.style.display === 'none' ? 'block' : 'none';">Åpne/Lukk Vedlegg B 📎</button>
             <div id="vedleggB" style="display: none; margin-top: 10px; position: relative;">
                 <img src="assets/documents/vedlegg-b.png" alt="Vedlegg B" style="max-width: 100%; border: 1px solid #00ff41; border-radius: 5px;">
