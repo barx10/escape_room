@@ -1,30 +1,32 @@
 import Room from './Room.js';
 
 const room8 = new Room(
-    6,
-    'TIDSFORSTÅELSE - KODEKNUSING',
+    8,
+    'FORHANDLINGENE',
     `
-    <h3>Plasser hendelsene i tid</h3>
-    <p>For å gjøre videre tolkning, regn ut hvor mange år etter 1945 de tidlige spenningene ble tydelige.</p>
+    <h3>Forhandlingene</h3>
+    <p>Hvem forhandlet direkte om en løsning under Cubakrisen? Velg de to riktige lederne.</p>
 
-    <div class="code-input">
-        <label for="yearsAfter">Antall år etter 1945:</label>
-        <input type="number" id="yearsAfter" placeholder="X" min="1" max="10">
-    <button class="btn" onclick="checkRoom7()">Lås opp</button>
+    <div class="map-grid">
+        <div class="map-item" onclick="selectLeader8('Kennedy')">John F. Kennedy</div>
+        <div class="map-item" onclick="selectLeader8('Khrushchev')">Nikita Khrushchev</div>
+        <div class="map-item" onclick="selectLeader8('Castro')">Fidel Castro</div>
     </div>
+
+    <button class="btn" onclick="checkRoom8()">Bekreft</button>
     `,
     function check() {
-        const years = parseInt(document.getElementById('yearsAfter').value);
-        if (years === 5) {
-            showMessage(7, '🎉 Korrekt! 5 år etter 1945.');
+        const selected = window.selectedLeaders8 || [];
+        if (selected.includes('Kennedy') && selected.includes('Khrushchev') && !selected.includes('Castro')) {
+            showMessage(8, '🎉 Riktig! Kennedy og Khrushchev forhandlet.');
             setTimeout(nextRoom, 2000);
             return true;
         } else {
-            showMessage(7, '❌ Feil. Regn: 1945 + X = ca. 1950.', 'error');
+            showMessage(8, '❌ Feil valg. Castro var ikke hovedforhandler.', 'error');
             return false;
         }
     },
-    'Tenk 1945 + X = cirka 1950; dette hjelper deg å forstå rekkefølgen av hendelser.'
+    'Kennedy og Khrushchev var hovedforhandlerne mellom supermaktene.'
 );
 
 export default room8;

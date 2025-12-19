@@ -124,6 +124,13 @@ class Game {
     showCurrentRoom() {
         const roomId = rooms[this.currentRoomIndex].id;
         const roomIndex = this.currentRoomIndex;
+        
+        // Fjern active-klassen fra ALLE rom først
+        document.querySelectorAll('.room').forEach(room => {
+            room.classList.remove('active');
+        });
+        
+        // Legg til active på kun det aktuelle rommet
         document.getElementById(`room${roomId}`).classList.add('active');
         
         // Fjern alle bakgrunnsklasser først, så legg til riktig
@@ -576,26 +583,8 @@ window.checkRoom4 = function() {
 };
 
 // Nye funksjoner for rom 6-11
-window.selectedDocument = '';
-window.selectDocument = function(doc) {
-    window.selectedDocument = doc;
-    document.querySelectorAll('.map-item').forEach(item => {
-        item.classList.remove('selected');
-    });
-    event.target.closest('.map-item').classList.add('selected');
-};
+// Rom 5: Hemmelige dokumenter
 window.checkRoom5 = function() {
-    if (window.selectedDocument === 'oktober') {
-        clearFailures(5);
-        game.showSolvedStamp();
-        setTimeout(() => game.nextRoom(), 3000);
-    } else {
-        game.showMessage(5, '❌ Feil dokument. Prøv igjen.', 'error');
-        recordFailure(5);
-    }
-};
-
-window.checkRoom6 = function() {
     const rocketCount = parseInt(document.getElementById('rocketCount').value);
     const distance = parseInt(document.getElementById('distance').value);
     const pilotName = document.getElementById('pilotName').value.trim().toUpperCase();
@@ -631,8 +620,10 @@ window.checkRoom6 = function() {
     }
 };
 
-// Check individual answers in Room 6 and show stamp
-window.checkAnswer6 = function(questionNumber) {
+// Rom 5: Sjekk individuelle svar
+
+// Check individual answers in Room 5 and show stamp
+window.checkAnswer5 = function(questionNumber) {
     const correctAnswers = {
         1: 42,
         2: 1850,
@@ -700,7 +691,7 @@ window.checkAnswer6 = function(questionNumber) {
         }
     } else {
         // Record failure
-        recordFailure(6);
+        recordFailure(5);
         
         // Visual feedback for wrong answer
         const button = document.getElementById(`btn-q${questionNumber}`);
@@ -714,6 +705,8 @@ window.checkAnswer6 = function(questionNumber) {
         }
     }
 };
+
+// Rom 6: Avlyttet melding fra Moskva (morse) - handlers er i room6.js
 
 window.checkRoom7 = function() {
     const years = parseInt(document.getElementById('yearsAfter').value);
@@ -787,6 +780,17 @@ window.updateTimer = function() {
 
 // Initialiser spillet når det eksplisitt blir startet fra UI (briefing)
 const game = new Game();
+
+// Gjør game tilgjengelig globalt for testing
+window.game = game;
+
+// Hjelpefunksjon for å hoppe til et rom under testing
+window.gotoRoom = function(roomNumber) {
+    game.currentRoomIndex = roomNumber - 1;
+    game.showCurrentRoom();
+    game.updateProgress();
+    console.log(`Hoppet til rom ${roomNumber}`);
+};
 
 // Eksporter eller gjør tilgjengelig en global funksjon for å starte spillet
 window.startGame = function() {

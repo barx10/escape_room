@@ -1,7 +1,7 @@
 import Room from './Room.js';
 
 const room1 = new Room(
-    0,
+    1,
     'ETTERKRIGSTIDEN',
     `
         <h3>Oppdragsintroduksjon — starten på den kalde krigen</h3>

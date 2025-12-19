@@ -1,7 +1,7 @@
 import Room from './Room.js';
 
 const room2 = new Room(
-    1,
+    2,
     'OPPBYGGING AV ALLIANSER',
     `
         <h3>Tidslinje</h3>

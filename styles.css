@@ -9,7 +9,7 @@ body {
     overflow-x: hidden;
 }
 
-/* Fullscreen background for Room 1 (index 0) */
+/* Fullscreen background for Room 1 (index 0) - Etterkrigstiden */
 .room-bg-0 {
     background-image: url('assets/images/room1.png');
     background-size: cover;
@@ -18,7 +18,7 @@ body {
     background-attachment: fixed;
 }
 
-/* Fullscreen background for Room 2 (index 1) */
+/* Fullscreen background for Room 2 (index 1) - Allianser */
 .room-bg-1 {
     background-image: url('assets/images/room2.png');
     background-size: cover;
@@ -27,7 +27,7 @@ body {
     background-attachment: fixed;
 }
 
-/* Fullscreen background for Room 3 (index 2) */
+/* Fullscreen background for Room 3 (index 2) - Berlinmuren */
 .room-bg-2 {
     background-image: url('assets/images/room3.png');
     background-size: cover;
@@ -36,7 +36,7 @@ body {
     background-attachment: fixed;
 }
 
-/* Fullscreen background for Room 4 (index 3) */
+/* Fullscreen background for Room 4 (index 3) - Cubakrisen */
 .room-bg-3 {
     background-image: url('assets/images/room4.png');
     background-size: cover;
@@ -45,7 +45,7 @@ body {
     background-attachment: fixed;
 }
 
-/* Fullscreen background for Room 5 (index 4) */
+/* Fullscreen background for Room 5 (index 4) - Hemmelige dokumenter */
 .room-bg-4 {
     background-image: url('assets/images/room6_bg.png');
     background-size: cover;
@@ -54,7 +54,7 @@ body {
     background-attachment: fixed;
 }
 
-/* Fullscreen background for Room 6 (index 5) */
+/* Fullscreen background for Room 6 (index 5) - Avlyttet melding */
 .room-bg-5 {
     background-image: url('assets/images/room7.png');
     background-size: cover;
@@ -62,6 +62,8 @@ body {
     background-repeat: no-repeat;
     background-attachment: fixed;
 }
+
+/* Fullscreen background for Room 7-10 - fallback til standard gradient */
 
 html {
     height: 100%;
@@ -577,7 +579,9 @@ html {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    background-attachment: fixed;
     padding: 40px 20px 20px 20px;
+    overflow-y: auto;
 }
 
 .briefing-container {

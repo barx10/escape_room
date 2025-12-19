@@ -1,32 +1,30 @@
 import Room from './Room.js';
 
 const room9 = new Room(
-    7,
-    'FORHANDLINGENE - KONTROLLROMMET',
+    9,
+    'SISTE BEVIS — FLUKTRUTEN',
     `
-    <h3>Forhandlingene</h3>
-    <p>Hvem forhandlet direkte om en løsning under Cubakrisen? Velg de to riktige lederne.</p>
+    <h3>Send bevisene</h3>
+    <p>Du må sende bevisene videre. Bruk kodeordet for å sikre kommunikasjonen.</p>
 
-    <div class="map-grid">
-        <div class="map-item" onclick="selectLeader8('Kennedy')">John F. Kennedy</div>
-        <div class="map-item" onclick="selectLeader8('Khrushchev')">Nikita Khrushchev</div>
-        <div class="map-item" onclick="selectLeader8('Castro')">Fidel Castro</div>
+    <div class="code-input">
+        <label for="codeword">Kodeord:</label>
+        <input type="text" id="codeword" placeholder="Skriv ord">
+        <button class="btn" onclick="checkRoom9()">Send</button>
     </div>
-
-    <button class="btn" onclick="checkRoom8()">Bekreft</button>
     `,
     function check() {
-        const selected = window.selectedLeaders8 || [];
-        if (selected.includes('Kennedy') && selected.includes('Khrushchev') && !selected.includes('Castro')) {
-            showMessage(8, '🎉 Riktig! Kennedy og Khrushchev forhandlet.');
+        const word = document.getElementById('codeword').value.toLowerCase();
+        if (word === 'tøvær') {
+            showMessage(9, '🎉 Sendt! Bevisene er ute.');
             setTimeout(nextRoom, 2000);
             return true;
         } else {
-            showMessage(8, '❌ Feil valg. Castro var ikke hovedforhandler.', 'error');
+            showMessage(9, '❌ Feil kodeord. Prøv igjen.', 'error');
             return false;
         }
     },
-    'Kennedy og Khrushchev var hovedforhandlerne mellom supermaktene.'
+    'Kodeordet er navnet på operasjonen.'
 );
 
 export default room9;

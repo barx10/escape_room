@@ -1,30 +1,34 @@
 import Room from './Room.js';
 
 const room10 = new Room(
-    8,
-    'SISTE BEVIS — FLUKTRUTEN',
+    10,
+    'AVSLUTNING — OPPDRAG FULLFØRT',
     `
-    <h3>Send bevisene</h3>
-    <p>Du må sende bevisene videre. Bruk kodeordet for å sikre kommunikasjonen.</p>
-
-    <div class="code-input">
-        <label for="codeword">Kodeord:</label>
-        <input type="text" id="codeword" placeholder="Skriv ord">
-    <button class="btn" onclick="checkRoom9()">Send</button>
-    </div>
+        <h3>🎉 Gratulerer, Agent!</h3>
+        <p>Du har gjennomført etterforskningen og bidratt til å hindre eskalering under Cubakrisen.</p>
+        
+        <div class="success-message">
+            <h3>Oppdragsrapport:</h3>
+            <p>✅ Forstått starten på den kalde krigen (1946–1947)</p>
+            <p>✅ Identifisert hovedalliansene (NATO vs Warszawapakten)</p>
+            <p>✅ Lært om Berlinmurens rolle (1961)</p>
+            <p>✅ Avslørt planlegging og installasjon av raketter på Cuba (1962)</p>
+            <p>✅ Samlet og sendt bevis</p>
+        </div>
+        
+        <p><strong>Refleksjon:</strong> Diskuter med gruppen eller klassen:</p>
+        <ul>
+            <li>Hvorfor kalles det "den kalde krigen"?</li>
+            <li>Hva var de viktigste konsekvensene av perioden?</li>
+            <li>Hva kan vi lære om diplomati og konfliktløsning?</li>
+        </ul>
+        
+        <button class="btn" onclick="restartGame()" style="background: linear-gradient(45deg, #4ecdc4, #44a08d);">🔄 Spill på nytt</button>
     `,
     function check() {
-        const word = document.getElementById('codeword').value.toLowerCase();
-        if (word === 'tøvær') {
-            showMessage(9, '🎉 Sendt! Bevisene er ute.');
-            setTimeout(nextRoom, 2000);
-            return true;
-        } else {
-            showMessage(9, '❌ Feil kodeord. Prøv igjen.', 'error');
-            return false;
-        }
-    },
-    'Kodeordet er navnet på operasjonen.'
+        // Ingen check for siste rom
+        return true;
+    }
 );
 
 export default room10;

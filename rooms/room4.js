@@ -3,8 +3,8 @@ import Room from './Room.js';
 let decryptedMessages = [];
 
 const room4 = new Room(
-    3,
-    'CUBAKRISEN (DEKRYPTERING)',
+    4,
+    'CUBAKRISEN',
     `
         <h3>🔐 Hemmelige meldinger fra krisen</h3>
         <p>CIA har avlyttet tre krypterte meldinger mellom de involverte lederne under Cubakrisen. 
