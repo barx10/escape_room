@@ -1140,3 +1140,154 @@ html {
         opacity: 1;
     }
 }
+
+/* Room 7 - Timeline Puzzle Styles */
+.timeline-slots {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+.timeline-slot {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px dashed rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    padding: 15px;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.timeline-slot:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.timeline-slot.correct-slot {
+    background: rgba(0, 255, 0, 0.1);
+    border: 2px solid #00ff00;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+}
+
+.timeline-slot.incorrect-slot {
+    background: rgba(255, 0, 0, 0.1);
+    border: 2px solid #ff4444;
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+}
+
+.timeline-slot p {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 14px;
+    margin: 0;
+}
+
+.timeline-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.timeline-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 10px;
+    cursor: grab;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.timeline-card:active {
+    cursor: grabbing;
+}
+
+.timeline-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.timeline-card img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.timeline-card p {
+    font-size: 13px;
+    font-weight: 600;
+    margin: 5px 0;
+    color: #fff;
+}
+
+.timeline-card .card-year {
+    display: block;
+    font-size: 18px;
+    font-weight: bold;
+    color: #4ecdc4;
+    margin-top: 5px;
+}
+
+.placed-card {
+    position: relative;
+    width: 100%;
+}
+
+.placed-card img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+
+.placed-card p {
+    font-size: 13px;
+    font-weight: 600;
+    margin: 5px 0;
+    color: #fff;
+}
+
+.placed-card .card-year {
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+    color: #4ecdc4;
+    margin-top: 5px;
+}
+
+.remove-card-btn {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.remove-card-btn:hover {
+    background: #ff0000;
+    transform: scale(1.1);
+}
