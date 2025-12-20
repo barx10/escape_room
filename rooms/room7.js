@@ -3,7 +3,7 @@ import Room from './Room.js';
 // Global state for room 7
 let room7Cards = [
     { id: 'jalta', name: 'Jalta-konferansen', year: 1945, image: 'assets/images/jalta.jpg', correctSlot: 1 },
-    { id: 'korea', name: 'Koreakriget starter', year: 1950, image: 'assets/images/korea.jpg', correctSlot: 2 },
+    { id: 'korea', name: 'Koreakrigen starter', year: 1950, image: 'assets/images/korea.jpg', correctSlot: 2 },
     { id: 'stalin', name: 'Stalin dør', year: 1953, image: 'assets/images/stalin.jpg', correctSlot: 3 },
     { id: 'sputnik', name: 'Sputnik lanseres', year: 1957, image: 'assets/images/sputnik.jpg', correctSlot: 4 },
     { id: 'cuba', name: 'Cubarevolusjon - Castro/Che', year: 1959, image: 'assets/images/che_castro.jpg', correctSlot: 5 },
@@ -31,36 +31,7 @@ function initRoom7(retryCount = 0) {
     room7Placements = { slot1: null, slot2: null, slot3: null, slot4: null, slot5: null, slot6: null, slot7: null, slot8: null };
     room7SafeUnlocked = false;
     
-    console.log('initRoom7 called, retry count:', retryCount);
-    
-    // Wait for DOM to be ready
-    const cardsContainer = document.getElementById('room7Cards');
-    
-    if (!cardsContainer) {
-        console.error('room7Cards container not found! Retrying...', retryCount);
-        // Retry up to 10 times with increasing delay
-        if (retryCount < 10) {
-            setTimeout(() => initRoom7(retryCount + 1), 300);
-        } else {
-            console.error('Failed to initialize room 7 after 10 retries');
-        }
-        return;
-    }
-    
-    // Render shuffled cards
-    const shuffled = shuffleArray(room7Cards);
-    console.log('Rendering cards:', shuffled);
-    
-    cardsContainer.innerHTML = shuffled.map(card => `
-        <div class="timeline-card" draggable="true" data-card-id="${card.id}" 
-             ondragstart="startDragCard7(event)">
-            <img src="${card.image}" alt="${card.name}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%23444%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 fill=%22%23fff%22 dy=%22.3em%22%3E?%3C/text%3E%3C/svg%3E'">
-            <p>${card.name}</p>
-            <span class="card-year">${card.year}</span>
-        </div>
-    `).join('');
-    
-    console.log('Cards rendered successfully!');
+    console.log('initRoom7 called - cards already in HTML, no need to render');
 }
 
 function startDragCard7(event) {
@@ -100,10 +71,16 @@ function dropCard7(event, slotNumber) {
     // Place new card
     room7Placements[`slot${slotNumber}`] = room7DraggedCard;
     
+    // Get last digit of year for display
+    const lastDigit = card.year % 10;
+    
     // Update slot display
     slot.innerHTML = `
         <div class="placed-card">
-            <img src="${card.image}" alt="${card.name}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%23444%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 fill=%22%23fff%22 dy=%22.3em%22%3E?%3C/text%3E%3C/svg%3E'">
+            <div class="card-image-wrapper">
+                <img src="${card.image}" alt="${card.name}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%23444%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 fill=%22%23fff%22 dy=%22.3em%22%3E?%3C/text%3E%3C/svg%3E'">
+                <span class="card-digit">${lastDigit}</span>
+            </div>
             <p>${card.name}</p>
             <button class="remove-card-btn" onclick="removeCard7(${slotNumber})">✖</button>
         </div>
@@ -158,6 +135,10 @@ function checkRoom7Puzzle() {
             slot.classList.remove('incorrect-slot');
             slot.classList.add('correct-slot');
         } else {
+            // Only count as attempt if this is a new incorrect placement
+            if (!slot.classList.contains('incorrect-slot')) {
+                recordFailure(7);
+            }
             slot.classList.remove('correct-slot');
             slot.classList.add('incorrect-slot');
             allCorrect = false;
@@ -176,12 +157,12 @@ function checkRoom7Puzzle() {
 
 function checkRoom7Safe() {
     const code = document.getElementById('safeCode7').value;
-    if (code === '1957') {
-        showMessage(7, '🎉 Safe åpnet! Sputnik-året var nøkkelen.');
+    if (code === '50379399') {
+        showMessage(7, '🎉 Safe åpnet! Du har løst puslespillet.');
         setTimeout(nextRoom, 2000);
         return true;
     } else {
-        showMessage(7, '❌ Feil kode. Se nøye på hendelsene...', 'error');
+        showMessage(7, '❌ Feil kode. Les sifrene fra bildene i slots 1-8.', 'error');
         return false;
     }
 }
@@ -246,46 +227,70 @@ const room7 = new Room(
     </div>
 
     <div class="timeline-cards" id="room7Cards">
-        <div class="timeline-card" draggable="true" data-card-id="jalta" ondragstart="startDragCard7(event)">
-            <img src="assets/images/jalta.jpg" alt="Jalta-konferansen" onclick="openImageModal7(event, 'assets/images/jalta.jpg', 'Jalta-konferansen')">
-            <p>Jalta-konferansen</p>
-        </div>
-        <div class="timeline-card" draggable="true" data-card-id="korea" ondragstart="startDragCard7(event)">
-            <img src="assets/images/korea.jpg" alt="Koreakriget starter" onclick="openImageModal7(event, 'assets/images/korea.jpg', 'Koreakriget starter')">
-            <p>Koreakriget starter</p>
-        </div>
-        <div class="timeline-card" draggable="true" data-card-id="stalin" ondragstart="startDragCard7(event)">
-            <img src="assets/images/stalin.jpg" alt="Stalin dør" onclick="openImageModal7(event, 'assets/images/stalin.jpg', 'Stalin dør')">
-            <p>Stalin dør</p>
-        </div>
-        <div class="timeline-card" draggable="true" data-card-id="sputnik" ondragstart="startDragCard7(event)">
-            <img src="assets/images/sputnik.jpg" alt="Sputnik lanseres" onclick="openImageModal7(event, 'assets/images/sputnik.jpg', 'Sputnik lanseres')">
-            <p>Sputnik lanseres</p>
-        </div>
-        <div class="timeline-card" draggable="true" data-card-id="cuba" ondragstart="startDragCard7(event)">
-            <img src="assets/images/che_castro.jpg" alt="Cubarevolusjon" onclick="openImageModal7(event, 'assets/images/che_castro.jpg', 'Cubarevolusjon - Castro/Che')">
-            <p>Cubarevolusjon - Castro/Che</p>
-        </div>
-        <div class="timeline-card" draggable="true" data-card-id="jfk" ondragstart="startDragCard7(event)">
-            <img src="assets/images/jfk.jpg" alt="JFK myrdet" onclick="openImageModal7(event, 'assets/images/jfk.jpg', 'JFK myrdet')">
-            <p>JFK myrdet</p>
-        </div>
         <div class="timeline-card" draggable="true" data-card-id="moon" ondragstart="startDragCard7(event)">
-            <img src="assets/images/manelanding.jpg" alt="Månelanding" onclick="openImageModal7(event, 'assets/images/manelanding.jpg', 'Månelanding')">
+            <div class="card-image-wrapper">
+                <img src="assets/images/manelanding.jpg" alt="Månelanding" onclick="openImageModal7(event, 'assets/images/manelanding.jpg', 'Månelanding')">
+                <span class="card-digit">9</span>
+            </div>
             <p>Månelanding</p>
         </div>
+        <div class="timeline-card" draggable="true" data-card-id="jalta" ondragstart="startDragCard7(event)">
+            <div class="card-image-wrapper">
+                <img src="assets/images/jalta.jpg" alt="Jalta-konferansen" onclick="openImageModal7(event, 'assets/images/jalta.jpg', 'Jalta-konferansen')">
+                <span class="card-digit">5</span>
+            </div>
+            <p>Jalta-konferansen</p>
+        </div>
+        <div class="timeline-card" draggable="true" data-card-id="jfk" ondragstart="startDragCard7(event)">
+            <div class="card-image-wrapper">
+                <img src="assets/images/jfk.jpg" alt="JFK myrdet" onclick="openImageModal7(event, 'assets/images/jfk.jpg', 'JFK myrdet')">
+                <span class="card-digit">3</span>
+            </div>
+            <p>JFK myrdet</p>
+        </div>
+        <div class="timeline-card" draggable="true" data-card-id="korea" ondragstart="startDragCard7(event)">
+            <div class="card-image-wrapper">
+                <img src="assets/images/korea.jpg" alt="Koreakrigen starter" onclick="openImageModal7(event, 'assets/images/korea.jpg', 'Koreakrigen starter')">
+                <span class="card-digit">0</span>
+            </div>
+            <p>Koreakrigen starter</p>
+        </div>
         <div class="timeline-card" draggable="true" data-card-id="wall" ondragstart="startDragCard7(event)">
-            <img src="assets/images/berlinmuren_rives.jpg" alt="Berlinmuren rives" onclick="openImageModal7(event, 'assets/images/berlinmuren_rives.jpg', 'Berlinmuren rives')">
+            <div class="card-image-wrapper">
+                <img src="assets/images/berlinmuren_rives.jpg" alt="Berlinmuren rives" onclick="openImageModal7(event, 'assets/images/berlinmuren_rives.jpg', 'Berlinmuren rives')">
+                <span class="card-digit">9</span>
+            </div>
             <p>Berlinmuren rives</p>
+        </div>
+        <div class="timeline-card" draggable="true" data-card-id="sputnik" ondragstart="startDragCard7(event)">
+            <div class="card-image-wrapper">
+                <img src="assets/images/sputnik.jpg" alt="Sputnik lanseres" onclick="openImageModal7(event, 'assets/images/sputnik.jpg', 'Sputnik lanseres')">
+                <span class="card-digit">7</span>
+            </div>
+            <p>Sputnik lanseres</p>
+        </div>
+        <div class="timeline-card" draggable="true" data-card-id="stalin" ondragstart="startDragCard7(event)">
+            <div class="card-image-wrapper">
+                <img src="assets/images/stalin.jpg" alt="Stalin dør" onclick="openImageModal7(event, 'assets/images/stalin.jpg', 'Stalin dør')">
+                <span class="card-digit">3</span>
+            </div>
+            <p>Stalin dør</p>
+        </div>
+        <div class="timeline-card" draggable="true" data-card-id="cuba" ondragstart="startDragCard7(event)">
+            <div class="card-image-wrapper">
+                <img src="assets/images/che_castro.jpg" alt="Cubarevolusjon" onclick="openImageModal7(event, 'assets/images/che_castro.jpg', 'Cubarevolusjon - Castro/Che')">
+                <span class="card-digit">9</span>
+            </div>
+            <p>Cubarevolusjon - Castro/Che</p>
         </div>
     </div>
 
     <div id="room7Safe" style="display: none; margin-top: 20px;">
         <h3>🔐 Safe åpnet!</h3>
-        <p>Hint: Året da Sputnik ble skutt opp og startet romkappløpet er safe-koden.</p>
+        <p>Hint: Les siste siffer fra hvert bilde i rekkefølge for å få koden.</p>
         <div class="code-input">
-            <label for="safeCode7">Safe-kode (årstall):</label>
-            <input type="number" id="safeCode7" placeholder="YYYY" min="1940" max="1970">
+            <label for="safeCode7">Safe-kode (8 siffer):</label>
+            <input type="text" id="safeCode7" placeholder="########" maxlength="8">
             <button class="btn" onclick="checkRoom7Safe()">Lås opp</button>
         </div>
     </div>
@@ -300,7 +305,7 @@ const room7 = new Room(
     function check() {
         return checkRoom7Safe();
     },
-    'Hendelsene må sorteres fra tidligst til senest. Sputnik-året er nøkkelen.'
+    'Hendelsene må sorteres fra tidligst til senest. Les sifrene på bildene når de er i riktig rekkefølge.'
 );
 
 export default room7;

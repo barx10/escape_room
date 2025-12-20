@@ -1200,7 +1200,7 @@ html {
 
 .timeline-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    grid-template-columns: repeat(4, minmax(140px, 1fr));
     gap: 15px;
     margin: 20px 0;
 }
@@ -1359,4 +1359,29 @@ html {
 
 .timeline-card img:hover {
     transform: scale(1.05);
+}
+
+/* Room 7 - Card digit overlay */
+.card-image-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.card-digit {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: rgba(255, 215, 0, 0.95);
+    color: #000;
+    font-size: 24px;
+    font-weight: bold;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    pointer-events: none;
 }
