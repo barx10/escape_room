@@ -63,7 +63,16 @@ body {
     background-attachment: fixed;
 }
 
-/* Fullscreen background for Room 7-10 - fallback til standard gradient */
+/* Fullscreen background for Room 7 (index 6) - Tidsforståelse */
+.room-bg-6 {
+    background-image: url('assets/images/room7_bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+/* Fullscreen background for Room 8-10 - fallback til standard gradient */
 
 html {
     height: 100%;
@@ -1290,4 +1299,64 @@ html {
 .remove-card-btn:hover {
     background: #ff0000;
     transform: scale(1.1);
+}
+
+/* Room 7 - Image Modal */
+.image-modal {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.image-modal-content {
+    max-width: 90%;
+    max-height: 85%;
+    object-fit: contain;
+    animation: zoom 0.3s ease;
+    border-radius: 8px;
+}
+
+@keyframes zoom {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.image-modal-close {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    color: #fff;
+    font-size: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.image-modal-close:hover {
+    color: #ff4444;
+}
+
+.image-modal-caption {
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+    font-size: 18px;
+    margin-top: 10px;
+}
+
+.timeline-card img {
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.timeline-card img:hover {
+    transform: scale(1.05);
 }

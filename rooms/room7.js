@@ -7,13 +7,15 @@ let room7Cards = [
     { id: 'stalin', name: 'Stalin dør', year: 1953, image: 'assets/images/stalin.jpg', correctSlot: 3 },
     { id: 'sputnik', name: 'Sputnik lanseres', year: 1957, image: 'assets/images/sputnik.jpg', correctSlot: 4 },
     { id: 'cuba', name: 'Cubarevolusjon - Castro/Che', year: 1959, image: 'assets/images/che_castro.jpg', correctSlot: 5 },
-    { id: 'jfk', name: 'JFK myrdet', year: 1963, image: 'assets/images/jfk.jpg', correctSlot: 6 }
+    { id: 'jfk', name: 'JFK myrdet', year: 1963, image: 'assets/images/jfk.jpg', correctSlot: 6 },
+    { id: 'moon', name: 'Månelanding', year: 1969, image: 'assets/images/manelanding.jpg', correctSlot: 7 },
+    { id: 'wall', name: 'Berlinmuren rives', year: 1989, image: 'assets/images/berlinmuren_rives.jpg', correctSlot: 8 }
 ];
 
 console.log('Room 7 cards initialized:', room7Cards);
 
 let room7DraggedCard = null;
-let room7Placements = { slot1: null, slot2: null, slot3: null, slot4: null, slot5: null, slot6: null };
+let room7Placements = { slot1: null, slot2: null, slot3: null, slot4: null, slot5: null, slot6: null, slot7: null, slot8: null };
 let room7SafeUnlocked = false;
 
 function shuffleArray(array) {
@@ -25,21 +27,28 @@ function shuffleArray(array) {
     return shuffled;
 }
 
-function initRoom7() {
-    room7Placements = { slot1: null, slot2: null, slot3: null, slot4: null, slot5: null, slot6: null };
+function initRoom7(retryCount = 0) {
+    room7Placements = { slot1: null, slot2: null, slot3: null, slot4: null, slot5: null, slot6: null, slot7: null, slot8: null };
     room7SafeUnlocked = false;
     
-    console.log('initRoom7 called');
+    console.log('initRoom7 called, retry count:', retryCount);
     
-    // Render shuffled cards
-    const shuffled = shuffleArray(room7Cards);
+    // Wait for DOM to be ready
     const cardsContainer = document.getElementById('room7Cards');
     
     if (!cardsContainer) {
-        console.error('room7Cards container not found!');
+        console.error('room7Cards container not found! Retrying...', retryCount);
+        // Retry up to 10 times with increasing delay
+        if (retryCount < 10) {
+            setTimeout(() => initRoom7(retryCount + 1), 300);
+        } else {
+            console.error('Failed to initialize room 7 after 10 retries');
+        }
         return;
     }
     
+    // Render shuffled cards
+    const shuffled = shuffleArray(room7Cards);
     console.log('Rendering cards:', shuffled);
     
     cardsContainer.innerHTML = shuffled.map(card => `
@@ -50,6 +59,8 @@ function initRoom7() {
             <span class="card-year">${card.year}</span>
         </div>
     `).join('');
+    
+    console.log('Cards rendered successfully!');
 }
 
 function startDragCard7(event) {
@@ -94,7 +105,6 @@ function dropCard7(event, slotNumber) {
         <div class="placed-card">
             <img src="${card.image}" alt="${card.name}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%23444%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 fill=%22%23fff%22 dy=%22.3em%22%3E?%3C/text%3E%3C/svg%3E'">
             <p>${card.name}</p>
-            <span class="card-year">${card.year}</span>
             <button class="remove-card-btn" onclick="removeCard7(${slotNumber})">✖</button>
         </div>
     `;
@@ -132,7 +142,7 @@ function checkRoom7Puzzle() {
     let allCorrect = true;
     
     // Check each placement
-    for (let i = 1; i <= 6; i++) {
+    for (let i = 1; i <= 8; i++) {
         const slot = document.getElementById(`slot${i}`);
         const placedCardId = room7Placements[`slot${i}`];
         
@@ -176,6 +186,21 @@ function checkRoom7Safe() {
     }
 }
 
+function openImageModal7(event, imgSrc, caption) {
+    event.stopPropagation(); // Prevent drag from starting
+    const modal = document.getElementById('imageModal7');
+    const modalImg = document.getElementById('modalImage7');
+    const modalCaption = document.getElementById('modalCaption7');
+    
+    modal.style.display = 'flex';
+    modalImg.src = imgSrc;
+    modalCaption.textContent = caption;
+}
+
+function closeImageModal7() {
+    document.getElementById('imageModal7').style.display = 'none';
+}
+
 // Expose to window
 window.initRoom7 = initRoom7;
 window.startDragCard7 = startDragCard7;
@@ -183,6 +208,8 @@ window.allowDrop7 = allowDrop7;
 window.dropCard7 = dropCard7;
 window.removeCard7 = removeCard7;
 window.checkRoom7Safe = checkRoom7Safe;
+window.openImageModal7 = openImageModal7;
+window.closeImageModal7 = closeImageModal7;
 
 const room7 = new Room(
     7,
@@ -210,26 +237,70 @@ const room7 = new Room(
         <div class="timeline-slot" id="slot6" ondrop="dropCard7(event, 6)" ondragover="allowDrop7(event)">
             <p>Slot 6</p>
         </div>
+        <div class="timeline-slot" id="slot7" ondrop="dropCard7(event, 7)" ondragover="allowDrop7(event)">
+            <p>Slot 7</p>
+        </div>
+        <div class="timeline-slot" id="slot8" ondrop="dropCard7(event, 8)" ondragover="allowDrop7(event)">
+            <p>Slot 8</p>
+        </div>
     </div>
 
-    <div class="timeline-Sputnik ble skutt opp og startet romkappløpet er safe-koden.</p>
-        <div class="code-input">
-            <label for="safeCode7">Safe-kode (årstall):</label>
-            <input type="number" id="safeCode7" placeholder="YYYY" min="1940" max="197
+    <div class="timeline-cards" id="room7Cards">
+        <div class="timeline-card" draggable="true" data-card-id="jalta" ondragstart="startDragCard7(event)">
+            <img src="assets/images/jalta.jpg" alt="Jalta-konferansen" onclick="openImageModal7(event, 'assets/images/jalta.jpg', 'Jalta-konferansen')">
+            <p>Jalta-konferansen</p>
+        </div>
+        <div class="timeline-card" draggable="true" data-card-id="korea" ondragstart="startDragCard7(event)">
+            <img src="assets/images/korea.jpg" alt="Koreakriget starter" onclick="openImageModal7(event, 'assets/images/korea.jpg', 'Koreakriget starter')">
+            <p>Koreakriget starter</p>
+        </div>
+        <div class="timeline-card" draggable="true" data-card-id="stalin" ondragstart="startDragCard7(event)">
+            <img src="assets/images/stalin.jpg" alt="Stalin dør" onclick="openImageModal7(event, 'assets/images/stalin.jpg', 'Stalin dør')">
+            <p>Stalin dør</p>
+        </div>
+        <div class="timeline-card" draggable="true" data-card-id="sputnik" ondragstart="startDragCard7(event)">
+            <img src="assets/images/sputnik.jpg" alt="Sputnik lanseres" onclick="openImageModal7(event, 'assets/images/sputnik.jpg', 'Sputnik lanseres')">
+            <p>Sputnik lanseres</p>
+        </div>
+        <div class="timeline-card" draggable="true" data-card-id="cuba" ondragstart="startDragCard7(event)">
+            <img src="assets/images/che_castro.jpg" alt="Cubarevolusjon" onclick="openImageModal7(event, 'assets/images/che_castro.jpg', 'Cubarevolusjon - Castro/Che')">
+            <p>Cubarevolusjon - Castro/Che</p>
+        </div>
+        <div class="timeline-card" draggable="true" data-card-id="jfk" ondragstart="startDragCard7(event)">
+            <img src="assets/images/jfk.jpg" alt="JFK myrdet" onclick="openImageModal7(event, 'assets/images/jfk.jpg', 'JFK myrdet')">
+            <p>JFK myrdet</p>
+        </div>
+        <div class="timeline-card" draggable="true" data-card-id="moon" ondragstart="startDragCard7(event)">
+            <img src="assets/images/manelanding.jpg" alt="Månelanding" onclick="openImageModal7(event, 'assets/images/manelanding.jpg', 'Månelanding')">
+            <p>Månelanding</p>
+        </div>
+        <div class="timeline-card" draggable="true" data-card-id="wall" ondragstart="startDragCard7(event)">
+            <img src="assets/images/berlinmuren_rives.jpg" alt="Berlinmuren rives" onclick="openImageModal7(event, 'assets/images/berlinmuren_rives.jpg', 'Berlinmuren rives')">
+            <p>Berlinmuren rives</p>
+        </div>
+    </div>
+
     <div id="room7Safe" style="display: none; margin-top: 20px;">
         <h3>🔐 Safe åpnet!</h3>
-        <p>Hint: Året da NATO ble dannet er safe-koden.</p>
+        <p>Hint: Året da Sputnik ble skutt opp og startet romkappløpet er safe-koden.</p>
         <div class="code-input">
             <label for="safeCode7">Safe-kode (årstall):</label>
-            <input type="number" id="safeCode7" placeholder="YYYY" min="1940" max="1960">
+            <input type="number" id="safeCode7" placeholder="YYYY" min="1940" max="1970">
             <button class="btn" onclick="checkRoom7Safe()">Lås opp</button>
-        </div>Sputnik
+        </div>
+    </div>
+
+    <!-- Image Modal -->
+    <div id="imageModal7" class="image-modal" onclick="closeImageModal7()" style="display: none;">
+        <span class="image-modal-close">&times;</span>
+        <img class="image-modal-content" id="modalImage7">
+        <div class="image-modal-caption" id="modalCaption7"></div>
     </div>
     `,
     function check() {
         return checkRoom7Safe();
     },
-    'Hendelsene må sorteres fra tidligst til senest. NATO-året er nøkkelen.'
+    'Hendelsene må sorteres fra tidligst til senest. Sputnik-året er nøkkelen.'
 );
 
 export default room7;

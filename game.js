@@ -131,22 +131,28 @@ class Game {
         });
         
         // Legg til active på kun det aktuelle rommet
-        document.getElementById(`room${roomId}`).classList.add('active');
+        const currentRoomElement = document.getElementById(`room${roomId}`);
+        if (currentRoomElement) {
+            currentRoomElement.classList.add('active');
+        }
         
         // Fjern alle bakgrunnsklasser først, så legg til riktig
         document.body.classList.remove('room-bg-0', 'room-bg-1', 'room-bg-2', 'room-bg-3', 'room-bg-4', 'room-bg-5', 'room-bg-6', 'room-bg-7', 'room-bg-8', 'room-bg-9');
         document.body.classList.add(`room-bg-${roomIndex}`);
         
-        // Initialize room-specific features
+        // Initialize room-specific features after DOM is ready
         if (roomId === 7) {
-            setTimeout(() => {
-                if (typeof window.initRoom7 === 'function') {
-                    console.log('Calling initRoom7');
-                    window.initRoom7();
-                } else {
-                    console.error('initRoom7 function not found!');
-                }
-            }, 100);
+            // Use requestAnimationFrame to ensure DOM is rendered
+            requestAnimationFrame(() => {
+                setTimeout(() => {
+                    if (typeof window.initRoom7 === 'function') {
+                        console.log('Calling initRoom7');
+                        window.initRoom7();
+                    } else {
+                        console.error('initRoom7 function not found!');
+                    }
+                }, 100);
+            });
         }
         
         // Update attempts display for the room when shown
