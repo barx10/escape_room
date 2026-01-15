@@ -32,11 +32,24 @@ class Game {
     }
 
     startTimer() {
+        if (this.timerInterval) clearInterval(this.timerInterval);
         this.updateTimer();
         this.timerInterval = setInterval(() => this.updateTimer(), 1000);
     }
 
+    stopTimer() {
+        if (this.timerInterval) {
+            clearInterval(this.timerInterval);
+            this.timerInterval = null;
+        }
+    }
+
     updateTimer() {
+        // If timer is stopped (interval cleared), don't update time based on current time
+        // but rely on displayed time or last update.
+        // However, usually we just stop calling this function.
+        if (!this.timerInterval && this.currentRoomIndex !== rooms.length - 1) return;
+
         const elapsed = Date.now() - this.startTime;
         const remaining = Math.max(0, this.gameTime - elapsed);
         const minutes = Math.floor(remaining / 60000);
@@ -117,8 +130,36 @@ class Game {
     nextRoom() {
         document.getElementById(`room${rooms[this.currentRoomIndex].id}`).classList.remove('active');
         this.currentRoomIndex++;
-        this.showCurrentRoom();
-        this.updateProgress();
+
+        // Check if this is the final room (Room 10, index 9)
+        if (this.currentRoomIndex === rooms.length - 1) {
+            this.stopTimer();
+            this.showCurrentRoom();
+            this.updateProgress();
+
+            // Update final time display
+            const elapsed = Date.now() - this.startTime;
+            const remaining = Math.max(0, this.gameTime - elapsed);
+            // Calculate time taken (inverse of remaining if we want "time taken")
+            // OR just show remaining time if that's the goal.
+            // Usually "Time used" is better for score.
+
+            const timeUsed = elapsed;
+            const minutes = Math.floor(timeUsed / 60000);
+            const seconds = Math.floor((timeUsed % 60000) / 1000);
+            const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+            // Wait for DOM update
+            setTimeout(() => {
+                const finalTimeEl = document.getElementById('finalTime');
+                if (finalTimeEl) {
+                    finalTimeEl.textContent = timeString;
+                }
+            }, 100);
+        } else {
+            this.showCurrentRoom();
+            this.updateProgress();
+        }
     }
 
     showCurrentRoom() {

@@ -9,6 +9,7 @@ const room10 = new Room(
         
         <div class="success-message">
             <h3>Oppdragsrapport:</h3>
+            <p><strong>Tid brukt: <span id="finalTime" style="color: #2ecc71; font-weight: bold;">--:--</span></strong></p>
             <p>✅ Forstått starten på den kalde krigen (1946–1947)</p>
             <p>✅ Identifisert hovedalliansene (NATO vs Warszawapakten)</p>
             <p>✅ Lært om Berlinmurens rolle (1961)</p>
