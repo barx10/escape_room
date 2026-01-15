@@ -6,6 +6,8 @@ const room6 = new Room(
     `
     <h3>📻 Morsekode-transmisjon</h3>
     <p>Vi har avlyttet en hemmelig melding fra KGB i Moskva. Meldingen inneholder koordinater til et møtested.</p>
+    
+    <div id="message6"></div>
 
     <div style="text-align: center; margin: 20px 0;">
         <button class="btn" id="playMorseBtn" onclick="playMorseCode()">▶️ Spill av morsekode</button>
@@ -41,6 +43,7 @@ const room6 = new Room(
             <input type="text" id="parkLocation" placeholder="Navn på sted" style="flex: 1;">
             <button class="btn-small" onclick="checkLocation6()">Sjekk sted 📍</button>
         </div>
+        <div class="stamp-container" id="stamp6a"></div>
     </div>
 
     <div id="agentSection" style="display: none; background: rgba(0,0,0,0.6); padding: 20px; border-radius: 10px; margin: 20px 0; border: 2px solid #ffd93d;">
@@ -53,6 +56,7 @@ const room6 = new Room(
             <input type="text" id="agentName" placeholder="Agentkode (6 bokstaver)" maxlength="6" style="flex: 1;">
             <button class="btn-small" onclick="checkAgent6()">Bekreft agent 🕵️</button>
         </div>
+        <div class="stamp-container" id="stamp6b"></div>
     </div>
 
     <div id="missionInfo" style="display: none; background: rgba(255,217,61,0.1); padding: 20px; border-radius: 10px; margin: 20px 0; border: 2px solid #ffd93d;">
@@ -174,6 +178,14 @@ window.checkLocation6 = function() {
     if (correctAnswers.some(ans => input.includes(ans))) {
         window.room6LocationCorrect = true;
         showMessage(6, '✅ Riktig sted! Dra til parken og lokaliser agenten, se nøye på bildet!');
+        
+        // Vis stempel
+        const stamp = document.getElementById('stamp6a');
+        if (stamp) {
+            stamp.innerHTML = '<span class="riktig-stamp">✓ RIKTIG!</span>';
+            setTimeout(() => { stamp.innerHTML = ''; }, 3000);
+        }
+        
         document.getElementById('agentSection').style.display = 'block';
         document.getElementById('parkLocation').disabled = true;
     } else {
@@ -188,6 +200,14 @@ window.checkAgent6 = function() {
     if (input === correctAgent) {
         window.room6AgentCorrect = true;
         showMessage(6, '✅ Agent identifisert! Dekrypterer oppdragsinformasjon...');
+        
+        // Vis stempel
+        const stamp = document.getElementById('stamp6b');
+        if (stamp) {
+            stamp.innerHTML = '<span class="riktig-stamp">✓ RIKTIG!</span>';
+            setTimeout(() => { stamp.innerHTML = ''; }, 3000);
+        }
+        
         document.getElementById('missionInfo').style.display = 'block';
         document.getElementById('agentName').disabled = true;
     } else {
