@@ -9,7 +9,7 @@ class Game {
         this.gameTime = 60 * 60 * 1000; // 60 minutter
         this.selectedAlliances = [];
         this.selectedLeaders = [];
-    this.selectedLeaders8 = [];
+        this.selectedLeaders8 = [];
         this.timerInterval = null;
     }
 
@@ -41,14 +41,14 @@ class Game {
         const remaining = Math.max(0, this.gameTime - elapsed);
         const minutes = Math.floor(remaining / 60000);
         const seconds = Math.floor((remaining % 60000) / 1000);
-        
-        document.getElementById('timer').textContent = 
+
+        document.getElementById('timer').textContent =
             `⏰ Tid igjen: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        
+
         // Update progress bar to match time elapsed
         const percentElapsed = (elapsed / this.gameTime) * 100;
         document.getElementById('progress').style.width = Math.min(100, percentElapsed) + '%';
-        
+
         if (remaining <= 0) {
             this.showMessage('timer', '⏰ Tiden er ute! Prøv igjen.', 'error');
             clearInterval(this.timerInterval);
@@ -75,34 +75,34 @@ class Game {
             </div>
         `;
         document.body.appendChild(overlay);
-        
+
         // Play stamp sound using Web Audio API (works everywhere)
         try {
             const AudioContext = window.AudioContext || window.webkitAudioContext;
             const audioCtx = new AudioContext();
-            
+
             // Create a deep "thud" sound for stamp
             const oscillator = audioCtx.createOscillator();
             const gainNode = audioCtx.createGain();
-            
+
             oscillator.connect(gainNode);
             gainNode.connect(audioCtx.destination);
-            
+
             // Deep bass frequency for stamp effect
             oscillator.frequency.value = 100;
             oscillator.type = 'sine';
-            
+
             // Quick attack and decay for "thud" effect - 80% høyere volum totalt
             const now = audioCtx.currentTime;
             gainNode.gain.setValueAtTime(1.61, now); // 1.34 * 1.2 = 1.61 (80% høyere enn original)
             gainNode.gain.exponentialRampToValueAtTime(0.020, now + 0.3);
-            
+
             oscillator.start(now);
             oscillator.stop(now + 0.3);
-        } catch(err) {
+        } catch (err) {
             console.log('Audio generation failed:', err);
         }
-        
+
         // Remove after animation (3 seconds)
         setTimeout(() => {
             overlay.remove();
@@ -124,22 +124,22 @@ class Game {
     showCurrentRoom() {
         const roomId = rooms[this.currentRoomIndex].id;
         const roomIndex = this.currentRoomIndex;
-        
+
         // Fjern active-klassen fra ALLE rom først
         document.querySelectorAll('.room').forEach(room => {
             room.classList.remove('active');
         });
-        
+
         // Legg til active på kun det aktuelle rommet
         const currentRoomElement = document.getElementById(`room${roomId}`);
         if (currentRoomElement) {
             currentRoomElement.classList.add('active');
         }
-        
+
         // Fjern alle bakgrunnsklasser først, så legg til riktig
         document.body.classList.remove('room-bg-0', 'room-bg-1', 'room-bg-2', 'room-bg-3', 'room-bg-4', 'room-bg-5', 'room-bg-6', 'room-bg-7', 'room-bg-8', 'room-bg-9');
         document.body.classList.add(`room-bg-${roomIndex}`);
-        
+
         // Initialize room-specific features after DOM is ready
         if (roomId === 7) {
             // Use requestAnimationFrame to ensure DOM is rendered
@@ -166,9 +166,9 @@ class Game {
                 }, 100);
             });
         }
-        
+
         // Update attempts display for the room when shown
-        try { updateAttemptDisplay(roomId); } catch(e) { /* ignore */ }
+        try { updateAttemptDisplay(roomId); } catch (e) { /* ignore */ }
     }
 
     showHint(roomNumber) {
@@ -181,27 +181,39 @@ class Game {
         this.startTime = Date.now();
         this.selectedAlliances = [];
         this.selectedLeaders = [];
-    this.selectedLeaders8 = [];
-        
+        this.selectedLeaders8 = [];
+
         // Reset alle input felt
         document.querySelectorAll('input').forEach(input => {
             input.value = '';
         });
-        
+
         // Reset alle rom
         document.querySelectorAll('.room').forEach(room => {
             room.classList.remove('active');
         });
-        
+
         // Reset valgte elementer
         document.querySelectorAll('.map-item').forEach(item => {
             item.classList.remove('selected');
         });
-        
+
         // Vis første rom
         this.showCurrentRoom();
         this.updateProgress();
         this.startTimer();
+    }
+
+    gotoRoom(roomNumber) {
+        const index = rooms.findIndex(r => r.id === roomNumber);
+        if (index !== -1) {
+            this.currentRoomIndex = index;
+            this.showCurrentRoom();
+            this.updateProgress();
+            console.log(`Navigerte til rom ${roomNumber}`);
+        } else {
+            console.error(`Rom ${roomNumber} finnes ikke.`);
+        }
     }
 }
 
@@ -209,7 +221,7 @@ class Game {
 // Per-room failure tracking and cooldowns
 window._roomFailures = {}; // { roomId: {count, cooldownEndsAt, timerId} }
 
-window.recordFailure = function(roomId) {
+window.recordFailure = function (roomId) {
     if (!window._roomFailures[roomId]) {
         window._roomFailures[roomId] = { count: 0, cooldownEndsAt: 0, timerId: null };
     }
@@ -226,7 +238,7 @@ window.recordFailure = function(roomId) {
         startCooldown(roomId);
     }
     // update attempts UI
-    try { updateAttemptDisplay(roomId); } catch(e) { }
+    try { updateAttemptDisplay(roomId); } catch (e) { }
 };
 
 function startCooldown(roomId) {
@@ -257,7 +269,7 @@ function startCooldown(roomId) {
             const ov = roomEl.querySelector('.cooldown-overlay');
             if (ov) ov.remove();
             // update attempts display after cooldown ends
-            try { updateAttemptDisplay(roomId); } catch(e) {}
+            try { updateAttemptDisplay(roomId); } catch (e) { }
         }
     }, 250);
 }
@@ -296,14 +308,14 @@ function clearFailures(roomId) {
         if (s.timerId) { clearInterval(s.timerId); s.timerId = null; }
         s.count = 0; s.cooldownEndsAt = 0;
     }
-    try { updateAttemptDisplay(roomId); } catch(e) {}
+    try { updateAttemptDisplay(roomId); } catch (e) { }
 }
 
-window.showSolvedStamp = function() {
+window.showSolvedStamp = function () {
     game.showSolvedStamp();
 };
 
-window.checkRoom1 = function() {
+window.checkRoom1 = function () {
     const year = parseInt(document.getElementById('year1').value);
     if (year === 1946) {
         clearFailures(1);
@@ -317,7 +329,7 @@ window.checkRoom1 = function() {
 
 // Hints for room 1 - cycle through 3 hints
 window._room1HintIndex = 0;
-window.nextHint1 = function() {
+window.nextHint1 = function () {
     const hints = [
         'Se på tiden rett etter andre verdenskrig.',
         'Winston Churchill holdt en tale om et «jernteppe» som delte Europa.',
@@ -342,7 +354,7 @@ window.nextHint1 = function() {
 
 // Hints for room 2 - cycle through 3 hints
 window._room2HintIndex = 0;
-window.nextHint2 = function() {
+window.nextHint2 = function () {
     const hints = [
         'Den første hendelsen handler om en by som ble delt og blokkert.',
         'Den første militæralliansen ble opprettet kort tid etter blokkaden.',
@@ -366,7 +378,7 @@ window.nextHint2 = function() {
 
 // Hints for room 3 - cycle through 3 hints
 window._room3HintIndex = 0;
-window.nextHint3 = function() {
+window.nextHint3 = function () {
     const hints = [
         'Sommermåned.',
         'Arbeidet startet etter en dramatisk økning i flyktninger fra øst.',
@@ -392,27 +404,27 @@ window.nextHint3 = function() {
 
 // Room 2: timeline selection handlers
 window._room2Sequence = [];
-window.selectEvent2 = function(eventKey) {
+window.selectEvent2 = function (eventKey) {
     // add to sequence if not already full
     if (!window._room2Sequence) window._room2Sequence = [];
     if (window._room2Sequence.length >= 4) return;
     window._room2Sequence.push(eventKey);
     const seqBox = document.getElementById('sequence2');
     if (seqBox) {
-        const labels = window._room2Sequence.map((k, i) => `${i+1}. ${formatEventLabel(k)}`);
+        const labels = window._room2Sequence.map((k, i) => `${i + 1}. ${formatEventLabel(k)}`);
         seqBox.textContent = labels.join(' \n');
     }
 };
 
-window.resetSequence2 = function() {
+window.resetSequence2 = function () {
     window._room2Sequence = [];
     const seqBox = document.getElementById('sequence2');
     if (seqBox) seqBox.textContent = '';
 };
 
-window.checkRoom2 = function() {
+window.checkRoom2 = function () {
     const seq = window._room2Sequence || [];
-    const correct = ['Berlin','NATO','Korea','Warszawa'];
+    const correct = ['Berlin', 'NATO', 'Korea', 'Warszawa'];
     if (seq.length !== correct.length) {
         game.showMessage(2, '❌ Du må velge alle hendelsene i en rekkefølge før du sjekker.', 'error');
         recordFailure(2);
@@ -431,7 +443,7 @@ window.checkRoom2 = function() {
 };
 
 function formatEventLabel(key) {
-    switch(key) {
+    switch (key) {
         case 'NATO': return 'Opprettelsen av NATO';
         case 'Warszawa': return 'Opprettelsen av Warszawapakten';
         case 'Berlin': return 'Berlinblokaden';
@@ -440,10 +452,10 @@ function formatEventLabel(key) {
     }
 }
 
-window.checkRoom3 = function() {
+window.checkRoom3 = function () {
     const year = parseInt(document.getElementById('berlinYear').value);
     const month = parseInt(document.getElementById('berlinMonth').value);
-    
+
     if (year === 1961 && month === 8) {
         game.showMessage(3, '🎉 Riktig! Berlinmuren ble bygget i august 1961. Safen er åpen!');
         clearFailures(3);
@@ -458,19 +470,19 @@ window.checkRoom3 = function() {
 };
 
 // Modal handlers for morse alphabet (Room 3)
-window.showMorseAlphabet = function() {
+window.showMorseAlphabet = function () {
     const modal = document.getElementById('morseModal');
     if (!modal) return;
     modal.style.display = 'block';
 };
 
-window.closeMorseAlphabet = function() {
+window.closeMorseAlphabet = function () {
     const modal = document.getElementById('morseModal');
     if (!modal) return;
     modal.style.display = 'none';
 };
 
-window.checkMorse = function() {
+window.checkMorse = function () {
     const answer = document.getElementById('morseAnswer').value.toLowerCase();
     if (answer === 'yes we can' || answer === 'yeswecan') {
         clearFailures(3);
@@ -482,9 +494,9 @@ window.checkMorse = function() {
     }
 };
 
-window.selectLeader = function(leader) {
+window.selectLeader = function (leader) {
     event.target.closest('.map-item').classList.toggle('selected');
-    
+
     if (game.selectedLeaders.includes(leader)) {
         game.selectedLeaders = game.selectedLeaders.filter(l => l !== leader);
     } else {
@@ -496,25 +508,25 @@ window.selectLeader = function(leader) {
 window.decryptedMessages = [];
 
 // Room 4 message checking
-window.checkMessage = function(messageNumber) {
+window.checkMessage = function (messageNumber) {
     console.log('checkMessage called for message', messageNumber);
     const inputElement = document.getElementById(`decrypt${messageNumber}`);
-    
+
     if (!inputElement) {
         console.error(`Input element decrypt${messageNumber} not found!`);
         return;
     }
-    
+
     if (!inputElement.value) {
         console.error(`Input element has no value property!`);
         return;
     }
-    
+
     const input = inputElement.value.trim().toUpperCase();
     console.log('Input:', input);
     let correctAnswer = '';
-    
-    switch(messageNumber) {
+
+    switch (messageNumber) {
         case 1:
             correctAnswer = 'WE MUST STOP THE MISSILES';
             break;
@@ -525,21 +537,21 @@ window.checkMessage = function(messageNumber) {
             correctAnswer = 'SOVIET MISSILES OPERATIONAL NOW';
             break;
     }
-    
+
     console.log('Correct answer:', correctAnswer);
     console.log('Match:', input === correctAnswer);
-    
+
     if (input === correctAnswer) {
         if (!window.decryptedMessages.includes(messageNumber)) {
             window.decryptedMessages.push(messageNumber);
         }
-        
+
         const messageBox = document.getElementById(`message${messageNumber}`).closest('.message-box');
         if (messageBox) {
             messageBox.style.borderColor = '#00ff41';
             messageBox.style.backgroundColor = 'rgba(0, 255, 65, 0.1)';
         }
-        
+
         game.showMessage(4, `✅ Melding ${messageNumber} dekryptert: "${correctAnswer}"`, 'success');
 
         // Pling-lyd med Web Audio API
@@ -569,14 +581,14 @@ window.checkMessage = function(messageNumber) {
         if (stamp) {
             stamp.innerHTML = '<span class="riktig-stamp">✓ RIKTIG!</span>';
             console.log('Stamp added to DOM');
-            setTimeout(() => { 
-                stamp.innerHTML = ''; 
+            setTimeout(() => {
+                stamp.innerHTML = '';
                 console.log('Stamp removed');
             }, 3000);
         } else {
             console.error('Stamp container not found!');
         }
-        
+
         // Show final code section when all messages are decrypted
         if (window.decryptedMessages.length === 3) {
             document.getElementById('finalCodeSection').style.display = 'block';
@@ -589,13 +601,13 @@ window.checkMessage = function(messageNumber) {
     }
 };
 
-window.checkRoom4 = function() {
+window.checkRoom4 = function () {
     const dateInput = document.getElementById('crisisDate').value;
     console.log('checkRoom4 called');
     console.log('Date entered:', dateInput);
     console.log('Decrypted messages count:', window.decryptedMessages.length);
     console.log('Decrypted messages:', window.decryptedMessages);
-    
+
     if (dateInput === '14101962MSK' && window.decryptedMessages.length === 3) {
         console.log('Room 4 solved!');
         clearFailures(4);
@@ -614,27 +626,27 @@ window.checkRoom4 = function() {
 
 // Nye funksjoner for rom 6-11
 // Rom 5: Hemmelige dokumenter
-window.checkRoom5 = function() {
+window.checkRoom5 = function () {
     const rocketCount = parseInt(document.getElementById('rocketCount').value);
     const distance = parseInt(document.getElementById('distance').value);
     const pilotName = document.getElementById('pilotName').value.trim().toUpperCase();
     const operationName = document.getElementById('operationName').value.trim().toUpperCase();
-    
+
     console.log('Room 6 check:', { rocketCount, distance, pilotName, operationName });
-    
+
     const correctAnswers = {
         rockets: 42,
         distance: 1850,
         pilot: 'RUDOLF ANDERSON',
         operation: 'OPERATION QUARANTINE'
     };
-    
+
     // Check all answers
-    if (rocketCount === correctAnswers.rockets && 
-        distance === correctAnswers.distance && 
+    if (rocketCount === correctAnswers.rockets &&
+        distance === correctAnswers.distance &&
         (pilotName === correctAnswers.pilot || pilotName === 'MAJOR RUDOLF ANDERSON') &&
         (operationName === correctAnswers.operation || operationName === 'QUARANTINE')) {
-        
+
         clearFailures(5);
         game.showSolvedStamp();
         setTimeout(() => game.nextRoom(), 3000);
@@ -644,7 +656,7 @@ window.checkRoom5 = function() {
         if (distance !== correctAnswers.distance) errors.push('avstand');
         if (pilotName !== correctAnswers.pilot && pilotName !== 'MAJOR RUDOLF ANDERSON') errors.push('pilot');
         if (operationName !== correctAnswers.operation && operationName !== 'QUARANTINE') errors.push('operasjonsnavn');
-        
+
         game.showMessage(5, `❌ Feil i: ${errors.join(', ')}. Sjekk dokumentene nøye!`, 'error');
         recordFailure(5);
     }
@@ -653,18 +665,18 @@ window.checkRoom5 = function() {
 // Rom 5: Sjekk individuelle svar
 
 // Check individual answers in Room 5 and show stamp
-window.checkAnswer5 = function(questionNumber) {
+window.checkAnswer5 = function (questionNumber) {
     const correctAnswers = {
         1: 42,
         2: 1850,
         3: ['RUDOLF ANDERSON', 'MAJOR RUDOLF ANDERSON'],
         4: ['OPERATION QUARANTINE']
     };
-    
+
     let isCorrect = false;
     let value;
-    
-    switch(questionNumber) {
+
+    switch (questionNumber) {
         case 1:
             value = parseInt(document.getElementById('rocketCount').value);
             isCorrect = value === correctAnswers[1];
@@ -682,7 +694,7 @@ window.checkAnswer5 = function(questionNumber) {
             isCorrect = correctAnswers[4].includes(value);
             break;
     }
-    
+
     if (isCorrect) {
         // Make button green
         const button = document.getElementById(`btn-q${questionNumber}`);
@@ -691,7 +703,7 @@ window.checkAnswer5 = function(questionNumber) {
             button.style.color = '#000';
             button.textContent = '✓ Riktig!';
         }
-        
+
         // Play sound
         try {
             const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -710,19 +722,19 @@ window.checkAnswer5 = function(questionNumber) {
         } catch (err) {
             console.error('Error playing sound:', err);
         }
-        
+
         // Show stamp
         const stamp = document.getElementById(`stamp-q${questionNumber}`);
         if (stamp) {
             stamp.innerHTML = '<span class="riktig-stamp">✓ RIKTIG!</span>';
-            setTimeout(() => { 
-                stamp.innerHTML = ''; 
+            setTimeout(() => {
+                stamp.innerHTML = '';
             }, 3000);
         }
     } else {
         // Record failure
         recordFailure(5);
-        
+
         // Visual feedback for wrong answer
         const button = document.getElementById(`btn-q${questionNumber}`);
         if (button) {
@@ -738,7 +750,7 @@ window.checkAnswer5 = function(questionNumber) {
 
 // Rom 6: Avlyttet melding fra Moskva (morse) - handlers er i room6.js
 
-window.checkRoom7 = function() {
+window.checkRoom7 = function () {
     const years = parseInt(document.getElementById('yearsAfter').value);
     if (years === 5) {
         clearFailures(7);
@@ -751,9 +763,9 @@ window.checkRoom7 = function() {
 };
 
 window.selectedLeaders8 = [];
-window.selectLeader8 = function(leader) {
+window.selectLeader8 = function (leader) {
     event.target.closest('.map-item').classList.toggle('selected');
-    
+
     if (window.selectedLeaders8.includes(leader)) {
         window.selectedLeaders8 = window.selectedLeaders8.filter(l => l !== leader);
     } else {
@@ -761,7 +773,7 @@ window.selectLeader8 = function(leader) {
     }
 };
 
-window.checkRoom8 = function() {
+window.checkRoom8 = function () {
     if (window.selectedLeaders8.includes('Kennedy') && window.selectedLeaders8.includes('Khrushchev') && !window.selectedLeaders8.includes('Castro')) {
         clearFailures(8);
         game.showSolvedStamp();
@@ -773,7 +785,7 @@ window.checkRoom8 = function() {
 };
 
 // Room 9 logic is handled via window.initRoom9 in room9.js
-window.checkRoom9 = function() {
+window.checkRoom9 = function () {
     // Legacy support/fallback
     const puzzleSolved = document.querySelectorAll('.memory-card.matched').length === 20;
     if (puzzleSolved) {
@@ -782,27 +794,31 @@ window.checkRoom9 = function() {
     return false;
 };
 
-window.showHint = function(roomNumber) {
+window.showHint = function (roomNumber) {
     game.showHint(roomNumber);
 };
 
-window.restartGame = function() {
+window.restartGame = function () {
     game.restartGame();
 };
 
-window.nextRoom = function() {
+window.nextRoom = function () {
     game.nextRoom();
 };
 
-window.showMessage = function(roomId, message, type) {
+window.showMessage = function (roomId, message, type) {
     game.showMessage(roomId, message, type);
 };
 
-window.updateProgress = function() {
+window.gotoRoom = function (roomNumber) {
+    game.gotoRoom(roomNumber);
+};
+
+window.updateProgress = function () {
     game.updateProgress();
 };
 
-window.updateTimer = function() {
+window.updateTimer = function () {
     game.updateTimer();
 };
 
@@ -813,7 +829,7 @@ const game = new Game();
 window.game = game;
 
 // Hjelpefunksjon for å hoppe til et rom under testing
-window.gotoRoom = function(roomNumber) {
+window.gotoRoom = function (roomNumber) {
     game.currentRoomIndex = roomNumber - 1;
     game.showCurrentRoom();
     game.updateProgress();
@@ -821,7 +837,7 @@ window.gotoRoom = function(roomNumber) {
 };
 
 // Eksporter eller gjør tilgjengelig en global funksjon for å starte spillet
-window.startGame = function() {
+window.startGame = function () {
     // Vis spillcontainer og skjul landingsside hvis begge finnes
     const landing = document.getElementById('landingPage');
     const gameContainer = document.getElementById('gameContainer');
@@ -840,11 +856,11 @@ window.startGame = function() {
 };
 
 // Cancel / abort mission: reset game and return to landing page
-window.cancelMission = function() {
+window.cancelMission = function () {
     // stop timer
-    try { clearInterval(game.timerInterval); } catch(e) {}
+    try { clearInterval(game.timerInterval); } catch (e) { }
     // reset game state
-    try { game.restartGame(); } catch(e) {}
+    try { game.restartGame(); } catch (e) { }
 
     // hide game container, show landing
     const gameContainer = document.getElementById('gameContainer');
