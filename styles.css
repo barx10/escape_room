@@ -72,7 +72,16 @@ body {
     background-attachment: fixed;
 }
 
-/* Fullscreen background for Room 8-10 - fallback til standard gradient */
+/* Fullscreen background for Room 9 (index 8) - Fluktrute */
+.room-bg-8 {
+    background-image: url('assets/images/room9.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+/* Fullscreen background for Room 8 & 10 - fallback til standard gradient */
 
 html {
     height: 100%;
