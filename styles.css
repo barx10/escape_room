@@ -1384,3 +1384,81 @@ html {
     box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     pointer-events: none;
 }
+
+/* Room 9 - Memory Game Styles */
+.memory-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin: 20px 0;
+    max-width: 800px;
+}
+
+.memory-card {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid #e94560;
+    border-radius: 8px;
+    padding: 10px;
+    min-height: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 13px;
+    user-select: none;
+}
+
+.memory-card:hover {
+    transform: scale(1.02);
+    background: rgba(233, 69, 96, 0.2);
+}
+
+.memory-card.selected {
+    background: rgba(255, 217, 61, 0.3);
+    border-color: #ffd93d;
+    box-shadow: 0 0 15px rgba(255, 217, 61, 0.4);
+    transform: scale(1.05);
+}
+
+.memory-card.matched {
+    background: rgba(0, 255, 65, 0.2);
+    border-color: #00ff41;
+    cursor: default;
+    pointer-events: none;
+    transform: none;
+}
+
+.memory-card.error {
+    background: rgba(255, 68, 68, 0.3);
+    border-color: #ff4444;
+    animation: shake 0.5s;
+}
+
+.card-type {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+    opacity: 0.8;
+}
+
+.card-type.cause { color: #ffd93d; }
+.card-type.effect { color: #4ecdc4; }
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
+@media (max-width: 600px) {
+    .memory-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+}

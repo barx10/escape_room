@@ -153,6 +153,18 @@ class Game {
                     }
                 }, 100);
             });
+        } else if (roomId === 9) {
+            // Initialize Room 9 memory game
+            requestAnimationFrame(() => {
+                setTimeout(() => {
+                    if (typeof window.initRoom9 === 'function') {
+                        console.log('Calling initRoom9');
+                        window.initRoom9();
+                    } else {
+                        console.error('initRoom9 function not found!');
+                    }
+                }, 100);
+            });
         }
         
         // Update attempts display for the room when shown
@@ -760,16 +772,14 @@ window.checkRoom8 = function() {
     }
 };
 
+// Room 9 logic is handled via window.initRoom9 in room9.js
 window.checkRoom9 = function() {
-    const word = document.getElementById('codeword').value.toLowerCase();
-    if (word === 'tøvær') {
-        clearFailures(9);
-        game.showSolvedStamp();
-        setTimeout(() => game.nextRoom(), 3000);
-    } else {
-        game.showMessage(9, '❌ Feil kodeord. Prøv igjen.', 'error');
-        recordFailure(9);
+    // Legacy support/fallback
+    const puzzleSolved = document.querySelectorAll('.memory-card.matched').length === 20;
+    if (puzzleSolved) {
+        return true;
     }
+    return false;
 };
 
 window.showHint = function(roomNumber) {
