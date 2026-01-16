@@ -110,13 +110,14 @@ class Game {
         document.getElementById('progress').style.width = Math.min(100, percentElapsed) + '%';
 
         if (remaining <= 0) {
-            this.showMessage('timer', '⏰ Tiden er ute! Prøv igjen.', 'error');
             clearInterval(this.timerInterval);
+            alert('⏰ Tiden er ute! Prøv igjen.');
         }
     }
 
     showMessage(roomId, message, type = 'success') {
         const messageDiv = document.getElementById(`message${roomId}`);
+        if (!messageDiv) return; // Sikkerhet mot null
         messageDiv.innerHTML = `<div class="${type}-message">${message}</div>`;
         setTimeout(() => {
             if (type === 'success') {
@@ -1143,3 +1144,19 @@ window.resetGame = function(code) {
         return false;
     }
 };
+
+// DEV: Enkel nullstilling - Ctrl+Shift+R i konsoll
+window.devReset = function() {
+    localStorage.removeItem(STORAGE_KEY);
+    console.log('🔄 Dev reset: Spilltilstand slettet. Refresh siden.');
+};
+
+// DEV: Tastatursnarvei Ctrl+Shift+D for dev reset + refresh
+document.addEventListener('keydown', function(e) {
+    if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+        e.preventDefault();
+        localStorage.removeItem(STORAGE_KEY);
+        console.log('🔄 Dev reset utført');
+        location.reload();
+    }
+});

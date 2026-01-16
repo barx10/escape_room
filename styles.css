@@ -799,13 +799,15 @@ html {
 }
 
 .error-message {
-    background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+    background: linear-gradient(45deg, rgba(180, 40, 40, 0.95), rgba(150, 30, 30, 0.95));
     color: white;
     padding: 15px;
     border-radius: 10px;
     margin: 15px 0;
     text-align: center;
     font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
 }
 
 .progress-bar {
@@ -896,6 +898,11 @@ html {
     color: #ff4444;
     margin-bottom: 15px;
     font-size: 18px;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.9), 0 0 10px rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.5);
+    padding: 8px 12px;
+    border-radius: 6px;
+    display: inline-block;
 }
 
 .encrypted-text {
@@ -1330,16 +1337,19 @@ html {
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 5px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 4px 8px;
+    border-radius: 4px;
 }
 
 .correct-indicator {
     color: #44ff44;
-    text-shadow: 0 0 5px rgba(68, 255, 68, 0.5);
+    text-shadow: 0 0 8px rgba(68, 255, 68, 0.7), 2px 2px 4px rgba(0, 0, 0, 0.9);
 }
 
 .incorrect-indicator {
     color: #ff4444;
-    text-shadow: 0 0 5px rgba(255, 68, 68, 0.5);
+    text-shadow: 0 0 8px rgba(255, 68, 68, 0.7), 2px 2px 4px rgba(0, 0, 0, 0.9);
 }
 
 /* Room 7 - Image Modal */
@@ -1429,7 +1439,7 @@ html {
 
 /* Room 8 - Balance puzzle */
 .balance-card {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.7);
     border: 2px solid #00ff41;
     border-radius: 8px;
     padding: 12px;
@@ -1437,10 +1447,13 @@ html {
     transition: all 0.3s;
     font-size: 14px;
     text-align: center;
+    color: #fff;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
 .balance-card:hover {
-    background: rgba(0, 255, 65, 0.2);
+    background: rgba(0, 50, 0, 0.8);
     transform: scale(1.05);
 }
 
@@ -1449,10 +1462,18 @@ html {
     padding: 15px;
     border-radius: 10px;
     transition: all 0.3s;
+    background: rgba(0, 0, 0, 0.4);
 }
 
 .balance-zone:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.balance-zone h4 {
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.9);
+    background: rgba(0, 0, 0, 0.5);
+    padding: 8px;
+    border-radius: 6px;
 }
 
 .zone-cards {
@@ -1464,12 +1485,14 @@ html {
 
 .placed-balance-card {
     position: relative;
-    background: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.4);
     border-radius: 6px;
     padding: 10px;
     font-size: 13px;
     text-align: center;
+    color: #fff;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
 }
 
 .placed-balance-card .remove-card-btn {
