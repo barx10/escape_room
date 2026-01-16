@@ -67,6 +67,12 @@ class Game {
         if (savedState) {
             this.startTime = savedState.startTime;
             this.currentRoomIndex = savedState.currentRoomIndex;
+            // Valider at roomIndex er gyldig
+            if (this.currentRoomIndex < 0 || this.currentRoomIndex >= rooms.length) {
+                console.log('Ugyldig romindeks, nullstiller til 0');
+                this.currentRoomIndex = 0;
+                this.clearState();
+            }
             window._roomFailures = savedState.failures || {};
             console.log('Gjenopprettet spilltilstand fra forrige økt');
         }
@@ -184,6 +190,10 @@ class Game {
     }
 
     showCurrentRoom() {
+        if (!rooms[this.currentRoomIndex]) {
+            console.error('Ugyldig romindeks:', this.currentRoomIndex);
+            this.currentRoomIndex = 0;
+        }
         const roomId = rooms[this.currentRoomIndex].id;
         const roomIndex = this.currentRoomIndex;
 

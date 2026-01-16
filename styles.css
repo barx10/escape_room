@@ -1514,21 +1514,21 @@ html {
     transform: scale(1.05);
 }
 
-/* Room 9 - Memory Game Styles */
+/* Room 9 & 10 - Memory Game Styles */
 .memory-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 15px;
     margin: 20px 0;
-    max-width: 800px;
+    max-width: 900px;
 }
 
 .memory-card {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.7);
     border: 2px solid #e94560;
     border-radius: 8px;
-    padding: 10px;
-    min-height: 80px;
+    padding: 12px;
+    min-height: 90px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1536,8 +1536,11 @@ html {
     text-align: center;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-size: 13px;
+    font-size: 14px;
     user-select: none;
+    color: #fff;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
 .memory-card:hover {
