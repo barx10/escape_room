@@ -31,7 +31,7 @@ const pairs = [
     { id: 4, concept: 'Terrorbalanse', explanation: 'Begge sider hadde atomvåpen og kunne ødelegge hverandre' },
     { id: 5, concept: 'KGB', explanation: 'Sovjetisk hemmelightstjeneste' },
     { id: 6, concept: 'CIA', explanation: 'Amerikansk etterretningtjeneste' },
-    { id: 7, concept: 'Bipolær verden', explanation: 'To rivaliserende supermakter dominerte' },
+    { id: 7, concept: 'Polarisert verden', explanation: 'To rivaliserende supermakter dominerte' },
     { id: 8, concept: 'Ideologisk krig', explanation: 'Kamp mellom kommunisme og kapitalisme' },
     { id: 9, concept: 'Rustningskappløpet', explanation: 'Konkurranse om å ha mest og beste våpen' },
     { id: 10, concept: 'Propaganda', explanation: 'Offentlig informasjon brukt for å påvirke meninger' }
