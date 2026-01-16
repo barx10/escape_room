@@ -15,6 +15,46 @@ const room10 = new Room(
         <h3 style="color:#00ff41">Begrepsforståelse bekreftet!</h3>
         <p>Oppdraget er fullført...</p>
     </div>
+
+    <!-- Splash Screen -->
+    <div id="splash-screen" class="splash-screen" style="display:none;">
+        <div class="splash-content">
+            <div class="splash-header">
+                <h1>HEMMELIGHETER AVSLØRT</h1>
+                <p class="classified-badge">TIDLIGERE KLASSIFISERT — NÅ ÅPNET</p>
+            </div>
+
+            <div class="splash-body">
+                <img src="assets/images/achievements.png" alt="Agent Debrief" class="splash-image">
+
+                <div class="debrief-report">
+                    <h2>OPPDRAGSRAPPORT - FULLFØRT</h2>
+
+                    <div class="time-display">
+                        <p>Oppdraget fullført på:</p>
+                        <h3 id="elapsed-time">-- minutter -- sekunder</h3>
+                    </div>
+
+                    <div class="success-message">
+                        <p><strong>Du er nå ekspert på den kalde krigen.</strong></p>
+                        <p>Gjennom analysen og dekrypteringen av hemmeligheter har du forstått det komplekse spillet mellom supermaktene.</p>
+
+                        <p style="margin-top: 20px;"><strong>Du har lært:</strong></p>
+                        <ul style="text-align: left; display: inline-block;">
+                            <li>✓ Hvordan jernteppet delte verden</li>
+                            <li>✓ Rollene til NATO og supermaktene</li>
+                            <li>✓ Konsekvensene av terrorbalansen</li>
+                            <li>✓ Betydningen av diplomati over konflikt</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="splash-footer">
+                <button class="btn replay-btn" onclick="restartGame()" style="background: linear-gradient(45deg, #4ecdc4, #44a08d); font-size: 16px; padding: 12px 30px;">🔄 Spill på nytt</button>
+            </div>
+        </div>
+    </div>
     `,
     function check() {
         // Fallback check logic handled by initRoom10/game.js
@@ -147,9 +187,36 @@ function checkWin() {
         document.getElementById('completion-message').style.display = 'block';
         if (window.clearFailures) window.clearFailures(10);
         if (window.showSolvedStamp) window.showSolvedStamp();
+
+        // Show splash screen after a delay
         setTimeout(() => {
-            if (window.nextRoom) window.nextRoom();
+            showSplashScreen();
         }, 3000);
+    }
+}
+
+function showSplashScreen() {
+    // Hide the game interface
+    document.getElementById('memory-grid').style.display = 'none';
+    document.getElementById('completion-message').style.display = 'none';
+
+    // Show splash screen
+    const splashScreen = document.getElementById('splash-screen');
+    if (splashScreen) {
+        splashScreen.style.display = 'block';
+
+        // Calculate and display elapsed time
+        if (window.game && window.game.startTime) {
+            const elapsedMs = Date.now() - window.game.startTime;
+            const totalSeconds = Math.floor(elapsedMs / 1000);
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+
+            const timeDisplay = document.getElementById('elapsed-time');
+            if (timeDisplay) {
+                timeDisplay.textContent = `${minutes} minutt${minutes !== 1 ? 'er' : ''} ${seconds.toString().padStart(2, '0')} sekunder`;
+            }
+        }
     }
 }
 
