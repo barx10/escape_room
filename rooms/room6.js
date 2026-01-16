@@ -101,48 +101,48 @@ const morseCode = {
 // Koden: 132
 const messageToPlay = '132';
 
-window.playMorseCode = function() {
+window.playMorseCode = function () {
     if (window.morseIsPlaying) return;
     window.morseIsPlaying = true;
-    
+
     const btn = document.getElementById('playMorseBtn');
     if (btn) btn.textContent = '🔊 Spiller...';
-    
+
     window.morseAudioContext = new (window.AudioContext || window.webkitAudioContext)();
-    
+
     const dotDuration = 300; // ms - kort pip
     const dashDuration = 900; // ms - langt pip
     const symbolGap = 300; // gap mellom prikker/streker
     const letterGap = 900; // gap mellom tall/tegn
     const wordGap = 1800; // gap mellom ord (mellomrom)
-    
+
     let currentTime = 0;
-    
+
     function playTone(duration, startTime) {
         const oscillator = window.morseAudioContext.createOscillator();
         const gainNode = window.morseAudioContext.createGain();
-        
+
         oscillator.connect(gainNode);
         gainNode.connect(window.morseAudioContext.destination);
-        
+
         oscillator.frequency.value = 600; // Hz - classic morse tone
         oscillator.type = 'sine';
-        
+
         const start = window.morseAudioContext.currentTime + startTime / 1000;
         oscillator.start(start);
         oscillator.stop(start + duration / 1000);
     }
-    
+
     // Convert message to morse and schedule tones
     for (let char of messageToPlay) {
         const morse = morseCode[char];
         if (!morse) continue;
-        
+
         if (char === ' ') {
             currentTime += wordGap;
             continue;
         }
-        
+
         for (let symbol of morse) {
             if (symbol === '.') {
                 playTone(dotDuration, currentTime);
@@ -154,7 +154,7 @@ window.playMorseCode = function() {
         }
         currentTime += letterGap;
     }
-    
+
     // Reset button after playback
     window.morseTimeout = setTimeout(() => {
         window.morseIsPlaying = false;
@@ -163,7 +163,7 @@ window.playMorseCode = function() {
     }, currentTime + 500);
 };
 
-window.stopMorseCode = function() {
+window.stopMorseCode = function () {
     if (window.morseAudioContext) {
         window.morseAudioContext.close();
         window.morseAudioContext = null;
@@ -176,21 +176,22 @@ window.stopMorseCode = function() {
     if (btn) btn.textContent = '▶️ Spill av morsekode';
 };
 
-window.checkLocation6 = function() {
+window.checkLocation6 = function () {
     const input = document.getElementById('parkLocation').value.trim().toLowerCase();
     const correctAnswers = ['zoopark', 'zoo park', 'zoo-park', 'moskva zoo'];
-    
+
     if (correctAnswers.some(ans => input.includes(ans))) {
         window.room6LocationCorrect = true;
         showMessage(6, '✅ Riktig sted! Dra til parken og lokaliser agenten, se nøye på bildet!');
-        
+        if (window.playSuccessSound) window.playSuccessSound();
+
         // Vis stempel
         const stamp = document.getElementById('stamp6a');
         if (stamp) {
             stamp.innerHTML = '<span class="riktig-stamp">✓ RIKTIG!</span>';
             setTimeout(() => { stamp.innerHTML = ''; }, 3000);
         }
-        
+
         document.getElementById('agentSection').style.display = 'block';
         document.getElementById('parkLocation').disabled = true;
     } else {
@@ -198,21 +199,22 @@ window.checkLocation6 = function() {
     }
 };
 
-window.checkAgent6 = function() {
+window.checkAgent6 = function () {
     const input = document.getElementById('agentName').value.trim().toUpperCase();
     const correctAgent = 'PETROV'; // Kan endres til ønsket agentnavn
-    
+
     if (input === correctAgent) {
         window.room6AgentCorrect = true;
         showMessage(6, '✅ Agent identifisert! Dekrypterer oppdragsinformasjon...');
-        
+        if (window.playSuccessSound) window.playSuccessSound();
+
         // Vis stempel
         const stamp = document.getElementById('stamp6b');
         if (stamp) {
             stamp.innerHTML = '<span class="riktig-stamp">✓ RIKTIG!</span>';
             setTimeout(() => { stamp.innerHTML = ''; }, 3000);
         }
-        
+
         document.getElementById('missionInfo').style.display = 'block';
         document.getElementById('agentName').disabled = true;
     } else {
@@ -220,7 +222,7 @@ window.checkAgent6 = function() {
     }
 };
 
-window.completeRoom6 = function() {
+window.completeRoom6 = function () {
     if (window.room6LocationCorrect && window.room6AgentCorrect) {
         window.room6Completed = true;
         showMessage(6, '🎉 Rom fullført! Møtetidspunktet er lagret.');

@@ -16,7 +16,7 @@ class Game {
         this.selectedLeaders8 = [];
         this.timerInterval = null;
     }
-    
+
     // Lagre spilltilstand til localStorage
     saveState() {
         const state = {
@@ -27,11 +27,11 @@ class Game {
         };
         try {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-        } catch(e) {
+        } catch (e) {
             console.log('Kunne ikke lagre spilltilstand:', e);
         }
     }
-    
+
     // Last spilltilstand fra localStorage
     loadState() {
         try {
@@ -46,17 +46,17 @@ class Game {
                     this.clearState();
                 }
             }
-        } catch(e) {
+        } catch (e) {
             console.log('Kunne ikke laste spilltilstand:', e);
         }
         return null;
     }
-    
+
     // Slett lagret tilstand
     clearState() {
         try {
             localStorage.removeItem(STORAGE_KEY);
-        } catch(e) {
+        } catch (e) {
             console.log('Kunne ikke slette spilltilstand:', e);
         }
     }
@@ -76,12 +76,12 @@ class Game {
             window._roomFailures = savedState.failures || {};
             console.log('Gjenopprettet spilltilstand fra forrige økt');
         }
-        
+
         this.renderRooms();
         this.startTimer();
         this.updateProgress();
         this.showCurrentRoom();
-        
+
         // Lagre tilstand periodisk (hvert 5. sekund)
         setInterval(() => this.saveState(), 5000);
     }
@@ -267,10 +267,10 @@ class Game {
         this.selectedLeaders = [];
         this.selectedLeaders8 = [];
         window._roomFailures = {}; // Reset failures
-        
+
         // Slett lagret tilstand
         this.clearState();
-        
+
         // Reset alle input felt
         document.querySelectorAll('input').forEach(input => {
             input.value = '';
@@ -305,98 +305,154 @@ class Game {
     }
 }
 
-// Globale funksjoner for onclick
-// Per-room failure tracking and cooldowns
-window._roomFailures = {}; // { roomId: {count, cooldownEndsAt, timerId} }
+// Helper for success sound
+window.playSuccessSound = function () {
+    try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const audioCtx = new AudioContext();
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
 
-window.recordFailure = function (roomId) {
-    if (!window._roomFailures[roomId]) {
-        window._roomFailures[roomId] = { count: 0, cooldownEndsAt: 0, timerId: null };
-    }
-    const state = window._roomFailures[roomId];
-    // If currently in cooldown, ignore additional failures
-    const now = Date.now();
-    if (state.cooldownEndsAt && now < state.cooldownEndsAt) return;
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
 
-    state.count = (state.count || 0) + 1;
-    if (state.count >= 3) {
-        // start 60s cooldown
-        state.cooldownEndsAt = now + 60 * 1000;
-        state.count = 0;
-        startCooldown(roomId);
+        oscillator.frequency.value = 800; // Høyere tone for "riktig"
+        oscillator.type = 'sine';
+
+        const now = audioCtx.currentTime;
+        gainNode.gain.setValueAtTime(0.3, now);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+
+        oscillator.start(now);
+        oscillator.stop(now + 0.2);
+    } catch (err) {
+        console.error('Error playing sound:', err);
     }
-    // update attempts UI
-    try { updateAttemptDisplay(roomId); } catch (e) { }
 };
 
-function startCooldown(roomId) {
-    const roomEl = document.getElementById(`room${roomId}`);
-    if (!roomEl) return;
-    // create overlay
-    let overlay = roomEl.querySelector('.cooldown-overlay');
-    if (!overlay) {
-        overlay = document.createElement('div');
-        overlay.className = 'cooldown-overlay';
-        overlay.innerHTML = `<div class="countdown-box"><div class="title">For mange forsøk</div><div class="desc">Vent ett minutt før du kan prøve igjen.</div><div class="time" id="cooldownTime${roomId}">01:00</div></div>`;
-        roomEl.appendChild(overlay);
+// Globale funksjoner for onclick
+// Per-room failure tracking and cooldowns
+// Global failure tracking
+window.globalFailures = { count: 0, cooldownEndsAt: 0, timerId: null };
+// Backwards compatibility for saveState
+window._roomFailures = {};
+
+window.recordFailure = function (roomId) {
+    const state = window.globalFailures;
+
+    // If currently in cooldown, ignore additional failures
+    const now = Date.now();
+    if (state.cooldownEndsAt) {
+        if (now < state.cooldownEndsAt) return;
+        // Cooldown finished
+        state.cooldownEndsAt = 0;
+        state.count = 0;
     }
 
-    const state = window._roomFailures[roomId];
+    state.count = (state.count || 0) + 1;
+    console.log(`Failure recorded. Total: ${state.count}`);
+
+    if (state.count >= 3) {
+        // start 60s global cooldown
+        state.cooldownEndsAt = now + 60 * 1000;
+        state.count = 0;
+        startGlobalCooldown();
+    }
+
+    // update attempts UI in all rooms (active room mostly)
+    updateGlobalAttemptDisplay();
+};
+
+function startGlobalCooldown() {
+    // Create global overlay if not exists
+    let overlay = document.getElementById('global-cooldown-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'global-cooldown-overlay';
+        overlay.className = 'cooldown-overlay';
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100vw';
+        overlay.style.height = '100vh';
+        overlay.style.zIndex = '9999';
+        overlay.innerHTML = `<div class="countdown-box"><div class="title">SIKKERHETSLÅS</div><div class="desc">For mange feilforsøk. Systemet er låst i ett minutt.</div><div class="time" id="globalCooldownTime">01:00</div></div>`;
+        document.body.appendChild(overlay);
+    }
+
+    const state = window.globalFailures;
     if (state.timerId) clearInterval(state.timerId);
+
     state.timerId = setInterval(() => {
         const remaining = Math.max(0, Math.floor((state.cooldownEndsAt - Date.now()) / 1000));
         const mm = String(Math.floor(remaining / 60)).padStart(2, '0');
         const ss = String(remaining % 60).padStart(2, '0');
-        const el = document.getElementById(`cooldownTime${roomId}`);
+        const el = document.getElementById('globalCooldownTime');
         if (el) el.textContent = `${mm}:${ss}`;
+
         if (remaining <= 0) {
             clearInterval(state.timerId);
             state.timerId = null;
             state.cooldownEndsAt = 0;
             // remove overlay
-            const ov = roomEl.querySelector('.cooldown-overlay');
-            if (ov) ov.remove();
-            // update attempts display after cooldown ends
-            try { updateAttemptDisplay(roomId); } catch (e) { }
+            if (overlay) overlay.remove();
+            // update attempts display
+            updateGlobalAttemptDisplay();
         }
     }, 250);
 }
 
-// Display/update attempts left in the active room
-function updateAttemptDisplay(roomId) {
-    const roomEl = document.getElementById(`room${roomId}`);
-    if (!roomEl) return;
-    let state = window._roomFailures[roomId];
-    if (!state) state = { count: 0, cooldownEndsAt: 0 };
+// Display/update attempts left in the active room (and others)
+window.updateAttemptDisplay = function (roomId) {
+    updateGlobalAttemptDisplay();
+}
 
-    // create or find attempts box
-    let box = roomEl.querySelector('.attempts-box');
-    if (!box) {
-        box = document.createElement('div');
-        box.className = 'attempts-box';
-        roomEl.insertAdjacentElement('afterbegin', box);
-    }
+function updateGlobalAttemptDisplay() {
+    const state = window.globalFailures;
+    const activeRoomId = window.game ? window.game.currentRoomIndex + 1 : 1; // Approximate active room
 
-    const now = Date.now();
-    if (state.cooldownEndsAt && now < state.cooldownEndsAt) {
-        const remaining = Math.max(0, Math.floor((state.cooldownEndsAt - now) / 1000));
-        const mm = String(Math.floor(remaining / 60)).padStart(2, '0');
-        const ss = String(remaining % 60).padStart(2, '0');
-        box.textContent = `Låst: ${mm}:${ss}`;
-    } else {
-        const attemptsLeft = 3 - (state.count || 0);
-        box.textContent = `Forsøk igjen: ${attemptsLeft}`;
+    // Update all visible attempt boxes
+    document.querySelectorAll('.attempts-box').forEach(box => {
+        const now = Date.now();
+        if (state.cooldownEndsAt && now < state.cooldownEndsAt) {
+            const remaining = Math.max(0, Math.floor((state.cooldownEndsAt - now) / 1000));
+            box.textContent = `Låst: ${remaining}s`;
+        } else {
+            const attemptsLeft = 3 - (state.count || 0);
+            box.textContent = `Forsøk igjen før lås: ${attemptsLeft}`;
+        }
+    });
+
+    // Also update the one in the current room specific if strictly needed, 
+    // but the querySelectorAll above covers existing boxes.
+    // If a room doesn't have a box yet, we might want to create it in the active room.
+    const activeRoomEl = document.querySelector('.room.active');
+    if (activeRoomEl) {
+        let box = activeRoomEl.querySelector('.attempts-box');
+        if (!box) {
+            box = document.createElement('div');
+            box.className = 'attempts-box';
+            activeRoomEl.insertAdjacentElement('afterbegin', box);
+
+            // Set initial text
+            const attemptsLeft = 3 - (state.count || 0);
+            box.textContent = `Forsøk igjen før lås: ${attemptsLeft}`;
+        }
     }
 }
 
-// Clear failure state for a room (call on success)
+// Clear failure state intentionally (e.g. on success? Maybe we DON'T want to clear on success if it's GLOBAL? 
+// The user said "3 errors for the WHOLE game". This implies they accumulate. 
+// However, usually in escape rooms, solving a puzzle might reset the "alarm" level? 
+// "3 feil er for hele spillet før lockdown" - this could mean "3 strikes and you're out (locked down)", then it resets?
+// Or does it mean they NEVER reset? "feilene kan ikke nullstilles på hvert rom". 
+// I will assume they accumulate until lockdown, then reset after lockdown.
+// But should they reset on room success? "feilene kan ikke nullstilles på hvert rom" suggests they DO NOT reset on room switch.
+// So check clearFailures usage.
 function clearFailures(roomId) {
-    if (window._roomFailures[roomId]) {
-        const s = window._roomFailures[roomId];
-        if (s.timerId) { clearInterval(s.timerId); s.timerId = null; }
-        s.count = 0; s.cooldownEndsAt = 0;
-    }
-    try { updateAttemptDisplay(roomId); } catch (e) { }
+    // We do NOT clear failures on success anymore based on user request "feilene kan ikke nullstilles på hvert rom"
+    // acts as if we just solved it. We just update display.
+    updateGlobalAttemptDisplay();
 }
 
 window.showSolvedStamp = function () {
@@ -496,7 +552,7 @@ window.nextHint3 = function () {
 
 // Hints for room 4 - cycle through 3 hints
 window._room4HintIndex = 0;
-window.nextHint4 = function() {
+window.nextHint4 = function () {
     const hints = [
         'Melding 1: Flytt hver bokstav ett steg tilbake i alfabetet.',
         'Melding 2: Flytt hver bokstav tre steg tilbake i alfabetet.',
@@ -521,7 +577,7 @@ window.nextHint4 = function() {
 
 // Hints for room 5 - cycle through 3 hints
 window._room5HintIndex = 0;
-window.nextHint5 = function() {
+window.nextHint5 = function () {
     const hints = [
         'Kartkoordinatene finner du ved å lese av rutenett på kartet.',
         'Kombiner bokstaver fra de tre stedene du finner.',
@@ -546,7 +602,7 @@ window.nextHint5 = function() {
 
 // Hints for room 6 - cycle through 3 hints
 window._room6HintIndex = 0;
-window.nextHint6 = function() {
+window.nextHint6 = function () {
     const hints = [
         'Lytt nøye til morsekoden - kort pip er prikk, langt pip er strek.',
         'Sammenlign koden du dekoder med tallene på stedene på kartet.',
@@ -571,7 +627,7 @@ window.nextHint6 = function() {
 
 // Hints for room 7 - cycle through 3 hints
 window._room7HintIndex = 0;
-window.nextHint7 = function() {
+window.nextHint7 = function () {
     const hints = [
         'Tenk på verdenshistorien fra slutten av andre verdenskrig og fremover.',
         'Jalta-konferansen var før Koreakrigen som var før Stalin døde.',
@@ -596,7 +652,7 @@ window.nextHint7 = function() {
 
 // Hints for room 8 - cycle through 3 hints
 window._room8HintIndex = 0;
-window.nextHint8 = function() {
+window.nextHint8 = function () {
     const hints = [
         'Møtetidspunktet ble avslørt av agent Petrov i rom 6 - sjekk oppdragsinformasjonen.',
         'USSR måtte fjerne sine missiler, akseptere inspeksjon og stoppe våpentransporter.',
@@ -657,7 +713,7 @@ window.checkRoom2 = function () {
         game.showMessage(2, `❌ Du må velge alle 4 hendelsene først. Du har valgt ${seq.length} av 4.`, 'error');
         return;
     }
-    
+
     // Count correct positions
     let correctCount = 0;
     for (let i = 0; i < correct.length; i++) {
@@ -665,7 +721,7 @@ window.checkRoom2 = function () {
             correctCount++;
         }
     }
-    
+
     if (correctCount === 4) {
         clearFailures(2);
         game.showSolvedStamp();
@@ -836,7 +892,7 @@ window.checkMessage = function (messageNumber) {
 };
 
 window.checkRoom4 = function () {
-    const dateInput = document.getElementById('crisisDate').value;
+    const dateInput = document.getElementById('crisisDate').value.trim().toUpperCase();
     console.log('checkRoom4 called');
     console.log('Date entered:', dateInput);
     console.log('Decrypted messages count:', window.decryptedMessages.length);
@@ -1116,7 +1172,7 @@ window.cancelMission = function () {
 // Hvis siden lastes med ?start=1 i URL, start spillet automatisk
 window.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
-    
+
     // Sjekk for reset-kode fra lærer
     const resetParam = params.get('reset');
     if (resetParam === RESET_CODE) {
@@ -1125,9 +1181,9 @@ window.addEventListener('DOMContentLoaded', () => {
             console.log('Spilltilstand nullstilt av lærer');
             // Fjern reset fra URL så den ikke blir lagret
             window.history.replaceState({}, '', window.location.pathname);
-        } catch(e) {}
+        } catch (e) { }
     }
-    
+
     if (params.get('start') === '1') {
         // Sjekk om det er en room parameter (f.eks ?start=1&room=5)
         const roomParam = params.get('room');
@@ -1143,7 +1199,7 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // Global funksjon for å nullstille spillet (krever kode)
-window.resetGame = function(code) {
+window.resetGame = function (code) {
     if (code === RESET_CODE) {
         game.clearState();
         game.restartGame();
@@ -1156,13 +1212,13 @@ window.resetGame = function(code) {
 };
 
 // DEV: Enkel nullstilling - Ctrl+Shift+R i konsoll
-window.devReset = function() {
+window.devReset = function () {
     localStorage.removeItem(STORAGE_KEY);
     console.log('🔄 Dev reset: Spilltilstand slettet. Refresh siden.');
 };
 
 // DEV: Tastatursnarvei Ctrl+Shift+D for dev reset + refresh
-document.addEventListener('keydown', function(e) {
+document.addEventListener('keydown', function (e) {
     if (e.ctrlKey && e.shiftKey && e.key === 'D') {
         e.preventDefault();
         localStorage.removeItem(STORAGE_KEY);

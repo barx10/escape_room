@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="no">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Operasjon Avsløring - Den Kalde Krigen Escape Room</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <audio id="pling-audio" src="https://cdn.pixabay.com/audio/2022/03/15/audio_115b6c2b48.mp3" preload="auto"></audio>
     <!-- Landing Page -->
@@ -16,31 +18,35 @@
                 <span class="classified-text">⚠️ KLASSIFISERT DOKUMENT ⚠️</span>
                 <span class="red-stamp">TOP SECRET</span>
             </div>
-            
+
             <h1 class="landing-title">OPERASJON AVSLØRING</h1>
             <div class="subtitle">Den Kalde Krigen - Digital Escape Room</div>
-            
+
             <!-- Oppdragsbriefing er flyttet til briefing.html -->
-            
+
             <div class="mission-stats">
                 <div class="stat-item" onclick="openRoomsModal()" role="button" tabindex="0" aria-label="Vis romliste">
-                    <div class="stat-number">11</div>
+                    <div class="stat-number">10</div>
                     <div class="stat-label">Rom å Løse</div>
                 </div>
-                <div class="stat-item" onclick="openInfoModal('Tid', '<p>Tiden starter i det oppdraget starter — enten fra briefing-siden når du klikker Fortsett eller ved å åpne oppdraget direkte. Hold øye med timeren øverst til høyre.</p>')" role="button" tabindex="0" aria-label="Vis tid-info">
+                <div class="stat-item"
+                    onclick="openInfoModal('Tid', '<p>Tiden starter i det oppdraget starter — enten fra briefing-siden når du klikker Fortsett eller ved å åpne oppdraget direkte. Hold øye med timeren øverst til høyre.</p>')"
+                    role="button" tabindex="0" aria-label="Vis tid-info">
                     <div class="stat-number">60</div>
                     <div class="stat-label">Minutter Tid</div>
                 </div>
-                <div class="stat-item" onclick="openInfoModal('Mulige feil', '<p>Du kan gjøre feil underveis uten å automatisk miste oppdraget. Feil gir ofte ledetråder eller stopper fremdrift, men timeren fortsetter. Oppfordre til samarbeid og refleksjon.</p>')" role="button" tabindex="0" aria-label="Vis info om mulige feil">
-                    <div class="stat-number">∞</div>
-                    <div class="stat-label">Mulige Feil</div>
+                <div class="stat-item"
+                    onclick="openInfoModal('Mulige feil', '<p>Du har totalt 3 forsøk før sikkerhetssystemet låser seg. Dette gjelder for hele spillet samlet. Ved 3 feil må dere vente i 1 minutt før dere kan prøve igjen.</p>')"
+                    role="button" tabindex="0" aria-label="Vis info om mulige feil">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Liv før Lås</div>
                 </div>
             </div>
-            
+
             <a href="briefing.html" class="start-mission-btn">
                 <span class="btn-text">🚀 START OPPDRAGET</span>
             </a>
-            
+
             <div class="footer-note footer-with-logo">
                 <p>📚 Dette er et læringsspill om den kalde krigen</p>
                 <p>Utviklet av Lærerliv, 2026.</p>
@@ -49,7 +55,7 @@
                 </a>
             </div>
         </div>
-        
+
         <div class="background-animation">
             <div class="globe"></div>
             <div class="grid-lines"></div>
@@ -62,16 +68,16 @@
             <button class="modal-close" onclick="closeRoomsModal()" aria-label="Lukk">✕</button>
             <h2>Rom i oppdraget</h2>
             <ul class="room-list">
-                <li>1 — Etterkrigstiden (1946–47)</li>
-                <li>2 — Oppbygging av allianser (1949/1955)</li>
-                <li>3 — Berlinmuren (1961)</li>
-                <li>4 — Cubakrisen (1962)</li>
-                <li>5 — Arkivdokumenter (oktober 1962)</li>
-                <li>6 — Avlyttede meldinger</li>
-                <li>7 — Tidsberegning & kodeknusing</li>
+                <li>1 — Etterkrigstiden</li>
+                <li>2 — Oppbygging av allianser</li>
+                <li>3 — Berlinmuren</li>
+                <li>4 — Cubakrisen</li>
+                <li>5 — Hemmelige dokumenter</li>
+                <li>6 — Avlyttet melding fra Moskva</li>
+                <li>7 — Tidsforståelse</li>
                 <li>8 — Forhandlingene</li>
-                <li>9 — Sende bevisene</li>
-                <li>10 — Avslutning og refleksjon</li>
+                <li>9 — Fluktruten</li>
+                <li>10 — Avslutning og mestring</li>
             </ul>
             <div style="text-align: right; margin-top: 12px;">
                 <a href="briefing.html" class="btn">Start oppdraget</a>
@@ -104,7 +110,8 @@
     </div>
 
     <!-- Fixed back button; hidden until game starts -->
-    <a href="#" id="fixedBackBtn" class="fixed-back-btn" aria-label="Avbryt oppdrag" style="display:none;" onclick="cancelMission(); return false;">Avbryt oppdrag</a>
+    <a href="#" id="fixedBackBtn" class="fixed-back-btn" aria-label="Avbryt oppdrag" style="display:none;"
+        onclick="cancelMission(); return false;">Avbryt oppdrag</a>
 
     <script type="module" src="game.js"></script>
     <script>
@@ -131,17 +138,19 @@
             m.setAttribute('aria-hidden', 'true');
         }
         // close modal on ESC
-        document.addEventListener('keydown', function(e) {
+        document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') closeRoomsModal();
         });
         // close when clicking outside modal content
-        document.getElementById('roomsModal').addEventListener('click', function(e) {
+        document.getElementById('roomsModal').addEventListener('click', function (e) {
             if (e.target === this) closeRoomsModal();
         });
-        document.getElementById('infoModal').addEventListener('click', function(e) {
+        document.getElementById('infoModal').addEventListener('click', function (e) {
             if (e.target === this) closeInfoModal();
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98fecaa602630731',t:'MTc2MDY5MzU3Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98fecaa602630731',t:'MTc2MDY5MzU3Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+    <script>(function () { function c() { var b = a.contentDocument || a.contentWindow.document; if (b) { var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'98fecaa602630731',t:'MTc2MDY5MzU3Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d) } } if (document.body) { var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState) c(); else if (window.addEventListener) document.addEventListener('DOMContentLoaded', c); else { var e = document.onreadystatechange || function () { }; document.onreadystatechange = function (b) { e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c()) } } } })();</script>
+    <script>(function () { function c() { var b = a.contentDocument || a.contentWindow.document; if (b) { var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'98fecaa602630731',t:'MTc2MDY5MzU3Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d) } } if (document.body) { var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState) c(); else if (window.addEventListener) document.addEventListener('DOMContentLoaded', c); else { var e = document.onreadystatechange || function () { }; document.onreadystatechange = function (b) { e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c()) } } } })();</script>
+</body>
+
 </html>

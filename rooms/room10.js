@@ -17,56 +17,7 @@ const room10 = new Room(
     <p style="color:#fff; margin-bottom:20px;">For å avslutte oppdraget må du bevise at du forstår de viktigste begrepene. Koble hvert <strong>Begrep</strong> med riktig <strong>Forklaring</strong>.</p>
 
     <div id="memory-grid" style="display:grid; grid-template-columns:repeat(5, 1fr); gap:15px; margin:20px 0;">
-        <div class="memory-card" data-id="1" data-type="concept" onclick="handleCardClick10(this)" 
-             style="display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(0,0,0,0.85); color:#fff; min-height:100px; border:2px solid #e94560; border-radius:8px; padding:15px; cursor:pointer;">
-            <div style="font-size:10px; text-transform:uppercase; color:#ffd93d; margin-bottom:5px;">BEGREP</div>
-            <div style="text-align:center;">Jernteppet</div>
-        </div>
-        <div class="memory-card" data-id="1" data-type="explanation" onclick="handleCardClick10(this)"
-             style="display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(0,0,0,0.85); color:#fff; min-height:100px; border:2px solid #e94560; border-radius:8px; padding:15px; cursor:pointer;">
-            <div style="font-size:10px; text-transform:uppercase; color:#4ecdc4; margin-bottom:5px;">FORKLARING</div>
-            <div style="text-align:center;">Skillet mellom øst og vest</div>
-        </div>
-        <div class="memory-card" data-id="2" data-type="concept" onclick="handleCardClick10(this)"
-             style="display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(0,0,0,0.85); color:#fff; min-height:100px; border:2px solid #e94560; border-radius:8px; padding:15px; cursor:pointer;">
-            <div style="font-size:10px; text-transform:uppercase; color:#ffd93d; margin-bottom:5px;">BEGREP</div>
-            <div style="text-align:center;">Kald Krig</div>
-        </div>
-        <div class="memory-card" data-id="2" data-type="explanation" onclick="handleCardClick10(this)"
-             style="display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(0,0,0,0.85); color:#fff; min-height:100px; border:2px solid #e94560; border-radius:8px; padding:15px; cursor:pointer;">
-            <div style="font-size:10px; text-transform:uppercase; color:#4ecdc4; margin-bottom:5px;">FORKLARING</div>
-            <div style="text-align:center;">Spenningen mellom USA og Sovjet uten direkte krig</div>
-        </div>
-        <div class="memory-card" data-id="3" data-type="concept" onclick="handleCardClick10(this)"
-             style="display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(0,0,0,0.85); color:#fff; min-height:100px; border:2px solid #e94560; border-radius:8px; padding:15px; cursor:pointer;">
-            <div style="font-size:10px; text-transform:uppercase; color:#ffd93d; margin-bottom:5px;">BEGREP</div>
-            <div style="text-align:center;">NATO</div>
-        </div>
-        <div class="memory-card" data-id="3" data-type="explanation" onclick="handleCardClick10(this)"
-             style="display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(0,0,0,0.85); color:#fff; min-height:100px; border:2px solid #e94560; border-radius:8px; padding:15px; cursor:pointer;">
-            <div style="font-size:10px; text-transform:uppercase; color:#4ecdc4; margin-bottom:5px;">FORKLARING</div>
-            <div style="text-align:center;">Vestlig forsvarsallianse dannet 1949</div>
-        </div>
-        <div class="memory-card" data-id="4" data-type="concept" onclick="handleCardClick10(this)"
-             style="display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(0,0,0,0.85); color:#fff; min-height:100px; border:2px solid #e94560; border-radius:8px; padding:15px; cursor:pointer;">
-            <div style="font-size:10px; text-transform:uppercase; color:#ffd93d; margin-bottom:5px;">BEGREP</div>
-            <div style="text-align:center;">Terrorbalanse</div>
-        </div>
-        <div class="memory-card" data-id="4" data-type="explanation" onclick="handleCardClick10(this)"
-             style="display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(0,0,0,0.85); color:#fff; min-height:100px; border:2px solid #e94560; border-radius:8px; padding:15px; cursor:pointer;">
-            <div style="font-size:10px; text-transform:uppercase; color:#4ecdc4; margin-bottom:5px;">FORKLARING</div>
-            <div style="text-align:center;">Begge sider hadde atomvåpen og kunne ødelegge hverandre</div>
-        </div>
-        <div class="memory-card" data-id="5" data-type="concept" onclick="handleCardClick10(this)"
-             style="display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(0,0,0,0.85); color:#fff; min-height:100px; border:2px solid #e94560; border-radius:8px; padding:15px; cursor:pointer;">
-            <div style="font-size:10px; text-transform:uppercase; color:#ffd93d; margin-bottom:5px;">BEGREP</div>
-            <div style="text-align:center;">KGB</div>
-        </div>
-        <div class="memory-card" data-id="5" data-type="explanation" onclick="handleCardClick10(this)"
-             style="display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(0,0,0,0.85); color:#fff; min-height:100px; border:2px solid #e94560; border-radius:8px; padding:15px; cursor:pointer;">
-            <div style="font-size:10px; text-transform:uppercase; color:#4ecdc4; margin-bottom:5px;">FORKLARING</div>
-            <div style="text-align:center;">Sovjetisk hemmelightstjeneste</div>
-        </div>
+        <!-- Cards will be injected here by initRoom10 -->
     </div>
 
     <div id="completion-message" style="display:none; text-align:center; margin-top:20px;">
@@ -113,14 +64,67 @@ const room10 = new Room(
     'Klikk på et Begrep og deretter på Forklaringen som hører til.'
 );
 
+window.initRoom10 = function () {
+    const grid = document.getElementById('memory-grid');
+    if (!grid) return;
+
+    grid.innerHTML = '';
+    let cards = [];
+
+    // Create card objects
+    pairs.forEach(pair => {
+        cards.push({
+            id: pair.id,
+            text: pair.concept,
+            type: 'concept',
+            matchId: pair.id
+        });
+        cards.push({
+            id: pair.id,
+            text: pair.explanation,
+            type: 'explanation',
+            matchId: pair.id
+        });
+    });
+
+    // Shuffle cards
+    for (let i = cards.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [cards[i], cards[j]] = [cards[j], cards[i]];
+    }
+
+    // Render cards
+    cards.forEach((card, index) => {
+        const el = document.createElement('div');
+        el.className = 'memory-card';
+        el.dataset.index = index;
+        el.dataset.id = card.id;
+        el.dataset.type = card.type;
+        el.onclick = () => handleCardClick10(el);
+
+        // Style based on type
+        const typeLabel = card.type === 'concept' ? 'BEGREP' : 'FORKLARING';
+        const typeColor = card.type === 'concept' ? '#ffd93d' : '#4ecdc4';
+
+        el.style.cssText = `display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(0,0,0,0.85); color:#fff; min-height:100px; border:2px solid #e94560; border-radius:8px; padding:15px; cursor:pointer;`;
+
+        el.innerHTML = `
+            <div style="font-size:10px; text-transform:uppercase; color:${typeColor}; margin-bottom:5px;">${typeLabel}</div>
+            <div style="text-align:center;">${card.text}</div>
+        `;
+
+        grid.appendChild(el);
+    });
+};
+
 // Global state
 let selectedCards10 = [];
 let isLocked10 = false;
 
-window.handleCardClick10 = function(el) {
+window.handleCardClick10 = function (el) {
     if (isLocked10) return;
     if (el.classList.contains('matched')) return;
-    
+
     if (el.classList.contains('selected')) {
         el.classList.remove('selected');
         el.style.borderColor = '#e94560';
@@ -159,7 +163,9 @@ function checkMatch10() {
             card2.style.background = 'rgba(0, 255, 65, 0.2)';
             card1.style.boxShadow = 'none';
             card2.style.boxShadow = 'none';
-            
+
+            if (window.playSuccessSound) window.playSuccessSound();
+
             selectedCards10 = [];
             isLocked10 = false;
             checkWin10();
@@ -171,7 +177,10 @@ function checkMatch10() {
             card2.style.borderColor = '#ff4444';
             card1.style.background = 'rgba(255, 68, 68, 0.3)';
             card2.style.background = 'rgba(255, 68, 68, 0.3)';
-            
+
+            if (window.recordFailure) window.recordFailure(10);
+
+
             setTimeout(() => {
                 card1.classList.remove('selected');
                 card2.classList.remove('selected');

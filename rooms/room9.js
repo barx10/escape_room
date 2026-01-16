@@ -37,7 +37,7 @@ const pairs = [
     { id: 10, cause: 'Tyskland deles i okkupasjonssoner', effect: 'Opprettelsen av DDR og Vest-Tyskland' }
 ];
 
-window.initRoom9 = function() {
+window.initRoom9 = function () {
     const grid = document.getElementById('memory-grid');
     if (!grid) return;
 
@@ -120,7 +120,8 @@ function checkMatch() {
             card1.el.classList.add('matched');
             card2.el.classList.add('matched');
 
-            // Play success sound (optional, reused from game.js patterns if accessible, otherwise silent)
+            // Play success sound
+            if (window.playSuccessSound) window.playSuccessSound();
 
             selectedCards = [];
             isLocked = false;
@@ -132,6 +133,8 @@ function checkMatch() {
         setTimeout(() => {
             card1.el.classList.add('error');
             card2.el.classList.add('error');
+
+            if (window.recordFailure) window.recordFailure(9);
 
             setTimeout(() => {
                 card1.el.classList.remove('selected', 'error');
