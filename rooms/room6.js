@@ -9,6 +9,11 @@ const room6 = new Room(
     
     <div id="message6"></div>
 
+    <div style="margin-top:12px; margin-bottom: 20px;">
+        <button id="hint6Btn" class="btn" onclick="nextHint6()">💡 Hint (-30 sek)</button>
+        <div id="hint6Box" class="hint-box" style="display:block; margin-top:10px; color:#fff;"></div>
+    </div>
+
     <div style="text-align: center; margin: 20px 0;">
         <button class="btn" id="playMorseBtn" onclick="playMorseCode()">▶️ Spill av morsekode</button>
         <button class="btn-small" onclick="stopMorseCode()" style="margin-left: 10px;">⏹️ Stopp</button>
@@ -40,7 +45,7 @@ const room6 = new Room(
         </div>
         <label style="display: block; margin-bottom: 10px;">Hvilket sted matcher koden fra morsemeldingen?</label>
         <div style="display: flex; gap: 10px; align-items: center;">
-            <input type="text" id="parkLocation" placeholder="Navn på sted" style="flex: 1;">
+            <input type="text" id="parkLocation" placeholder="Skriv stedsnavn" style="flex: 1;">
             <button class="btn-small" onclick="checkLocation6()">Sjekk sted 📍</button>
         </div>
         <div class="stamp-container" id="stamp6a"></div>
@@ -53,7 +58,7 @@ const room6 = new Room(
         </div>
         <p style="color: #fff; margin-bottom: 10px;">🔍 Finn de 6 skjulte bokstavene i bildet og sett dem sammen</p>
         <div style="display: flex; gap: 10px; align-items: center;">
-            <input type="text" id="agentName" placeholder="Agentkode (6 bokstaver)" maxlength="6" style="flex: 1;">
+            <input type="text" id="agentName" placeholder="XXXXXX" maxlength="6" style="flex: 1;">
             <button class="btn-small" onclick="checkAgent6()">Bekreft agent 🕵️</button>
         </div>
         <div class="stamp-container" id="stamp6b"></div>

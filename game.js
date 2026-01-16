@@ -2,6 +2,10 @@
 
 import rooms from './rooms/index.js';
 
+// Konstanter for localStorage
+const STORAGE_KEY = 'escaperoom_gamestate';
+const RESET_CODE = 'kaldkrig2026'; // Lærerkode for å nullstille
+
 class Game {
     constructor() {
         this.currentRoomIndex = 0; // Start på room 1
@@ -12,12 +16,68 @@ class Game {
         this.selectedLeaders8 = [];
         this.timerInterval = null;
     }
+    
+    // Lagre spilltilstand til localStorage
+    saveState() {
+        const state = {
+            startTime: this.startTime,
+            currentRoomIndex: this.currentRoomIndex,
+            failures: window._roomFailures || {},
+            savedAt: Date.now()
+        };
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch(e) {
+            console.log('Kunne ikke lagre spilltilstand:', e);
+        }
+    }
+    
+    // Last spilltilstand fra localStorage
+    loadState() {
+        try {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                const state = JSON.parse(saved);
+                // Sjekk at lagret tilstand ikke er for gammel (maks 2 timer)
+                if (Date.now() - state.savedAt < 2 * 60 * 60 * 1000) {
+                    return state;
+                } else {
+                    // For gammel tilstand, slett den
+                    this.clearState();
+                }
+            }
+        } catch(e) {
+            console.log('Kunne ikke laste spilltilstand:', e);
+        }
+        return null;
+    }
+    
+    // Slett lagret tilstand
+    clearState() {
+        try {
+            localStorage.removeItem(STORAGE_KEY);
+        } catch(e) {
+            console.log('Kunne ikke slette spilltilstand:', e);
+        }
+    }
 
     init() {
+        // Sjekk om det finnes lagret tilstand
+        const savedState = this.loadState();
+        if (savedState) {
+            this.startTime = savedState.startTime;
+            this.currentRoomIndex = savedState.currentRoomIndex;
+            window._roomFailures = savedState.failures || {};
+            console.log('Gjenopprettet spilltilstand fra forrige økt');
+        }
+        
         this.renderRooms();
         this.startTimer();
         this.updateProgress();
         this.showCurrentRoom();
+        
+        // Lagre tilstand periodisk (hvert 5. sekund)
+        setInterval(() => this.saveState(), 5000);
     }
 
     renderRooms() {
@@ -119,6 +179,7 @@ class Game {
         this.currentRoomIndex++;
         this.showCurrentRoom();
         this.updateProgress();
+        this.saveState(); // Lagre når vi bytter rom
     }
 
     showCurrentRoom() {
@@ -182,7 +243,11 @@ class Game {
         this.selectedAlliances = [];
         this.selectedLeaders = [];
         this.selectedLeaders8 = [];
-
+        window._roomFailures = {}; // Reset failures
+        
+        // Slett lagret tilstand
+        this.clearState();
+        
         // Reset alle input felt
         document.querySelectorAll('input').forEach(input => {
             input.value = '';
@@ -349,6 +414,8 @@ window.nextHint1 = function () {
             btn.disabled = true;
             btn.textContent = '💡 Ingen flere hint';
         }
+        // Trekk fra 30 sekunder
+        applyHintPenalty();
     }
 };
 
@@ -373,6 +440,8 @@ window.nextHint2 = function () {
             btn.disabled = true;
             btn.textContent = '💡 Ingen flere hint';
         }
+        // Trekk fra 30 sekunder
+        applyHintPenalty();
     }
 };
 
@@ -397,8 +466,144 @@ window.nextHint3 = function () {
             btn.disabled = true;
             btn.textContent = '💡 Ingen flere hint';
         }
+        // Trekk fra 30 sekunder
+        applyHintPenalty();
     }
 };
+
+// Hints for room 4 - cycle through 3 hints
+window._room4HintIndex = 0;
+window.nextHint4 = function() {
+    const hints = [
+        'Melding 1: Flytt hver bokstav ett steg tilbake i alfabetet.',
+        'Melding 2: Flytt hver bokstav tre steg tilbake i alfabetet.',
+        'Melding 3: Les meldingen baklengs, ord for ord.'
+    ];
+    const box = document.getElementById('hint4Box');
+    const btn = document.getElementById('hint4Btn');
+    if (!box || !btn) return;
+
+    if (window._room4HintIndex < hints.length) {
+        const p = document.createElement('p');
+        p.textContent = `Hint ${window._room4HintIndex + 1}: ${hints[window._room4HintIndex]}`;
+        box.appendChild(p);
+        window._room4HintIndex++;
+        if (window._room4HintIndex >= hints.length) {
+            btn.disabled = true;
+            btn.textContent = '💡 Ingen flere hint';
+        }
+        applyHintPenalty();
+    }
+};
+
+// Hints for room 5 - cycle through 3 hints
+window._room5HintIndex = 0;
+window.nextHint5 = function() {
+    const hints = [
+        'Kartkoordinatene finner du ved å lese av rutenett på kartet.',
+        'Kombiner bokstaver fra de tre stedene du finner.',
+        'De skjulte bokstavene danner et ord når du setter dem sammen i riktig rekkefølge.'
+    ];
+    const box = document.getElementById('hint5Box');
+    const btn = document.getElementById('hint5Btn');
+    if (!box || !btn) return;
+
+    if (window._room5HintIndex < hints.length) {
+        const p = document.createElement('p');
+        p.textContent = `Hint ${window._room5HintIndex + 1}: ${hints[window._room5HintIndex]}`;
+        box.appendChild(p);
+        window._room5HintIndex++;
+        if (window._room5HintIndex >= hints.length) {
+            btn.disabled = true;
+            btn.textContent = '💡 Ingen flere hint';
+        }
+        applyHintPenalty();
+    }
+};
+
+// Hints for room 6 - cycle through 3 hints
+window._room6HintIndex = 0;
+window.nextHint6 = function() {
+    const hints = [
+        'Lytt nøye til morsekoden - kort pip er prikk, langt pip er strek.',
+        'Sammenlign koden du dekoder med tallene på stedene på kartet.',
+        'Agentnavnet består av bokstavene som er skjult i bildet - se nøye etter!'
+    ];
+    const box = document.getElementById('hint6Box');
+    const btn = document.getElementById('hint6Btn');
+    if (!box || !btn) return;
+
+    if (window._room6HintIndex < hints.length) {
+        const p = document.createElement('p');
+        p.textContent = `Hint ${window._room6HintIndex + 1}: ${hints[window._room6HintIndex]}`;
+        box.appendChild(p);
+        window._room6HintIndex++;
+        if (window._room6HintIndex >= hints.length) {
+            btn.disabled = true;
+            btn.textContent = '💡 Ingen flere hint';
+        }
+        applyHintPenalty();
+    }
+};
+
+// Hints for room 7 - cycle through 3 hints
+window._room7HintIndex = 0;
+window.nextHint7 = function() {
+    const hints = [
+        'Tenk på verdenshistorien fra slutten av andre verdenskrig og fremover.',
+        'Jalta-konferansen var før Koreakrigen som var før Stalin døde.',
+        'Safe-koden er siste siffer i årstallene når de er i riktig rekkefølge.'
+    ];
+    const box = document.getElementById('hint7Box');
+    const btn = document.getElementById('hint7Btn');
+    if (!box || !btn) return;
+
+    if (window._room7HintIndex < hints.length) {
+        const p = document.createElement('p');
+        p.textContent = `Hint ${window._room7HintIndex + 1}: ${hints[window._room7HintIndex]}`;
+        box.appendChild(p);
+        window._room7HintIndex++;
+        if (window._room7HintIndex >= hints.length) {
+            btn.disabled = true;
+            btn.textContent = '💡 Ingen flere hint';
+        }
+        applyHintPenalty();
+    }
+};
+
+// Hints for room 8 - cycle through 3 hints
+window._room8HintIndex = 0;
+window.nextHint8 = function() {
+    const hints = [
+        'Møtetidspunktet ble avslørt av agent Petrov i rom 6 - sjekk oppdragsinformasjonen.',
+        'USSR måtte fjerne sine missiler, akseptere inspeksjon og stoppe våpentransporter.',
+        'USA lovte å ikke invadere Cuba, fjerne sine missiler fra Tyrkia og avslutte blokaden.'
+    ];
+    const box = document.getElementById('hint8Box');
+    const btn = document.getElementById('hint8Btn');
+    if (!box || !btn) return;
+
+    if (window._room8HintIndex < hints.length) {
+        const p = document.createElement('p');
+        p.textContent = `Hint ${window._room8HintIndex + 1}: ${hints[window._room8HintIndex]}`;
+        box.appendChild(p);
+        window._room8HintIndex++;
+        if (window._room8HintIndex >= hints.length) {
+            btn.disabled = true;
+            btn.textContent = '💡 Ingen flere hint';
+        }
+        applyHintPenalty();
+    }
+};
+
+// Funksjon for å trekke fra tid når hint brukes
+function applyHintPenalty() {
+    if (game && game.startTime) {
+        // Trekk fra 30 sekunder ved å flytte starttiden fremover
+        game.startTime -= 30 * 1000;
+        game.showMessage('timer', '⏱️ -30 sekunder! Hint koster tid.', 'error');
+    }
+}
 
 // legacy selectAlliance removed (room2 now uses selectEvent2/ resetSequence2)
 
@@ -426,20 +631,26 @@ window.checkRoom2 = function () {
     const seq = window._room2Sequence || [];
     const correct = ['Berlin', 'NATO', 'Korea', 'Warszawa'];
     if (seq.length !== correct.length) {
-        game.showMessage(2, '❌ Du må velge alle hendelsene i en rekkefølge før du sjekker.', 'error');
-        recordFailure(2);
+        game.showMessage(2, `❌ Du må velge alle 4 hendelsene først. Du har valgt ${seq.length} av 4.`, 'error');
         return;
     }
+    
+    // Count correct positions
+    let correctCount = 0;
     for (let i = 0; i < correct.length; i++) {
-        if (seq[i] !== correct[i]) {
-            game.showMessage(2, '❌ Feil rekkefølge. Tenk kronologisk — begynn med det eldste.', 'error');
-            recordFailure(2);
-            return;
+        if (seq[i] === correct[i]) {
+            correctCount++;
         }
     }
-    clearFailures(2);
-    game.showSolvedStamp();
-    setTimeout(() => game.nextRoom(), 3000);
+    
+    if (correctCount === 4) {
+        clearFailures(2);
+        game.showSolvedStamp();
+        setTimeout(() => game.nextRoom(), 3000);
+    } else {
+        game.showMessage(2, `📊 ${correctCount} av 4 riktig plassert. Tenk kronologisk — begynn med det eldste.`, 'error');
+        recordFailure(2);
+    }
 };
 
 function formatEventLabel(key) {
@@ -882,6 +1093,18 @@ window.cancelMission = function () {
 // Hvis siden lastes med ?start=1 i URL, start spillet automatisk
 window.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
+    
+    // Sjekk for reset-kode fra lærer
+    const resetParam = params.get('reset');
+    if (resetParam === RESET_CODE) {
+        try {
+            localStorage.removeItem(STORAGE_KEY);
+            console.log('Spilltilstand nullstilt av lærer');
+            // Fjern reset fra URL så den ikke blir lagret
+            window.history.replaceState({}, '', window.location.pathname);
+        } catch(e) {}
+    }
+    
     if (params.get('start') === '1') {
         // Sjekk om det er en room parameter (f.eks ?start=1&room=5)
         const roomParam = params.get('room');
@@ -895,3 +1118,16 @@ window.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => window.startGame(), 50);
     }
 });
+
+// Global funksjon for å nullstille spillet (krever kode)
+window.resetGame = function(code) {
+    if (code === RESET_CODE) {
+        game.clearState();
+        game.restartGame();
+        console.log('Spillet er nullstilt');
+        return true;
+    } else {
+        console.log('Feil kode. Spillet ble ikke nullstilt.');
+        return false;
+    }
+};

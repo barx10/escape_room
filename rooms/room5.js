@@ -7,6 +7,11 @@ const room5 = new Room(
     <h3>📂 Klassifiserte CIA-arkiver</h3>
     <p>Du har tilgang til hemmelige dokumenter fra Cubakrisen. Les nøye gjennom dokumentene og svar på spørsmålene.</p>
 
+    <div style="margin-top:12px; margin-bottom: 20px;">
+        <button id="hint5Btn" class="btn" onclick="nextHint5()">💡 Hint (-30 sek)</button>
+        <div id="hint5Box" class="hint-box" style="display:block; margin-top:10px; color:#fff;"></div>
+    </div>
+
     <div style="text-align: center; margin: 20px 0;">
         <button class="btn" onclick="const v = document.getElementById('documentImage'); v.style.display = v.style.display === 'none' ? 'block' : 'none';">Åpne/Lukk dokument 📄</button>
     </div>

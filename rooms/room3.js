@@ -15,7 +15,7 @@ const room3 = new Room(
         </div>
 
         <div style="margin-top:12px;">
-            <button id="hint3Btn" class="btn" onclick="nextHint3()">💡 Hint</button>
+            <button id="hint3Btn" class="btn" onclick="nextHint3()">💡 Hint (-30 sek)</button>
             <div id="hint3Box" class="hint-box" style="display:block; margin-top:10px; color:#fff;"></div>
         </div>
 

@@ -10,6 +10,11 @@ const room4 = new Room(
         <p>CIA har avlyttet tre krypterte meldinger mellom de involverte lederne under Cubakrisen. 
         Du må dekryptere meldingene for å finne den hemmelige koden som avverget atomkrigen.</p>
 
+        <div style="margin-top:12px; margin-bottom: 20px;">
+            <button id="hint4Btn" class="btn" onclick="nextHint4()">💡 Hint (-30 sek)</button>
+            <div id="hint4Box" class="hint-box" style="display:block; margin-top:10px; color:#fff;"></div>
+        </div>
+
         <div class="encrypted-messages">
             <div class="message-box">
                 <h4>📡 Melding 1 - Fra Washington (Caesar cipher, shift 1)</h4>

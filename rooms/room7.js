@@ -74,15 +74,14 @@ function dropCard7(event, slotNumber) {
     // Get last digit of year for display
     const lastDigit = card.year % 10;
     
-    // Update slot display
+    // Update slot display - hide remove button until check is done
     slot.innerHTML = `
         <div class="placed-card">
             <div class="card-image-wrapper">
                 <img src="${card.image}" alt="${card.name}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%23444%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 fill=%22%23fff%22 dy=%22.3em%22%3E?%3C/text%3E%3C/svg%3E'">
                 <span class="card-digit">${lastDigit}</span>
             </div>
-            <p>${card.name}</p>
-            <button class="remove-card-btn" onclick="removeCard7(${slotNumber})">✖</button>
+            <p>${card.name}</p>            <span class="check-indicator" style="display: none;"></span>            <button class="remove-card-btn" onclick="removeCard7(${slotNumber})" style="display: none;">✖</button>
         </div>
     `;
     
@@ -93,7 +92,7 @@ function dropCard7(event, slotNumber) {
     }
     
     room7DraggedCard = null;
-    checkRoom7Puzzle();
+    // Don't auto-check - wait for user to click check button
 }
 
 function removeCard7(slotNumber) {
@@ -112,45 +111,71 @@ function removeCard7(slotNumber) {
     const slot = document.getElementById(`slot${slotNumber}`);
     slot.innerHTML = `<p>Slot ${slotNumber}</p>`;
     
-    checkRoom7Puzzle();
+    // Remove visual feedback
+    slot.classList.remove('correct-slot', 'incorrect-slot');
 }
 
 function checkRoom7Puzzle() {
-    let allCorrect = true;
+    // Count how many cards are placed
+    let placedCount = 0;
+    for (let i = 1; i <= 8; i++) {
+        if (room7Placements[`slot${i}`]) {
+            placedCount++;
+        }
+    }
     
-    // Check each placement
+    // Must place all cards first
+    if (placedCount !== 8) {
+        showMessage(7, `❌ Du må plassere alle 8 kort først. Du har plassert ${placedCount} av 8.`, 'error');
+        return;
+    }
+    
+    // Count correct placements
+    let correctCount = 0;
+    
     for (let i = 1; i <= 8; i++) {
         const slot = document.getElementById(`slot${i}`);
         const placedCardId = room7Placements[`slot${i}`];
-        
-        if (!placedCardId) {
-            allCorrect = false;
-            slot.classList.remove('correct-slot', 'incorrect-slot');
-            continue;
-        }
-        
         const card = room7Cards.find(c => c.id === placedCardId);
+        const removeBtn = slot.querySelector('.remove-card-btn');
+        const checkIndicator = slot.querySelector('.check-indicator');
         
         if (card.correctSlot === i) {
             slot.classList.remove('incorrect-slot');
             slot.classList.add('correct-slot');
-        } else {
-            // Only count as attempt if this is a new incorrect placement
-            if (!slot.classList.contains('incorrect-slot')) {
-                recordFailure(7);
+            correctCount++;
+            // Show green checkmark, hide remove button for correct cards
+            if (checkIndicator) {
+                checkIndicator.textContent = '✓';
+                checkIndicator.className = 'check-indicator correct-indicator';
+                checkIndicator.style.display = 'block';
             }
+            if (removeBtn) removeBtn.style.display = 'none';
+        } else {
             slot.classList.remove('correct-slot');
             slot.classList.add('incorrect-slot');
-            allCorrect = false;
+            // Show red X and remove button for incorrect cards
+            if (checkIndicator) {
+                checkIndicator.textContent = '✖';
+                checkIndicator.className = 'check-indicator incorrect-indicator';
+                checkIndicator.style.display = 'block';
+            }
+            if (removeBtn) removeBtn.style.display = 'block';
         }
     }
     
+    // Record one failure attempt per check (unless all correct)
+    if (correctCount < 8) {
+        recordFailure(7);
+        showMessage(7, `📊 ${correctCount} av 8 riktig. Fjern de røde og prøv igjen!`, 'error');
+    }
+    
     // If all correct, unlock safe
-    if (allCorrect && !room7SafeUnlocked) {
+    if (correctCount === 8 && !room7SafeUnlocked) {
         room7SafeUnlocked = true;
         setTimeout(() => {
             document.getElementById('room7Safe').style.display = 'block';
-            showMessage(7, '🎉 Riktig rekkefølge! Safe-koden er åpenbaret.');
+            showMessage(7, '🎉 Alle riktig! Safe-koden er åpenbaret.');
         }, 500);
     }
 }
@@ -188,6 +213,7 @@ window.startDragCard7 = startDragCard7;
 window.allowDrop7 = allowDrop7;
 window.dropCard7 = dropCard7;
 window.removeCard7 = removeCard7;
+window.checkRoom7Puzzle = checkRoom7Puzzle;
 window.checkRoom7Safe = checkRoom7Safe;
 window.openImageModal7 = openImageModal7;
 window.closeImageModal7 = closeImageModal7;
@@ -198,6 +224,11 @@ const room7 = new Room(
     `
     <h3>Plasser hendelsene i kronologisk rekkefølge</h3>
     <p>Dra kortene til riktige slots for å åpne safen. Rekkefølgen avslører koden.</p>
+
+    <div style="margin-top:12px; margin-bottom: 20px;">
+        <button id="hint7Btn" class="btn" onclick="nextHint7()">💡 Hint (-30 sek)</button>
+        <div id="hint7Box" class="hint-box" style="display:block; margin-top:10px; color:#fff;"></div>
+    </div>
 
     <div class="timeline-slots">
         <div class="timeline-slot" id="slot1" ondrop="dropCard7(event, 1)" ondragover="allowDrop7(event)">
@@ -283,6 +314,11 @@ const room7 = new Room(
             </div>
             <p>Cubarevolusjon - Castro/Che</p>
         </div>
+    </div>
+
+    <div style="text-align: center; margin: 20px 0;">
+        <button class="btn" onclick="checkRoom7Puzzle()">Sjekk rekkefølge ✓</button>
+        <div id="message7" style="margin-top: 15px;"></div>
     </div>
 
     <div id="room7Safe" style="display: none; margin-top: 20px;">
