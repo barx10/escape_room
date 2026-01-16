@@ -90,7 +90,14 @@ body {
     background-attachment: fixed;
 }
 
-/* Fullscreen background for Room 10 - fallback til standard gradient */
+/* Fullscreen background for Room 10 (index 9) - Begrepsforståelse */
+.room-bg-9 {
+    background-image: url('assets/images/room10_bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
 
 html {
     height: 100%;

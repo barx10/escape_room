@@ -198,7 +198,7 @@ class Game {
         }
 
         // Fjern alle bakgrunnsklasser først, så legg til riktig
-        document.body.classList.remove('room-bg-0', 'room-bg-1', 'room-bg-2', 'room-bg-3', 'room-bg-4', 'room-bg-5', 'room-bg-6', 'room-bg-7', 'room-bg-8', 'room-bg-9', 'room-bg-10');
+        document.body.classList.remove('room-bg-0', 'room-bg-1', 'room-bg-2', 'room-bg-3', 'room-bg-4', 'room-bg-5', 'room-bg-6', 'room-bg-7', 'room-bg-8', 'room-bg-9');
         document.body.classList.add(`room-bg-${roomIndex}`);
 
         // Initialize room-specific features after DOM is ready
