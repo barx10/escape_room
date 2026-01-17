@@ -1771,3 +1771,226 @@ html {
 /* Styles for card-type in Room 10 */
 .card-type.concept { color: #ffd93d; }
 .card-type.explanation { color: #4ecdc4; }
+
+/* ========================================
+   ROOM 10 - CONNECT THE CONCEPTS GAME
+   ======================================== */
+
+.connect-game {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    position: relative;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 15px;
+    min-height: 500px;
+}
+
+.lines-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.concepts-column,
+.explanations-column {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 2;
+    width: 42%;
+}
+
+.concepts-column {
+    align-items: flex-end;
+}
+
+.explanations-column {
+    align-items: flex-start;
+}
+
+.connect-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: rgba(20, 20, 40, 0.9);
+    border: 2px solid #444;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    max-width: 100%;
+}
+
+.concept-item {
+    flex-direction: row;
+    border-color: #ffd93d;
+    text-align: right;
+}
+
+.explanation-item {
+    flex-direction: row;
+    border-color: #4ecdc4;
+    text-align: left;
+}
+
+.connect-item:hover:not(.connected) {
+    transform: scale(1.02);
+    box-shadow: 0 0 20px rgba(255, 217, 61, 0.3);
+}
+
+.concept-item:hover:not(.connected) {
+    border-color: #fff;
+    background: rgba(255, 217, 61, 0.1);
+}
+
+.explanation-item:hover:not(.connected) {
+    border-color: #fff;
+    background: rgba(78, 205, 196, 0.1);
+}
+
+.connect-item.selected {
+    border-color: #fff !important;
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.5);
+    animation: pulse-glow 1s infinite;
+}
+
+@keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.4); }
+    50% { box-shadow: 0 0 35px rgba(255, 255, 255, 0.7); }
+}
+
+.connect-item.connected {
+    cursor: default;
+    opacity: 0.9;
+}
+
+.connect-item.correct {
+    border-color: #00ff41 !important;
+    background: rgba(0, 255, 65, 0.15) !important;
+}
+
+.connect-item.incorrect {
+    border-color: #ff4444 !important;
+    background: rgba(255, 68, 68, 0.15) !important;
+    animation: shake 0.5s;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-5px); }
+    40%, 80% { transform: translateX(5px); }
+}
+
+.item-text {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.concept-item .item-text {
+    color: #ffd93d;
+}
+
+.explanation-item .item-text {
+    color: #4ecdc4;
+}
+
+.connect-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.concept-dot {
+    background: radial-gradient(circle at 30% 30%, #ffd93d, #b8860b);
+    box-shadow: 0 0 10px rgba(255, 217, 61, 0.5);
+}
+
+.explanation-dot {
+    background: radial-gradient(circle at 30% 30%, #4ecdc4, #2a9d8f);
+    box-shadow: 0 0 10px rgba(78, 205, 196, 0.5);
+}
+
+.connect-item.selected .connect-dot {
+    transform: scale(1.3);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+}
+
+.connect-item.correct .connect-dot {
+    background: radial-gradient(circle at 30% 30%, #00ff41, #00aa2a) !important;
+    box-shadow: 0 0 15px rgba(0, 255, 65, 0.7);
+}
+
+.connect-item.incorrect .connect-dot {
+    background: radial-gradient(circle at 30% 30%, #ff4444, #aa0000) !important;
+    box-shadow: 0 0 15px rgba(255, 68, 68, 0.7);
+}
+
+/* Animated Lines */
+.animated-line {
+    transition: stroke-dashoffset 0.6s ease-out;
+    filter: drop-shadow(0 0 3px currentColor);
+}
+
+.correct-line {
+    filter: drop-shadow(0 0 6px rgba(0, 255, 65, 0.6));
+}
+
+.incorrect-line {
+    filter: drop-shadow(0 0 6px rgba(255, 68, 68, 0.6));
+}
+
+.animated-line.celebration {
+    animation: line-celebration 1.5s ease-in-out infinite;
+}
+
+@keyframes line-celebration {
+    0%, 100% { 
+        filter: drop-shadow(0 0 6px rgba(0, 255, 65, 0.6));
+        stroke-width: 3;
+    }
+    50% { 
+        filter: drop-shadow(0 0 15px rgba(0, 255, 65, 1));
+        stroke-width: 5;
+    }
+}
+
+.animated-line.fade-out {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+/* Responsive for connect game */
+@media (max-width: 768px) {
+    .connect-game {
+        flex-direction: column;
+        gap: 40px;
+        padding: 15px;
+    }
+    
+    .concepts-column,
+    .explanations-column {
+        width: 100%;
+        align-items: stretch;
+    }
+    
+    .concept-item,
+    .explanation-item {
+        text-align: left;
+        flex-direction: row;
+    }
+    
+    .item-text {
+        font-size: 13px;
+    }
+}
