@@ -459,6 +459,24 @@ window.showSolvedStamp = function () {
     game.showSolvedStamp();
 };
 
+// Vis en midlertidig "Riktig!"-melding for deloppgaver
+window.showPartialSuccess = function (message = '✓ Riktig!') {
+    // Fjern eksisterende
+    const existing = document.querySelector('.partial-success-stamp');
+    if (existing) existing.remove();
+    
+    const stamp = document.createElement('div');
+    stamp.className = 'partial-success-stamp';
+    stamp.innerHTML = `<span>${message}</span>`;
+    document.body.appendChild(stamp);
+    
+    // Fjern etter 2 sekunder
+    setTimeout(() => {
+        stamp.classList.add('fade-out');
+        setTimeout(() => stamp.remove(), 500);
+    }, 2000);
+};
+
 window.checkRoom1 = function () {
     const year = parseInt(document.getElementById('year1').value);
     if (year === 1946) {
@@ -753,6 +771,9 @@ window.checkRoom3 = function () {
         // Reveal the button to open the morse alphabet modal in Room 3
         const showBtn = document.getElementById('showMorseBtn');
         if (showBtn) showBtn.style.display = 'inline-block';
+        
+        // Vis mini "Riktig!"-stempel for deloppgaven
+        showPartialSuccess('✓ Årstall riktig!');
     } else {
         game.showMessage(3, '❌ Feil dato. Muren ble bygget "over natten" i 1961.', 'error');
         recordFailure(3);
