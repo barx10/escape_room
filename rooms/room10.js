@@ -16,46 +16,13 @@ const room10 = new Room(
     <h3 style="color:#ffd93d;">Nøkkelbegreper fra den kalde krigen</h3>
     <p style="color:#fff; margin-bottom:20px;">For å avslutte oppdraget må du bevise at du forstår de viktigste begrepene. Koble hvert <strong>Begrep</strong> med riktig <strong>Forklaring</strong>.</p>
 
-    <div id="memory-grid" style="display:grid; grid-template-columns:repeat(5, 1fr); gap:15px; margin:20px 0;">
+    <div id="memory-grid-10" class="memory-grid" style="display:grid; grid-template-columns:repeat(5, 1fr); gap:15px; margin:20px 0;">
         <!-- Cards will be injected here by initRoom10 -->
     </div>
 
     <div id="completion-message" style="display:none; text-align:center; margin-top:20px;">
         <h3 style="color:#00ff41">🎉 Begrepsforståelse bekreftet!</h3>
         <p style="color:#fff;">Oppdraget er fullført...</p>
-    </div>
-
-    <div id="splash-screen" class="splash-screen" style="display:none;">
-        <div class="splash-content">
-            <div class="splash-header">
-                <h1>HEMMELIGHETER AVSLØRT</h1>
-                <p class="classified-badge">TIDLIGERE KLASSIFISERT — NÅ ÅPNET</p>
-            </div>
-            <div class="splash-body">
-                <img src="assets/images/achievements.png" alt="Agent Debrief" class="splash-image">
-                <div class="debrief-report">
-                    <h2>OPPDRAGSRAPPORT - FULLFØRT</h2>
-                    <div class="time-display">
-                        <p>Oppdraget fullført på:</p>
-                        <h3 id="elapsed-time">-- minutter -- sekunder</h3>
-                    </div>
-                    <div class="success-message">
-                        <p><strong>Du er nå ekspert på den kalde krigen.</strong></p>
-                        <p>Gjennom analysen og dekrypteringen av hemmeligheter har du forstått det komplekse spillet mellom supermaktene.</p>
-                        <p style="margin-top: 20px;"><strong>Du har lært:</strong></p>
-                        <ul style="text-align: left; display: inline-block;">
-                            <li>✓ Hvordan jernteppet delte verden</li>
-                            <li>✓ Rollene til NATO og supermaktene</li>
-                            <li>✓ Konsekvensene av terrorbalansen</li>
-                            <li>✓ Betydningen av diplomati over konflikt</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="splash-footer">
-                <button class="btn replay-btn" onclick="restartGame()" style="background: linear-gradient(45deg, #4ecdc4, #44a08d); font-size: 16px; padding: 12px 30px;">🔄 Spill på nytt</button>
-            </div>
-        </div>
     </div>
     `,
     function check() {
@@ -65,14 +32,28 @@ const room10 = new Room(
 );
 
 window.initRoom10 = function () {
-    const grid = document.getElementById('memory-grid');
-    if (!grid) return;
+    console.log('initRoom10 called');
+    const grid = document.getElementById('memory-grid-10');
+    console.log('Grid element:', grid);
+    if (!grid) {
+        console.error('memory-grid-10 element not found!');
+        return;
+    }
+
+    // Define pairs locally to ensure they are accessible
+    const localPairs = [
+        { id: 1, concept: 'Jernteppet', explanation: 'Skillet mellom øst og vest' },
+        { id: 2, concept: 'Kald Krig', explanation: 'Spenningen mellom USA og Sovjet uten direkte krig' },
+        { id: 3, concept: 'NATO', explanation: 'Vestlig forsvarsallianse dannet 1949' },
+        { id: 4, concept: 'Terrorbalanse', explanation: 'Begge sider hadde atomvåpen og kunne ødelegge hverandre' },
+        { id: 5, concept: 'KGB', explanation: 'Sovjetisk hemmelightstjeneste' }
+    ];
 
     grid.innerHTML = '';
     let cards = [];
 
     // Create card objects
-    pairs.forEach(pair => {
+    localPairs.forEach(pair => {
         cards.push({
             id: pair.id,
             text: pair.concept,
@@ -211,25 +192,61 @@ function checkWin10() {
 }
 
 function showSplashScreen10() {
-    document.getElementById('memory-grid').style.display = 'none';
+    document.getElementById('memory-grid-10').style.display = 'none';
     document.getElementById('completion-message').style.display = 'none';
 
-    const splashScreen = document.getElementById('splash-screen');
-    if (splashScreen) {
-        splashScreen.style.display = 'block';
+    // Fjern eventuell eksisterende splash-screen
+    const existingSplash = document.getElementById('splash-screen-10');
+    if (existingSplash) existingSplash.remove();
 
-        if (window.game && window.game.startTime) {
-            const elapsedMs = Date.now() - window.game.startTime;
-            const totalSeconds = Math.floor(elapsedMs / 1000);
-            const minutes = Math.floor(totalSeconds / 60);
-            const seconds = totalSeconds % 60;
-
-            const timeDisplay = document.getElementById('elapsed-time');
-            if (timeDisplay) {
-                timeDisplay.textContent = `${minutes} minutt${minutes !== 1 ? 'er' : ''} ${seconds.toString().padStart(2, '0')} sekunder`;
-            }
-        }
+    // Beregn tid
+    let timeText = '-- minutter -- sekunder';
+    if (window.game && window.game.startTime) {
+        const elapsedMs = Date.now() - window.game.startTime;
+        const totalSeconds = Math.floor(elapsedMs / 1000);
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        timeText = `${minutes} minutt${minutes !== 1 ? 'er' : ''} ${seconds.toString().padStart(2, '0')} sekunder`;
     }
+
+    // Opprett splash-screen og legg til body
+    const splashScreen = document.createElement('div');
+    splashScreen.id = 'splash-screen-10';
+    splashScreen.className = 'splash-screen';
+    splashScreen.style.display = 'flex';
+    splashScreen.innerHTML = `
+        <div class="splash-content">
+            <div class="splash-header">
+                <h1>HEMMELIGHETER AVSLØRT</h1>
+                <p class="classified-badge">TIDLIGERE KLASSIFISERT — NÅ ÅPNET</p>
+            </div>
+            <div class="splash-body">
+                <img src="assets/images/achievements.png" alt="Agent Debrief" class="splash-image">
+                <div class="debrief-report">
+                    <h2>OPPDRAGSRAPPORT - FULLFØRT</h2>
+                    <div class="time-display">
+                        <p>Oppdraget fullført på:</p>
+                        <h3 id="elapsed-time">${timeText}</h3>
+                    </div>
+                    <div class="success-message">
+                        <p><strong>Du er nå ekspert på den kalde krigen.</strong></p>
+                        <p>Gjennom analysen og dekrypteringen av hemmeligheter har du forstått det komplekse spillet mellom supermaktene.</p>
+                        <p style="margin-top: 20px;"><strong>Du har lært:</strong></p>
+                        <ul style="text-align: left; display: inline-block;">
+                            <li>✓ Hvordan jernteppet delte verden</li>
+                            <li>✓ Rollene til NATO og supermaktene</li>
+                            <li>✓ Konsekvensene av terrorbalansen</li>
+                            <li>✓ Betydningen av diplomati over konflikt</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="splash-footer">
+                <button class="btn replay-btn" onclick="restartGame()" style="background: linear-gradient(45deg, #4ecdc4, #44a08d); font-size: 16px; padding: 12px 30px;">🔄 Spill på nytt</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(splashScreen);
 }
 
 export default room10;
