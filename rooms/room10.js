@@ -365,11 +365,29 @@ function showSplashScreen10() {
                 </div>
             </div>
             <div class="splash-footer">
-                <button class="btn replay-btn" onclick="restartGame()" style="background: linear-gradient(45deg, #4ecdc4, #44a08d); font-size: 16px; padding: 12px 30px;">🔄 Spill på nytt</button>
+                <button class="btn replay-btn" id="replay-btn-10" style="background: linear-gradient(45deg, #4ecdc4, #44a08d); font-size: 16px; padding: 12px 30px; margin-right: 10px;">🔄 Spill på nytt</button>
+                <button class="btn home-btn" id="home-btn-10" style="background: linear-gradient(45deg, #e94560, #c23a51); font-size: 16px; padding: 12px 30px;">🏠 Gå til forside</button>
             </div>
         </div>
     `;
     document.body.appendChild(splashScreen);
+    
+    // Legg til event listeners etter at elementene er lagt til DOM
+    document.getElementById('replay-btn-10').addEventListener('click', function() {
+        // Fjern splash-screen
+        const splash = document.getElementById('splash-screen-10');
+        if (splash) splash.remove();
+        
+        // Restart spillet
+        if (window.restartGame) {
+            window.restartGame();
+        }
+    });
+    
+    document.getElementById('home-btn-10').addEventListener('click', function() {
+        // Gå til forsiden
+        window.location.href = 'index.html';
+    });
 }
 
 export default room10;
