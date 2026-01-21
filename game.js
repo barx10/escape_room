@@ -842,7 +842,7 @@ window.checkMessage = function (messageNumber) {
             correctAnswer = 'WE MUST STOP THE MISSILES';
             break;
         case 2:
-            correctAnswer = 'WE WILL DEPLØ THEM';
+            correctAnswer = 'WE WILL DEPLOY THEM';
             break;
         case 3:
             correctAnswer = 'SOVIET MISSILES OPERATIONAL NOW';
