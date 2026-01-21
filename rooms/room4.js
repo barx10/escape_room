@@ -29,7 +29,7 @@ const room4 = new Room(
 
             <div class="message-box">
                 <h4>📡 Melding 2 - Fra Moskva (Caesar cipher, shift 3)</h4>
-                <p class="encrypted-text">ZH ZLOO GHSORT WKHP</p>
+                <p class="encrypted-text">ZH ZLOO GHSORØ WKHP</p>
                 <div class="decrypt-input">
                     <input type="text" id="decrypt2" placeholder="Dekrypter meldingen..." maxlength="25">
                     <button class="btn-small" onclick="checkMessage(2)">Dekrypter</button>
